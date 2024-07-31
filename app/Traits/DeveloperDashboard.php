@@ -265,7 +265,7 @@ trait DeveloperDashboard
 
             return Reply::dataOnly([
                 'status' => 'success',
-                'html' => $html,
+                'html'   => $html,
             ]);
         } else {
             $devId = Auth::id();
@@ -816,13 +816,13 @@ trait DeveloperDashboard
         $tasks_with_revision_data = clone $all_tasks_with_revision;
 
         $tasks_with_revision_data = $tasks_with_revision_data->has('revisions')->withCount([
-            'taskType as primary_task_type_page_count' => function ($q) {
+            'taskType as primary_task_type_page_count'   => function ($q) {
                 $q->where('page_type', '=', 'Primary Page Development');
             },
             'taskType as secondary_task_type_page_count' => function ($q) {
                 $q->where('page_type', '=', 'Secondary Page Development');
             },
-            'taskType as other_task_type_page_count' => function ($q) {
+            'taskType as other_task_type_page_count'     => function ($q) {
                 $q->where('task_type', '=', 'Others');
             },
         ])->get();

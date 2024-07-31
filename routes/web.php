@@ -65,6 +65,7 @@ use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\DMContractController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\StickyNoteController;
@@ -152,6 +153,7 @@ use App\Http\Controllers\Payment\PayfastController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProjectCategoryController;
 use App\Http\Controllers\ProjectTemplateController;
+use App\Http\Controllers\SalesRiskPolicyController;
 use App\Http\Controllers\SecuritySettingController;
 use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\TimelogCalendarController;
@@ -200,8 +202,6 @@ use App\Http\Controllers\ProjectTemplateMemberController;
 use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
-use App\Http\Controllers\EvaluationController;
-use App\Http\Controllers\SalesRiskPolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -335,6 +335,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('account-unverified', [DashboardController::class, 'accountUnverified'])->name('account_unverified');
     Route::get('checklist', [DashboardController::class, 'checklist'])->name('checklist');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/details', [DashboardController::class, 'indexApi']);
+    Route::group(['prefix' => '/dashboard/lead'], function () {
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/table/list', 'tableListApi');
+            Route::get('/number-of-submitted-tasks', 'leadNumberOfSubmittedTasksApi');
+            Route::get('/number-of-tasks-received', 'leadNumberOfSubmittedTasksApi');
+            Route::get('/number-of-approved-tasks-on-1st-attempt-and-avg-by-project-manager', 'leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManagerApi');
+        });
+    });
     Route::get('dashboard/{temp?}', [DashboardController::class, 'tempDashboard'])->name('temp_dashboard');
 
     // admin advance dashboard
@@ -354,8 +363,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dashboard-lead-dev-performance/{id}/temp', [DashboardController::class, 'tempLeadDevDashboard'])->name('temp-lead-dev-dashboard');
     //developer dashboard
     Route::get('dashboard-developer-performance/{id}', [DashboardController::class, 'devPerformance'])->name('dev-performance');
-     // lead developer dashboard temp
-     Route::get('dashboard-developer-performance/{id}/temp', [DashboardController::class, 'tempDevDashboard'])->name('temp-dev-dashboard');
+    // lead developer dashboard temp
+    Route::get('dashboard-developer-performance/{id}/temp', [DashboardController::class, 'tempDevDashboard'])->name('temp-dev-dashboard');
     //sales dashboard
     Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
     //sales dashboard temp
@@ -684,17 +693,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             // discussion category routes
             Route::resource('discussion-category', DiscussionCategoryController::class);
             // discussion category ends
-
+    
             // discussion routes
             Route::post('discussion/setBestAnswer', [DiscussionController::class, 'setBestAnswer'])->name('discussion.set_best_answer');
             Route::resource('discussion', DiscussionController::class);
             // discussion ends
-
+    
             // discussion reply routes
             Route::get('discussion-reply/get-replies/{id}', [DiscussionReplyController::class, 'getReplies'])->name('discussion-reply.get_replies');
             Route::resource('discussion-reply', DiscussionReplyController::class);
             // discussion reply end
-
+    
             // Discussion Files
             Route::get('discussion-files/download/{id}', [DiscussionFilesController::class, 'download'])->name('discussion_file.download');
 
@@ -703,7 +712,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             // rating routes
             Route::resource('project-ratings', ProjectRatingController::class);
             // rating end
-
+    
             Route::get('projects/burndown/{projectId?}', [ProjectController::class, 'burndown'])->name('projects.burndown');
 
 
@@ -952,16 +961,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /******* Independent TASK Start ******** */
     Route::get('independent/{any?}', [IndependentTaskController::class, 'index'])
-    ->where('any', '^(?!api\/)[\/\w\.-]*')
-    ->where('any', '^(?:(?!\d+).)*');
-    Route::resource('independent-task',IndependentTaskController::class);
-    Route::get('get-independent-task',[IndependentTaskController::class,'independentTaskGet'])->name('independent-task-get');
-    Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');
-    Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
-    Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-independent-subtask');
-    Route::get('independent-subtasks',[IndependentTaskController::class,'independentAllSubTask'])->name('get-independent-all-sub-task');
+        ->where('any', '^(?!api\/)[\/\w\.-]*')
+        ->where('any', '^(?:(?!\d+).)*');
+    Route::resource('independent-task', IndependentTaskController::class);
+    Route::get('get-independent-task', [IndependentTaskController::class, 'independentTaskGet'])->name('independent-task-get');
+    Route::get('independent-task-show', [IndependentTaskController::class, 'independentTaskShow'])->name('independent-task-show');
+    Route::get('get-all-independent-task', [IndependentTaskController::class, 'independentTaskAll'])->name('get-all-independent-task');
+    Route::get('independent-task/{task_id}/subtask', [IndependentTaskController::class, 'independentSubTask'])->name('get-independent-subtask');
+    Route::get('independent-subtasks', [IndependentTaskController::class, 'independentAllSubTask'])->name('get-independent-all-sub-task');
     Route::get('export-independent-task', [IndependentTaskController::class, 'exportIndependentTask']);
-     /******* Independent TASK End ******** */
+    /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
     Route::get('pending-task-conversations/{task_id}', [TaskController::class, 'get_pending_parent_task_conversation_question'])->name('pending-task-conversations');
@@ -1158,22 +1167,22 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
 
     Route::resource('employee-evaluation', EvaluationController::class);
-    Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
+    Route::get('get-all-evaluation', [EvaluationController::class, 'getAllEvaluation']);
     Route::get('get-single-evaluation/{user_id}', [EvaluationController::class, 'getSingleEvaluation']);
-    Route::get('employee-evaluation-task/{id}', [EvaluationController::class,'getEmployeeTask']);
-    Route::post('employee-task-evaluation-store', [EvaluationController::class,'storeEmployeeTaskEvaluation']);
-    Route::post('employee-evaluation-submission-store', [EvaluationController::class,'storeSubmissionEvaluation']);
-    Route::get('employee-task-evaluation-edit/{id}', [EvaluationController::class,'editEmployeeTaskEvaluation']);
-    Route::post('employee-task-evaluation-update', [EvaluationController::class,'updateEmployeeTaskEvaluation']);
-    Route::post('employee-evaluation-team-lead-cmnt', [EvaluationController::class,'storeTeamLeadCmnt']);
-    Route::post('employee-evaluation-authorization', [EvaluationController::class,'storeAuthorization']);
-    Route::post('employee-evaluation-acknowledged', [EvaluationController::class,'storeTeamLeadAcknowledged']);
-    Route::get('employee-evaluation-user/{id}', [EvaluationController::class,'getEmployeeUser']);
-    Route::get('employee-task-revision/{id}', [EvaluationController::class,'employeeTaskRevision']);
-    Route::get('evaluation-total-revision/{id}', [EvaluationController::class,'totalRevision']);
-    Route::get('evaluation-task/{id}', [EvaluationController::class,'EmployeeEvaluationTask']);
-    Route::get('evaluation-history/{id}', [EvaluationController::class,'EmployeeEvaluationHistory']);
-    Route::get('evaluation-total-task-revision/{user_id}/{round}', [EvaluationController::class,'evaluationTotalTaskRevision']);
+    Route::get('employee-evaluation-task/{id}', [EvaluationController::class, 'getEmployeeTask']);
+    Route::post('employee-task-evaluation-store', [EvaluationController::class, 'storeEmployeeTaskEvaluation']);
+    Route::post('employee-evaluation-submission-store', [EvaluationController::class, 'storeSubmissionEvaluation']);
+    Route::get('employee-task-evaluation-edit/{id}', [EvaluationController::class, 'editEmployeeTaskEvaluation']);
+    Route::post('employee-task-evaluation-update', [EvaluationController::class, 'updateEmployeeTaskEvaluation']);
+    Route::post('employee-evaluation-team-lead-cmnt', [EvaluationController::class, 'storeTeamLeadCmnt']);
+    Route::post('employee-evaluation-authorization', [EvaluationController::class, 'storeAuthorization']);
+    Route::post('employee-evaluation-acknowledged', [EvaluationController::class, 'storeTeamLeadAcknowledged']);
+    Route::get('employee-evaluation-user/{id}', [EvaluationController::class, 'getEmployeeUser']);
+    Route::get('employee-task-revision/{id}', [EvaluationController::class, 'employeeTaskRevision']);
+    Route::get('evaluation-total-revision/{id}', [EvaluationController::class, 'totalRevision']);
+    Route::get('evaluation-task/{id}', [EvaluationController::class, 'EmployeeEvaluationTask']);
+    Route::get('evaluation-history/{id}', [EvaluationController::class, 'EmployeeEvaluationHistory']);
+    Route::get('evaluation-total-task-revision/{user_id}/{round}', [EvaluationController::class, 'evaluationTotalTaskRevision']);
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
     Route::post('pm-goal-setting-update', [PmGoalSetingController::class, 'pmGoalUpdate'])->name('pm-goal-setting-update');
@@ -1198,9 +1207,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
 
-    Route::resource('qualified-sales',QualifiedSalesController::class);
-    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
-    Route::get('export-qualified-sales-data', [QualifiedSalesController::class,'exportQualifiedSales']);
+    Route::resource('qualified-sales', QualifiedSalesController::class);
+    Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
+    Route::get('export-qualified-sales-data', [QualifiedSalesController::class, 'exportQualifiedSales']);
 
 
 
@@ -1450,7 +1459,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('time-log-report-chart', [TimelogReportController::class, 'timelogChartData'])->name('time-log-report.chart');
 
     Route::get('time-log-report/{project_id}/{employee_id}', [TimelogReportController::class, 'show'])->where([
-        'project_id' => '[0-9]+',
+        'project_id'  => '[0-9]+',
         'employee_id' => '[0-9]+',
     ]);
 
@@ -1574,7 +1583,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('portfolio-rating-store', [PortfolioController::class, 'ratingStore']);
     Route::post('portfolio-rating-update', [PortfolioController::class, 'ratingUpdate']);
 
-  //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
+    //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
