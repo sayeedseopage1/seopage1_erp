@@ -18,6 +18,7 @@ import style from "./styles/dashboardProjectGuideAndChallengeSection.module.css"
 
 // Helper
 import { formatHttp, handleLoadingComponent } from "../../helper";
+import Switch from "../../../global/Switch";
 
 /**
  * Dashboard Project Guide And Challenge Section
@@ -70,16 +71,39 @@ const DashboardProjectGuideAndChallengeSection = ({
                         />
                     </SectionContentContainer>,
                     // This will be shown when the data is loaded
-                    <SectionContentContainer
-                        color="#FFF"
-                        maxHeight="35vh"
-                        className="pt-3"
-                        dangerouslySetInnerHTML={{
-                            __html:
-                                !isLoading &&
-                                formatHttp(projectData?.project_summary),
-                        }}
-                    />
+                    <Switch>
+                        <Switch.Case
+                            condition={
+                                !isLoading && projectData?.project_summary
+                            }
+                        >
+                            <SectionContentContainer
+                                color="#FFF"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(
+                                            projectData?.project_summary
+                                        ),
+                                }}
+                            />
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                !isLoading && !projectData?.project_summary
+                            }
+                        >
+                            <SectionContentContainer
+                                color="#FFF"
+                                maxHeight="35vh"
+                                className="pt-3"
+                            >
+                                <p>N/A</p>
+                            </SectionContentContainer>
+                        </Switch.Case>
+                    </Switch>
                 )}
             </SectionContainer>
             {/*End Project General Guidelines  */}
