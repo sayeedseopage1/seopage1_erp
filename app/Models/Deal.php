@@ -51,12 +51,12 @@ class Deal extends Model
         return $this->belongsTo(AwardTimeIncress::class, 'id', 'deal_id');
     }
 
-    public function pm_project() : HasOne
+    public function pm_project(): HasOne
     {
         return $this->hasOne(PMProject::class, 'deal_id');
     }
 
-    public function project() : HasOne
+    public function project(): HasOne
     {
         return $this->hasOne(Project::class, 'deal_id');
     }

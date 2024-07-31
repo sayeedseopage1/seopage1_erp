@@ -335,10 +335,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('account-unverified', [DashboardController::class, 'accountUnverified'])->name('account_unverified');
     Route::get('checklist', [DashboardController::class, 'checklist'])->name('checklist');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('dashboard/api', [DashboardController::class, 'indexApi']);
+    Route::get('dashboard/details', [DashboardController::class, 'indexApi']);
     // Sale Dashboard Auth APi
-    Route::get('dashboard-sales/sale-dashboard-api/country-wise-bidding-breakdown', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
-    Route::get('dashboard-sales/sale-dashboard-api/country-wise-won-deal', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
+    Route::get('dashboard-sales/sale-dashboard-details/country-wise-bidding-breakdown', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
+    Route::get('dashboard-sales/sale-dashboard-details/country-wise-won-deal', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
     // Temp React Dashboard
     Route::get('dashboard/{temp?}', [DashboardController::class, 'tempDashboard'])->name('temp_dashboard');
 
@@ -364,9 +364,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //sales dashboard
     Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
     // Admin Dashboard Sale Performance Api
-    Route::get('dashboard-sales-performance/admin-sale-dashboard-api/{sale_id}', [DashboardController::class, 'adminSalesPerformanceApi']);
-    Route::get('dashboard-sales-performance/admin-sale-dashboard-api/country-wise-bidding-breakdown/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
-    Route::get('dashboard-sales-performance/admin-sale-dashboard-api/country-wise-won-deal/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
+    Route::get('dashboard-sales-performance/admin-sale-dashboard-details/{sale_id}', [DashboardController::class, 'adminSalesPerformanceApi']);
+    Route::get('dashboard-sales-performance/admin-sale-dashboard-details/country-wise-bidding-breakdown/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
+    Route::get('dashboard-sales-performance/admin-sale-dashboard-details/country-wise-won-deal/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
+    // Role Wise get User api
+    Route::get('dashboard-user/{role}', [DashboardController::class, 'getUserRoleWise']);
     //sales dashboard temp
     Route::get('dashboard-sales-performance/{id}/temp', [DashboardController::class, 'tempSalesDashboard'])->name('temp-sales-dashboard');
 

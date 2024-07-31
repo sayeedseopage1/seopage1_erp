@@ -869,7 +869,6 @@ class DashboardController extends AccountBaseController
     public function adminSalesPerformanceApi($id = null)
     {
         $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
-        dd($this->sales, auth()->user(), $id);
         return $this->salesDashboardAdminApi($this->sales);
     }
     public function adminSalesPerformanceCountryWiseBiddingBreakdownApi($id = null)
@@ -900,5 +899,16 @@ class DashboardController extends AccountBaseController
     {
         $this->sales = User::where('id', $id)->first();
         return view('dashboard.temp_sales_admin_dashboard', $this->data);
+    }
+
+    public function getUserRoleWise($role = null)
+    {
+        if ($role) {
+            $users = User::whereRelation('role', 'role_id', $role)->withoutEagerLoads()->select('id', 'name')->get();
+        } else {
+            $users = [];
+        }
+
+        return response()->json(['data' => $users]);
     }
 }
