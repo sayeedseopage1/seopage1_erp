@@ -21,7 +21,7 @@ return new class extends Migration
             foreach (Project::$goalCreationTimeType as $key => $value) $string .= " $key-$value,";
             // $table->tinyInteger('goal_creation_time_type')->default('2')->after('new_deadline')->comment($string)->change();
             DB::statement("ALTER TABLE `projects`
-            CHANGE COLUMN `goal_creation_time_type` `goal_creation_time_type` 
+            ADD COLUMN `goal_creation_time_type` `goal_creation_time_type` 
             TINYINT(3) NOT NULL DEFAULT '2' 
             COMMENT '$string' AFTER `new_deadline`;
             ");
