@@ -67,6 +67,19 @@ class StickyNoteController extends AccountBaseController
         ->select(['users.id', 'users.name'])
         ->get();
 
+        $this->dev_clients = Project::where('projects.status','in progress')->whereIn('projects.id', function($query) {
+            $query->select('tasks.project_id')
+                ->from('tasks')
+                ->leftJoin('sub_tasks', 'sub_tasks.task_id', '=', 'tasks.id')
+                ->whereNotNull('tasks.project_id')
+                ->where('tasks.board_column_id', '!=', 4)
+                ->where('sub_tasks.assigned_to', user()->id)
+                ->groupBy('tasks.project_id');
+        })
+        ->leftJoin('users', 'users.id', '=', 'projects.client_id')
+        ->select(['users.id', 'users.name'])
+        ->get();
+
         $this->pageTitle = __('modules.sticky.addNote');
 
         if (request()->ajax()) {
@@ -95,9 +108,18 @@ class StickyNoteController extends AccountBaseController
             $validated = $request->validate([
                 'colour' => 'required',
                 'note_type' => 'required',
-                'client_id' => 'required',
-                'task_id' => 'required',
-                'subtask_id' => 'required',
+                'client_id' => ['required_if:note_type,Task'],
+                'task_id' => ['required_if:note_type,Task'],
+                'subtask_id' => ['required_if:note_type,Task'],
+                'reminder_time' => 'required',
+                'notetext' => 'required',
+            ]);
+        }elseif(Auth::user()->role_id == 5){
+            $validated = $request->validate([
+                'colour' => 'required',
+                'note_type' => 'required',
+                'client_id' => ['required_if:note_type,Sub-Task'],
+                'subtask_id' => ['required_if:note_type,Sub-Task'],
                 'reminder_time' => 'required',
                 'notetext' => 'required',
             ]);
@@ -111,9 +133,9 @@ class StickyNoteController extends AccountBaseController
         $sticky->milestone_id = $request->milestone_id;
         $sticky->task_id = $request->task_id;
         //PM Notes End
-        //Lead dev Notes start
+        //Lead lead/dev Notes start
         $sticky->sub_task_id = $request->subtask_id;
-        //Lead dev Notes end
+        //Lead lead/dev Notes end
         $sticky->reminder_time = Carbon::now()->addHours($request->reminder_time);
         $sticky->note_text  = $request->notetext;
         $sticky->user_id = Auth::user()->id;
@@ -192,7 +214,22 @@ class StickyNoteController extends AccountBaseController
                         ->where('task_users.user_id', Auth::user()->id)
                         ->select('tasks.id', 'heading')
                         ->get();
+
          return response()->json($leadDevTasks);
+         
+        }elseif(Auth::user()->role_id == 5){
+            $devsubtasks = Project::leftJoin('tasks', 'projects.id', '=', 'tasks.project_id')
+                        ->leftJoin('sub_tasks', 'tasks.id', '=', 'sub_tasks.task_id')
+                        ->where('projects.client_id', $request->client_id)
+                        ->where('projects.status', 'in progress')
+                        ->where('tasks.subtask_id', null)
+                        ->where('tasks.board_column_id', '!=', 4)
+                        ->where('sub_tasks.assigned_to', Auth::user()->id)
+                        ->select('sub_tasks.id', 'title')
+                        ->get();
+
+         return response()->json($devsubtasks);
+
         }
     }
 

@@ -48,7 +48,7 @@
 
                     <x-cards.data-row :label="__('modules.sticky.colors')"
                         value="<i class='fa fa-square f-21 mr-2 text-{{ $colour }}'></i>" html="true" />
-                    @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 6)
+                    @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5)
                     <x-cards.data-row :label="__('Note Type')" :value="$stickyNotes->note_type" html="true" />
                     @if($stickyNotes->client_id)   
                     <x-cards.data-row :label="__('Client')" :value="$stickyNotes->client->name" html="true" />

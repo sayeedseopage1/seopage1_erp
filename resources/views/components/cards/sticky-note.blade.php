@@ -43,8 +43,13 @@
                         <a class="dropdown-item mark-as-complete" data-note-id="{{ $stickyNote->id }}"
                             href="javascript:;"><i class="fa fa-check mr-2"></i>Mark as complete</a>
                             @else
+                            @if($stickyNote->status == 'Deleted')
+                            <a class="dropdown-item""
+                                href="javascript:;"><i class="fa fa-ban mr-2"></i>Deleted</a>
+                            @else
                             <a class="dropdown-item""
                                 href="javascript:;"><i class="fa fa-check-square mr-2"></i>Completed</a>
+                            @endif
                             @endif
                     </div>
                 </div>

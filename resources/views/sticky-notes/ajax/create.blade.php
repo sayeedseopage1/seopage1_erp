@@ -132,6 +132,107 @@
                         </div>
                     </div>
                     @endif
+                     {{-- For Developer Only --}}
+                     @if(Auth::user()->role_id == 5)
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="note_type" id="note_type" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                                 <option value="Sub-Task">Sub-Task</option>
+                                 <option value="Non-Subtask">Non-Subtask</option>
+                             </select>
+                             <label id="note_type_error" class="text-danger" for="note_type"></label>
+                         </div>
+                     </div>
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="clientField" style="display: none">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_id">Clients
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                                 @foreach ($dev_clients as $client)
+                                 <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                 @endforeach
+                             </select>
+                             <label id="client_id_error" class="text-danger" for="client_id"></label>
+                         </div>
+                     </div>
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="subtaskField" style="display: none">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="subtask_id">Subtask
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="subtask_id" id="subtask_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                             </select>
+                             <label id="subtask_id_error" class="text-danger" for="subtask_id"></label>
+                         </div>
+                     </div>
+                     @endif
+                     {{-- For Admin Only --}}
+                    @if(Auth::user()->role_id == 4)
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="note_type" id="note_type" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                <option value="Project">Project</option>
+                                <option value="Deal">Deal</option>
+                                <option value="Won Deal">Won Deal</option>
+                            </select>
+                            <label id="note_type_error" class="text-danger" for="note_type"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="clientField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_id">Clients
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                @foreach ($clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                @endforeach
+                            </select>
+                            <label id="client_id_error" class="text-danger" for="client_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="projectField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_id">Projects
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="project_id" id="project_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="project_id_error" class="text-danger" for="project_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="milestoneField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="milestone_id">Milestones</label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="milestone_id" id="milestone_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="milestone_id_error" class="text-danger" for="milestone_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks</label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="task_id" id="task_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="task_id_error" class="text-danger" for="task_id"></label>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="reminder_time">When should the system remind you about this note?
@@ -198,6 +299,16 @@
                 $('#subtaskField').hide();
             }
             @endif
+            // ONLY FOR DEVELOPERS
+            @if(Auth::user()->role_id == 5)
+            if ($(this).val() == 'Sub-Task') {
+                $('#clientField').show();
+                $('#subtaskField').show();
+            } else {
+                $('#clientField').hide();
+                $('#subtaskField').hide();
+            }
+            @endif
         });
         // ONLY FOR PROJECTS DROPDOWN
         $('#client_id').change(function() {
@@ -217,19 +328,27 @@
                 dataType: "json",
                 success: function (response) {
                     @if(Auth::user()->role_id == 4)
-                    $('#project_id').empty();
-                    $('#project_id').append('<option value="">--</option>');
-                    $.each(response, function(index, project) {
-                        $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
-                    });
-                    $('#project_id').selectpicker('refresh');
+                        $('#project_id').empty();
+                        $('#project_id').append('<option value="">--</option>');
+                        $.each(response, function(index, project) {
+                            $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
+                        });
+                        $('#project_id').selectpicker('refresh');
+
                     @elseif (Auth::user()->role_id == 6)
-                    $('#task_id').empty();
-                    $('#task_id').append('<option value="">--</option>');
-                    $.each(response, function(index, task) {
-                        $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
-                    });
-                    $('#task_id').selectpicker('refresh');
+                        $('#task_id').empty();
+                        $('#task_id').append('<option value="">--</option>');
+                        $.each(response, function(index, task) {
+                            $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
+                        });
+                        $('#task_id').selectpicker('refresh');
+                    @elseif (Auth::user()->role_id == 5)
+                        $('#subtask_id').empty();
+                        $('#subtask_id').append('<option value="">--</option>');
+                        $.each(response, function(index, subtask) {
+                            $('#subtask_id').append('<option value="' + subtask.id + '">' + subtask.title + '</option>');
+                        });
+                        $('#subtask_id').selectpicker('refresh');
                     @endif
                 },
                 error: function(error) {
@@ -348,9 +467,15 @@
                 @if (Auth::user()->role_id == 4)
                 'project_id': document.getElementById("project_id").value,
                 'milestone_id': document.getElementById("milestone_id").value,
+                'task_id': document.getElementById("task_id").value,
                 @endif
+                @if (Auth::user()->role_id == 6)
                 'task_id': document.getElementById("task_id").value,
                 'subtask_id': document.getElementById("subtask_id").value,
+                @endif
+                @if (Auth::user()->role_id == 5)
+                'subtask_id': document.getElementById("subtask_id").value,
+                @endif
                 'reminder_time': document.getElementById("reminder_time").value,
                 'notetext': document.getElementById("notetext").value,
             }
