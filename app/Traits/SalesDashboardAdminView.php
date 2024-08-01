@@ -49,7 +49,7 @@ trait SalesDashboardAdminView
             $leadsWithDateAndIdClone = clone $leadsWithSaleId;
 
             $leadsWithDateAndId = $leadsWithDateAndIdClone->with('currency:id,currency_symbol', 'addedByUser:id,name', 'addedByUser.employeeDetail:id,user_id,designation_id,employee_id', 'addedByUser.employeeDetail.designation:id,name')
-                ->whereBetween('created_at', [$startDate, $endDate])->select('id', 'client_name', 'bid_value', 'created_at', 'deal_status', 'currency_id', 'added_by');
+                ->whereBetween('created_at', [$startDate, $endDate])->select('id', 'client_name', 'bid_value', 'created_at', 'deal_status', 'currency_id', 'added_by', 'bidding_minutes', 'bidding_seconds');
             $numberOfLeadsReceivedGet = clone $leadsWithDateAndId;
 
             $numberOfLeadsReceivedFixed = clone $leadsWithDateAndId;
@@ -59,7 +59,7 @@ trait SalesDashboardAdminView
 
             if ($tableType == 'leads_received') {
                 $saleExecutive += [
-                    'number_of_leads_received_list' => $numberOfLeadsReceivedGet->select('id', 'client_name', 'bid_value', 'created_at', 'deal_status', 'currency_id', 'added_by', 'bidding_minutes', 'bidding_seconds')->get(),
+                    'number_of_leads_received_list' => $numberOfLeadsReceivedGet->get(),
                 ];
             } else {
                 $saleExecutive += [
