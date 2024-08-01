@@ -51,7 +51,7 @@ class PmGoalBeforeExpireNotification extends Notification
         $client= User::where('id',$goal->client_id)->first();
 
         // calculating ordinal suffix 
-        $nthGoal = 0;
+        $nthGoal = 1;
         ProjectPmGoal::where('project_id', $goal->project_id)->orderBy('id', 'ASC')->each(function($item) use($goal, &$nthGoal) {
             if ($goal->id == $item->id) 
                 return false;

@@ -51,9 +51,9 @@ class PmGoalMissNotification extends Notification
         $client= User::where('id',$pm_goal->client_id)->first();
 
         // calculating ordinal suffix 
-        $nthGoal = 0;
-        ProjectPmGoal::where('project_id', $goal->project_id)->orderBy('id', 'ASC')->each(function($item) use($goal, &$nthGoal) {
-            if ($goal->id == $item->id) 
+        $nthGoal = 1;
+        ProjectPmGoal::where('project_id', $pm_goal->project_id)->orderBy('id', 'ASC')->each(function($item) use($pm_goal, &$nthGoal) {
+            if ($pm_goal->id == $item->id) 
                 return false;
             $nthGoal++;
         });

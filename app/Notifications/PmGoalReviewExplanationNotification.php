@@ -52,7 +52,7 @@ class PmGoalReviewExplanationNotification extends Notification
         $pm= User::where('id',$goal->pm_id)->first();
         
         // calculating ordinal suffix 
-        $nthGoal = 0;
+        $nthGoal = 1;
         ProjectPmGoal::where('project_id', $goal->project_id)->orderBy('id', 'ASC')->each(function($item) use($goal, &$nthGoal) {
             if ($goal->id == $item->id) 
                 return false;
