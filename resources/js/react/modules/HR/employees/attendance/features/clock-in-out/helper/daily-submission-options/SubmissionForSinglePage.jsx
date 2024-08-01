@@ -21,8 +21,11 @@ import Others from "./options/Others";
 import { dailySubmissionStaticData } from "../../../../../../../../utils/daily-submission-categories";
 import Button from "../../../../../../../../global/Button";
 import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
+import ErrorDisplay from "./components/ErrorDisplay";
+import { toast } from "react-toastify";
 
 const SubmissionForSinglePage = ({
+    errorFields,
     numberOfPages,
     pageNumber,
     dailySubPagesData,
@@ -75,6 +78,7 @@ const SubmissionForSinglePage = ({
             case 1:
                 return (
                     <SectionBuilding
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -85,6 +89,7 @@ const SubmissionForSinglePage = ({
             case 2:
                 return (
                     <MobileScreenResponsive
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -95,6 +100,7 @@ const SubmissionForSinglePage = ({
             case 3:
                 return (
                     <Revision
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -105,6 +111,7 @@ const SubmissionForSinglePage = ({
             case 4:
                 return (
                     <BugFixing
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -115,6 +122,7 @@ const SubmissionForSinglePage = ({
             case 5:
                 return (
                     <FunctionalityDevelopment
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -125,6 +133,7 @@ const SubmissionForSinglePage = ({
             case 6:
                 return (
                     <SpeedOptimization
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -135,6 +144,7 @@ const SubmissionForSinglePage = ({
             case 7:
                 return (
                     <DomainHostingConnection
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -145,6 +155,7 @@ const SubmissionForSinglePage = ({
             case 8:
                 return (
                     <Migration
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -155,6 +166,7 @@ const SubmissionForSinglePage = ({
             case 9:
                 return (
                     <ProductUploading
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -165,6 +177,7 @@ const SubmissionForSinglePage = ({
             case 10:
                 return (
                     <BlogUploading
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -175,6 +188,7 @@ const SubmissionForSinglePage = ({
             case 11:
                 return (
                     <CloningPage
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -185,6 +199,7 @@ const SubmissionForSinglePage = ({
             case 12:
                 return (
                     <Others
+                        errorFields={errorFields}
                         pageUrl={pageUrl}
                         sectionId={index}
                         pageNumber={pageNumber}
@@ -198,6 +213,24 @@ const SubmissionForSinglePage = ({
     };
 
     const handleAddSection = () => {
+        // Default category with ID 1
+        const defaultCategory = categories.find(
+            (category) => category.id === 1
+        );
+
+        setSections((prevSections) => [
+            ...prevSections,
+            { id: prevSections.length },
+        ]);
+
+        // Set default category for the new section
+        setSelectedCategories((prevCategories) => [
+            ...prevCategories,
+            defaultCategory || {}, // Add default category if found
+        ]);
+    };
+
+    const handleAddCategory = () => {
         setSections((prevSections) => [
             ...prevSections,
             { id: prevSections.length },
@@ -214,11 +247,24 @@ const SubmissionForSinglePage = ({
         setSinglePageData((prevData) =>
             prevData.filter((data) => data.id !== `${id}`)
         );
+        toast.success("Section Removed");
     };
 
     console.log("page url", pageUrl);
     console.log("single page data", singlePageData);
-
+    const [error, setError] = useState([]);
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (field) =>
+                field.pageId === currentPage && field.errorName === "pageUrl"
+        );
+        // Set only the first item if it exists
+        if (filteredErrorFields.length > 0) {
+            setError([filteredErrorFields[0]]);
+        } else {
+            setError([]);
+        }
+    }, [errorFields, currentPage]);
     return (
         <div style={{ marginBottom: "50px", marginTop: "30px" }}>
             <div style={{ color: "#979797" }}>
@@ -231,24 +277,45 @@ const SubmissionForSinglePage = ({
                 value={pageUrl}
                 onChange={(e) => setPageUrl(e.target.value)}
             />
+            <ErrorDisplay errors={error} errorName="pageUrl" />
 
             <strong>What did you do on this page</strong>
 
             {sections.map((section, index) => (
                 <div key={section.id}>
-                    <SubmissionDropDown
-                        categories={categories}
-                        setCategories={setCategories}
-                        selectedCategory={selectedCategories[index]}
-                        onCategoryChange={(category) =>
-                            handleCategoryChange(index, category)
-                        }
-                    />
+                    {/* Remove the dropdown for section building option where section id more than 0 */}
+                    {selectedCategories &&
+                    selectedCategories[index]?.id == 1 &&
+                    index > 0 ? (
+                        ""
+                    ) : (
+                        <SubmissionDropDown
+                            categories={categories}
+                            setCategories={setCategories}
+                            selectedCategory={selectedCategories[index]}
+                            onCategoryChange={(category) =>
+                                handleCategoryChange(index, category)
+                            }
+                        />
+                    )}
+
                     {selectedCategories[index] !== undefined && (
                         <SectionContainer>
                             <SectionTitle>
-                                Section {index + 1}:{" "}
-                                {selectedCategories[index]?.name}
+                                {selectedCategories[index]?.id == 1 ? (
+                                    <div>
+                                        <span>Section {index + 1}: </span>{" "}
+                                        <span>
+                                            {selectedCategories[index]?.name}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <span>
+                                            {selectedCategories[index]?.name}
+                                        </span>
+                                    </div>
+                                )}
                             </SectionTitle>
                             {getComponentForCategory(
                                 index,
@@ -279,7 +346,9 @@ const SubmissionForSinglePage = ({
                                           <span>
                                               <CiCircleMinus size={25} />
                                           </span>{" "}
-                                          <span>Remove the section</span>
+                                          <span>
+                                              Remove Section {index + 1}
+                                          </span>
                                       </div>
                                   </div>
                                   <div>
@@ -321,7 +390,7 @@ const SubmissionForSinglePage = ({
                 </div>
             ))}
             <div style={{ marginTop: "10px" }}>
-                <Button size="md" onClick={handleAddSection}>
+                <Button size="md" onClick={handleAddCategory}>
                     Add New
                 </Button>
             </div>

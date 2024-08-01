@@ -12,7 +12,7 @@ const SubmissionDropDown = ({
     return (
         <Container>
             <Dropdown onClick={() => setMenuVisible(!menuVisible)}>
-                <strong>{selectedCategory?.name ?? "Select Here"}</strong>
+                <strong>{selectedCategory?.name ?? "Select a Category"}</strong>
                 <span
                     style={{
                         transform: menuVisible

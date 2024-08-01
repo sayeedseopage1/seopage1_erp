@@ -29,6 +29,8 @@ import {
     RadioInput,
 } from "./DailySubmissionUI";
 import SubmissionForSinglePage from "./helper/daily-submission-options/SubmissionForSinglePage";
+import { validateDailySubPagesData } from "../../../../../../utils/daily-submission-data-validation";
+import ErrorDisplay from "./helper/daily-submission-options/components/ErrorDisplay";
 
 /**
  * * This component render task report form
@@ -49,7 +51,7 @@ const DailyReportSubmissionForm = ({
 
     //mitul work
     const [dailySubPagesData, setDailySubPagesData] = React.useState({});
-
+    const [errorFields, setErrorFields] = React.useState([]);
     const handleDailySubPagesData = (data, type) => {
         if (type === "frontendPassword")
             setDailySubmissionData([...dailySubmissionData, data]);
@@ -79,119 +81,440 @@ const DailyReportSubmissionForm = ({
         setDailySubPagesData((prev) => ({ ...prev, frontendPasswordValue }));
     }, [frontendPasswordValue, numberOfPages]);
 
-    const validateDailySubPagesData = () => {
-        const errors = [];
-        const { pageData, frontendPasswordValue } = dailySubPagesData;
+    // const validateDailySubPagesData = () => {
+    //     const errors = [];
+    //     const errorFields = [];
+    //     const { pageData, frontendPasswordValue } = dailySubPagesData;
 
-        // Check if frontendPasswordValue is defined
-        if (
-            frontendPasswordValue === undefined ||
-            frontendPasswordValue.trim() === ""
-        ) {
-            errors.push("Frontend password cannot be empty.");
-        }
+    //     // Check if frontendPasswordValue is defined
+    //     if (
+    //         isFrontendPassword === "yes" &&
+    //         (frontendPasswordValue === undefined ||
+    //             frontendPasswordValue.trim() === "")
+    //     ) {
+    //         errors.push("Frontend password cannot be empty.");
+    //     }
 
-        pageData.forEach((page, pageIndex) => {
-            if (page) {
-                page.forEach((section, sectionIndex) => {
-                    // Check each field for undefined and trim if it's a string
-                    if (
-                        section.pageId === undefined ||
-                        section.pageId.trim() === ""
-                    ) {
-                        errors.push(
-                            `Page ${pageIndex + 1}, Section ${
-                                sectionIndex + 1
-                            }: Page ID cannot be empty.`
-                        );
-                    }
-                    if (
-                        section.categoryId === undefined ||
-                        section.categoryId.trim() === ""
-                    ) {
-                        errors.push(
-                            `Page ${pageIndex + 1}, Section ${
-                                sectionIndex + 1
-                            }: Category ID cannot be empty.`
-                        );
-                    }
-                    if (
-                        section.categoryName === undefined ||
-                        section.categoryName.trim() === ""
-                    ) {
-                        errors.push(
-                            `Page ${pageIndex + 1}, Section ${
-                                sectionIndex + 1
-                            }: Category Name cannot be empty.`
-                        );
-                    }
-                    if (
-                        section.name === undefined ||
-                        section.name.trim() === ""
-                    ) {
-                        errors.push(
-                            `Page ${pageIndex + 1}, Section ${
-                                sectionIndex + 1
-                            }: Section Name cannot be empty.`
-                        );
-                    }
-                    if (
-                        (section.screenshotUrl === undefined ||
-                            section.screenshotUrl.trim() === "") &&
-                        (section.bugName === undefined ||
-                            section.bugName.trim() === "")
-                    ) {
-                        errors.push(
-                            `Page ${pageIndex + 1}, Section ${
-                                sectionIndex + 1
-                            }: Screenshot URL or Bug Name cannot be empty.`
-                        );
-                    }
-                });
-            }
-        });
+    //     pageData.forEach((page, pageIndex) => {
+    //         if (page.length === 0) {
+    //             errors.push(
+    //                 `Please select a category for Page-${pageIndex + 1}.`
+    //             );
+    //         }
+    //         if (page) {
+    //             page.forEach((section, sectionIndex) => {
+    //                 const pageUrl = section.pageUrl;
+    //                 if (
+    //                     pageUrl === undefined ||
+    //                     pageUrl === "" ||
+    //                     !checkIsURL(pageUrl)
+    //                 ) {
+    //                     errors.push(
+    //                         `Page-${pageIndex + 1}, Category-${
+    //                             sectionIndex + 1
+    //                         }: Page URL is invalid.`
+    //                     );
+    //                 }
 
-        return errors;
-    };
+    //                 if (section.categoryId == 1) {
+    //                     const webUrl = section.webVersionUrl;
+    //                     const mobileUrl = section.mobileVersionUrl;
+    //                     const tabUrl = section.tabVersionUrl;
+    //                     const webFile = section.webVersionFile || [];
+    //                     const mobileFile = section.mobileVersionFile || [];
+    //                     const tabFile = section.tabVersionFile || [];
+    //                     const comment = section.comment;
+    //                     const sectionName = section.sectionName;
+
+    //                     if (
+    //                         (webUrl === undefined ||
+    //                             webUrl === "" ||
+    //                             !checkIsURL(webUrl)) &&
+    //                         webFile.length === 0
+    //                     ) {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Web Version URL/file is invalid.`
+    //                         );
+    //                         errorFields.push({
+    //                             pageId: section.pageId,
+    //                             categoryId: section.categoryId,
+    //                             sectionId: section.id,
+    //                             errorName: "webVersionUrl",
+    //                             errorMessage:
+    //                                 "Web Version URL/file is invalid in error field.",
+    //                         });
+    //                         console.log("errorFields in form", errorFields);
+    //                     }
+    //                     if (
+    //                         (mobileUrl === undefined ||
+    //                             mobileUrl === "" ||
+    //                             !checkIsURL(mobileUrl)) &&
+    //                         mobileFile.length === 0
+    //                     ) {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Mobile Version URL/file is invalid.`
+    //                         );
+    //                     }
+    //                     if (
+    //                         (tabUrl === undefined ||
+    //                             tabUrl === "" ||
+    //                             !checkIsURL(tabUrl)) &&
+    //                         tabFile.length === 0
+    //                     ) {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Tab Version URL/file is invalid.`
+    //                         );
+    //                     }
+    //                     if (comment === undefined || comment === "") {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Comment is required.`
+    //                         );
+    //                     }
+    //                     if (sectionName === undefined || sectionName === "") {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Section Name is required.`
+    //                         );
+    //                     }
+    //                 } else if (section.categoryId == 2) {
+    //                     const name = section.name;
+    //                     const screenshotUrl = section.screenshotUrl;
+    //                     const comment = section.comment;
+
+    //                     if (name === undefined || name === "") {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Name is required.`
+    //                         );
+    //                     }
+    //                     if (
+    //                         screenshotUrl === undefined ||
+    //                         screenshotUrl === "" ||
+    //                         !checkIsURL(screenshotUrl)
+    //                     ) {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Screenshot URL is invalid.`
+    //                         );
+    //                     }
+
+    //                     if (comment === undefined || comment === "") {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Comment is required.`
+    //                         );
+    //                     }
+    //                 } else if (section.categoryId == 3) {
+    //                     const name = section.name;
+    //                     const screenshotUrl = section.screenshotUrl;
+    //                     const comment = section.comment;
+
+    //                     if (name === undefined || name === "") {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Name is required.`
+    //                         );
+    //                     }
+    //                     if (
+    //                         screenshotUrl === undefined ||
+    //                         screenshotUrl === "" ||
+    //                         !checkIsURL(screenshotUrl)
+    //                     ) {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Screenshot URL is invalid.`
+    //                         );
+    //                     }
+
+    //                     if (comment === undefined || comment === "") {
+    //                         errors.push(
+    //                             `Page-${pageIndex + 1}, Category-${
+    //                                 sectionIndex + 1
+    //                             }: Comment is required.`
+    //                         );
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+
+    //     console.log(errors);
+    //     setErrorFields(errorFields);
+    //     return errors;
+    // };
 
     const handleSubmission = (e) => {
         setIsLoading(true);
         e.preventDefault();
-        const pageData = JSON.stringify(dailySubPagesData);
 
-        const validationErrors = validateDailySubPagesData();
+        const validationErrors = validateDailySubPagesData(
+            dailySubPagesData,
+            isFrontendPassword,
+            setErrorFields,
+            errorFields
+        );
+
+        console.log("validationErrors after submit", validationErrors);
+
         if (validationErrors.length > 0) {
-            const errorMessage = validationErrors.join("\n");
-            toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: false, // Prevent auto-hide
+            // const errorMessage = (
+            //     <div>
+            //         <div style={{ fontWeight: "bold" }}>
+            //             {" "}
+            //             Please fill in the following fields:
+            //         </div>
+            //         <div>
+            //             {validationErrors.map((field, index) => (
+            //                 <p key={index} style={{ marginBottom: "2px" }}>
+            //                     {index + 1}. {field}
+            //                 </p>
+            //             ))}
+            //         </div>
+            //     </div>
+            // );
+
+            // toast.error(errorMessage, {
+            //     position: "top-center",
+            //     autoClose: 5000,
+            //     style: {
+            //         backgroundColor: "#f8d7da",
+            //         color: "#721c24",
+            //         padding: "5px",
+            //         width: "450px",
+            //         fontSize: "14px",
+            //     },
+            // });
+            toast.error("Please validate your input data", {
+                autoClose: 5000,
                 style: {
                     backgroundColor: "#f8d7da",
                     color: "#721c24",
-                    padding: "16px",
-                    borderRadius: "8px",
-                    fontSize: "16px",
                 },
             });
             setIsLoading(false);
             return;
         }
-        // create form data
+        toast.success("Data submitted successfully", {
+            autoClose: 5000,
+            style: {
+                backgroundColor: "#d4edda",
+                color: "#155724",
+            },
+        });
         const fd = new FormData();
-        fd.append("task_id", task.id);
-        fd.append("user_id", window.Laravel.user.id);
-        fd.append("project_id", task.projectId);
-        fd.append("task_heading", task.task_title);
-        fd.append("client_id", task.clientId);
-        fd.append("client_name", task.client_name);
-        fd.append("hours_spent", task.total_time_spent);
+        // create form data
+
+        // if (dailySubPagesData?.totalPage)
+        //     fd.append("totalPage", dailySubPagesData.totalPage);
+        // if (dailySubPagesData?.frontendPasswordValue)
+        //     fd.append(
+        //         "frontendPasswordValue",
+        //         dailySubPagesData.frontendPasswordValue
+        //     );
+        // fd.append("totalPage", dailySubPagesData?.totalPage);
+        // fd.append(
+        //     "frontendPasswordValue",
+        //     dailySubPagesData.frontendPasswordValue
+        // );
+
+        const pageDataJSON = JSON.stringify(dailySubPagesData);
+        fd.append("pageData", pageDataJSON);
+
+        dailySubPagesData?.pageData.forEach((pageArray, pageIndex) => {
+            pageArray.forEach((section, index) => {
+                if (section.categoryId === "1") {
+                    const sectionId = Number(section.id) + 1;
+                    const pageId = section.pageId;
+                    section.webVersionFile.forEach((file, fileIndex) => {
+                        fd.append(
+                            `pageId[${pageId}]sectionId[${sectionId}]webVersionFiles[]`,
+                            file
+                        );
+                    });
+
+                    section.mobileVersionFile.forEach((file, fileIndex) => {
+                        fd.append(
+                            `pageId[${pageId}]sectionId[${sectionId}]mobileVersionFiles[]`,
+                            file
+                        );
+                    });
+
+                    section.tabVersionFile.forEach((file, fileIndex) => {
+                        fd.append(
+                            `pageId[${pageId}]sectionId[${sectionId}]tabVersionFiles[]`,
+                            file
+                        );
+                    });
+                }
+                //  else if (page.categoryId === "2") {
+                //     fd.append(
+                //         `pageData[${pageIndex}][${index}][name]`,
+                //         page.name
+                //     );
+                //     fd.append(
+                //         `pageData[${pageIndex}][${index}][screenshotUrl]`,
+                //         page.screenshotUrl
+                //     );
+                //     fd.append(
+                //         `pageData[${pageIndex}][${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "3") {
+                //     fd.append(
+                //         `additionalData[${index}][assignedRevisions]`,
+                //         page.assignedRevisions
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][completedRevisions]`,
+                //         page.completedRevisions
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][completedPercentage]`,
+                //         page.completedPercentage
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "4") {
+                //     fd.append(
+                //         `additionalData[${index}][bugName]`,
+                //         page.bugName
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][bugFixedPercentage]`,
+                //         page.bugFixedPercentage
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "5") {
+                //     fd.append(
+                //         `additionalData[${index}][functionalityName]`,
+                //         page.functionalityName
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][totalFixedPercentage]`,
+                //         page.totalFixedPercentage
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "6") {
+                //     fd.append(
+                //         `additionalData[${index}][speedBeforeStarted]`,
+                //         page.speedBeforeStarted
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][screenshotUrlBeforeStarted]`,
+                //         page.screenshotUrlBeforeStarted
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][speedAfterFinished]`,
+                //         page.speedAfterFinished
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][screenshotUrlAfterFinished]`,
+                //         page.screenshotUrlAfterFinished
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "7") {
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "8") {
+                //     fd.append(
+                //         `additionalData[${index}][websiteSize]`,
+                //         page.websiteSize
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][migrationReason]`,
+                //         page.migrationReason
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "9") {
+                //     fd.append(
+                //         `additionalData[${index}][totalProducts]`,
+                //         page.totalProducts
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][screenshotUrl]`,
+                //         page.screenshotUrl
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "10") {
+                //     fd.append(
+                //         `additionalData[${index}][totalBlogPosts]`,
+                //         page.totalBlogPosts
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][screenshotUrl]`,
+                //         page.screenshotUrl
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // } else if (page.categoryId === "11") {
+                //     fd.append(
+                //         `additionalData[${index}][totalClonedPages]`,
+                //         page.totalClonedPages
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][isContentChanged]`,
+                //         page.isContentChanged
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][screenshotUrl]`,
+                //         page.screenshotUrl
+                //     );
+                //     fd.append(
+                //         `additionalData[${index}][comment]`,
+                //         page.comment
+                //     );
+                // }
+            });
+        });
+
+        // fd.append("task_id", task.id);
+        // fd.append("user_id", window.Laravel.user.id);
+        // fd.append("project_id", task.projectId);
+        // fd.append("task_heading", task.task_title);
+        // fd.append("client_id", task.clientId);
+        // fd.append("client_name", task.client_name);
+        // fd.append("hours_spent", task.total_time_spent);
         fd.append(
             "_token",
             document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-        fd.append("pageData", pageData);
 
         // form submit
         const formSubmit = async () => {
@@ -225,6 +548,14 @@ const DailyReportSubmissionForm = ({
             formSubmit();
         }
     };
+    const [error, setError] = React.useState([]);
+
+    useEffect(() => {
+        const filteredError = errorFields.filter(
+            (field) => field.errorName === "frontendPasswordValue"
+        );
+        setError(filteredError);
+    }, [errorFields]);
     return (
         <ReactModal
             style={{
@@ -236,7 +567,7 @@ const DailyReportSubmissionForm = ({
                 content: {
                     borderRadius: "29px 29px 10px 10px",
                     maxWidth: "800px",
-                    height: "98%",
+                    height: "90%",
                     margin: "auto auto",
                     padding: "0px",
                     zIndex: 9999,
@@ -286,15 +617,21 @@ const DailyReportSubmissionForm = ({
                         </Flex>
                         <br />
                         {isFrontendPassword === "yes" && (
-                            <InputItem
-                                width="150%"
-                                placeHolder="write password.."
-                                label="Insert the password here:"
-                                value={frontendPasswordValue}
-                                onChange={(e) =>
-                                    setFrontendPasswordValue(e.target.value)
-                                }
-                            />
+                            <>
+                                <InputItem
+                                    width="150%"
+                                    placeHolder=""
+                                    label="Insert the password here:"
+                                    value={frontendPasswordValue}
+                                    onChange={(e) =>
+                                        setFrontendPasswordValue(e.target.value)
+                                    }
+                                />
+                                <ErrorDisplay
+                                    errors={error}
+                                    errorName="frontendPasswordValue"
+                                />
+                            </>
                         )}
                     </FrontendPassword>
                     <br />
@@ -324,6 +661,7 @@ const DailyReportSubmissionForm = ({
                     <br />
                     {pageDetailsArray?.map((pageNumber, index) => (
                         <SubmissionForSinglePage
+                            errorFields={errorFields}
                             numberOfPages={numberOfPages}
                             key={index}
                             dailySubPagesData={dailySubPagesData}
@@ -334,22 +672,24 @@ const DailyReportSubmissionForm = ({
                     ))}
                 </ModalBody>
 
-                <DailySubmissionButtonContainer>
-                    <Button
-                        variant="primary"
-                        size="md"
-                        onClick={handleSubmission}
-                    >
-                        Submit
-                    </Button>
-                    <Button variant="danger" size="md" onClick={close}>
-                        Close
-                    </Button>
-                </DailySubmissionButtonContainer>
+                {numberOfPages > 0 && (
+                    <DailySubmissionButtonContainer>
+                        <Button
+                            variant="primary"
+                            size="md"
+                            onClick={handleSubmission}
+                        >
+                            Submit
+                        </Button>
+                        <Button variant="danger" size="md" onClick={close}>
+                            Close
+                        </Button>
+                    </DailySubmissionButtonContainer>
+                )}
             </ModalContainer>
-            <div style={{ overflow: "auto" }}>
+            {/* <div style={{ overflow: "auto" }}>
                 {JSON.stringify(dailySubPagesData)}
-            </div>
+            </div> */}
         </ReactModal>
     );
 };
