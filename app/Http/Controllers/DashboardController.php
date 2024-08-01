@@ -85,7 +85,7 @@ class DashboardController extends AccountBaseController
             return $this->PmDashboard();
         }
         if ($this->user->role_id == 5) {
-            return $this->DeveloperDashboard();
+            return $this->developerDashboard();
         }
         if ($this->user->role_id == 9) {
             return $this->UxUiDashboard();

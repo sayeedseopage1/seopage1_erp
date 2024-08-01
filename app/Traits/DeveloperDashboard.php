@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use \Carbon\Carbon;
+use Carbon\Carbon;
 use App\Models\Task;
 use App\Helper\Reply;
 use App\Models\Leave;
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait DeveloperDashboard
 {
-    public function DeveloperDashboard()
+    public function developerDashboard()
     {
         $this->viewEventPermission = user()->permission('view_events');
         $this->viewNoticePermission = user()->permission('view_notice');
@@ -137,11 +137,11 @@ trait DeveloperDashboard
                 $this->approved_task_by_client_in_first_attempt_other,
             ] = $this->approvedTaskByClientInFirstAttempt($startDate, $endDate, $devId);
 
-            $AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper = clone $tasksUserInDate;
+            $avgNumberOfAttemptsNeededForApprovalByLeadDeveloper = clone $tasksUserInDate;
             [
                 $this->average_submission_approval_in_this_month,
                 $this->avg_no_of_submission_needed_for_app_by_lead_dev
-            ] = $this->AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper($AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper);
+            ] = $this->avgNumberOfAttemptsNeededForApprovalByLeadDeveloper($avgNumberOfAttemptsNeededForApprovalByLeadDeveloper);
 
             $avgLoggedTimeForCompleteTasks = clone $tasksUserInDate;
             [
@@ -265,15 +265,15 @@ trait DeveloperDashboard
 
             return Reply::dataOnly([
                 'status' => 'success',
-                'html' => $html,
+                'html'   => $html,
             ]);
         } else {
             $devId = Auth::id();
 
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth()->addDays(1);
-            // $startDate = Carbon::parse('2024-05-01')->startOfMonth();
-            // $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
+            // $startDate = Carbon::now()->startOfMonth();
+            // $endDate = Carbon::now()->endOfMonth()->addDays(1);
+            $startDate = Carbon::parse('2024-05-01')->startOfMonth();
+            $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
 
             $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
                 ->whereRelation('taskUsers', 'user_id', $devId);
@@ -342,11 +342,11 @@ trait DeveloperDashboard
 
             // --------------Average number of attempts needed for approval(in cycle) lead developer-----------------------------//
 
-            $AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper = clone $tasksUserInDate;
+            $avgNumberOfAttemptsNeededForApprovalByLeadDeveloper = clone $tasksUserInDate;
             [
                 $this->average_submission_approval_in_this_month,
                 $this->avg_no_of_submission_needed_for_app_by_lead_dev
-            ] = $this->AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper($AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper);
+            ] = $this->avgNumberOfAttemptsNeededForApprovalByLeadDeveloper($avgNumberOfAttemptsNeededForApprovalByLeadDeveloper);
 
             //---------------- Avg number of attempts needed for approval by lead developer table view------------------------------//
 
@@ -504,7 +504,7 @@ trait DeveloperDashboard
     private function numberOfTasksReceived($tasksUserInDate)
     {
         $tasksUserInDate->with(
-            'taskType:id,task_id,task_type',
+            'taskType:id,task_id,task_type,page_type,task_type_other',
             'stat:id,label_color,column_name',
             'project:id,pm_id,client_id',
             'project.pm:id,name',
@@ -729,7 +729,7 @@ trait DeveloperDashboard
         ];
     }
 
-    private function AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper($tasksUserInDate)
+    private function avgNumberOfAttemptsNeededForApprovalByLeadDeveloper($tasksUserInDate)
     {
         $avg_no_of_submission_needed_for_app_by_lead_dev = $tasksUserInDate->with(
             'firstHistoryForDevDoing',
@@ -816,13 +816,13 @@ trait DeveloperDashboard
         $tasks_with_revision_data = clone $all_tasks_with_revision;
 
         $tasks_with_revision_data = $tasks_with_revision_data->has('revisions')->withCount([
-            'taskType as primary_task_type_page_count' => function ($q) {
+            'taskType as primary_task_type_page_count'   => function ($q) {
                 $q->where('page_type', '=', 'Primary Page Development');
             },
             'taskType as secondary_task_type_page_count' => function ($q) {
                 $q->where('page_type', '=', 'Secondary Page Development');
             },
-            'taskType as other_task_type_page_count' => function ($q) {
+            'taskType as other_task_type_page_count'     => function ($q) {
                 $q->where('task_type', '=', 'Others');
             },
         ])->get();

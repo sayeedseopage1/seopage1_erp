@@ -36,7 +36,7 @@
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
                                 <td>
-                                    {{ $row?->taskType?->task_type }}
+                                    {{ $row?->taskType?->page_type }}
                                 </td>
                                 <td>
                                     @if ($row?->project?->client)

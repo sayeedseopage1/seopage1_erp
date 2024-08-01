@@ -36,7 +36,7 @@
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
                                 <td>
-                                    {{ $row?->taskType?->task_type }}
+                                    {{ $row?->taskType?->task_type_other }}
                                 </td>
                                 <td>
                                     @if ($row?->project?->client)
@@ -65,7 +65,7 @@
     </div>
 </div>
 
-
+</style>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
     new DataTable('#number_of_task_received_table', {
