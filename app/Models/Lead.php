@@ -99,7 +99,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Lead extends BaseModel
 {
-    use Notifiable, HasFactory;
+    use Notifiable;
+    use HasFactory;
     use CustomFieldsTrait;
 
     protected $table = 'leads';
@@ -240,7 +241,7 @@ class Lead extends BaseModel
 
     public function leadDeal()
     {
-        return  $this->hasOne(Deal::class, 'lead_id');
+        return $this->hasOne(Deal::class, 'lead_id');
     }
 
 }

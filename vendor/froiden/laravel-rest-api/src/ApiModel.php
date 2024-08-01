@@ -1,4 +1,5 @@
-<?php namespace Froiden\RestAPI;
+<?php
+namespace Froiden\RestAPI;
 
 use Carbon\Carbon;
 use Closure;
@@ -31,7 +32,7 @@ class ApiModel extends Model
      *
      * @var array
      */
-    protected $hidden = ["created_at", "updated_at", "pivot"];
+    protected $hidden = ["updated_at", "pivot"];
 
     /**
      * List of fields on which filters are allowed to be applied. For security
@@ -165,7 +166,8 @@ class ApiModel extends Model
         // when checking the field. We will just return the DateTime right away.
         if ($value instanceof DateTimeInterface) {
             return new Carbon(
-                $value->format('Y-m-d H:i:s.u'), $value->getTimeZone()
+                $value->format('Y-m-d H:i:s.u'),
+                $value->getTimeZone()
             );
         }
 
@@ -186,8 +188,7 @@ class ApiModel extends Model
         // Parse ISO 8061 date
         if (preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\\+(\d{2}):(\d{2})$/', $value)) {
             return Carbon::createFromFormat('Y-m-d\TH:i:s+P', $value);
-        }
-        elseif (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2}T(\d{2}):(\d{2}):(\d{2})\\.(\d{1,3})Z)$/', $value)) {
+        } elseif (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2}T(\d{2}):(\d{2}):(\d{2})\\.(\d{1,3})Z)$/', $value)) {
             return Carbon::createFromFormat('Y-m-d\TH:i:s.uZ', $value);
         }
 
@@ -243,8 +244,7 @@ class ApiModel extends Model
             // Guarded attributes should be removed
             if (in_array($key, $excludes)) {
                 unset($attributes[$key]);
-            }
-            else if (method_exists($this, $key) && ((is_array($attribute) || is_null($attribute)))) {
+            } else if (method_exists($this, $key) && ((is_array($attribute) || is_null($attribute)))) {
                 // Its a relation
                 $this->relationAttributes[$key] = $attribute;
 
@@ -258,8 +258,7 @@ class ApiModel extends Model
                         // If key value is not set in request, we create new object
                         if (!isset($attribute[$primaryKey])) {
                             throw new RelatedResourceNotFoundException('Resource for relation "' . $key . '" not found');
-                        }
-                        else {
+                        } else {
                             $model = $relation->getRelated()->find($attribute[$primaryKey]);
 
                             if (!$model) {
@@ -295,8 +294,7 @@ class ApiModel extends Model
                     // If key value is not set in request, we create new object
                     if (!isset($relationAttribute[$primaryKey])) {
                         throw new RelatedResourceNotFoundException('Resource for relation "' . $key . '" not found');
-                    }
-                    else {
+                    } else {
                         $model = $relation->getRelated()->find($relationAttribute[$primaryKey]);
 
                         if (!$model) {
@@ -334,8 +332,7 @@ class ApiModel extends Model
                     if ($val !== null) {
                         if (!isset($val[$primaryKey])) {
                             throw new RelatedResourceNotFoundException('Resource for relation "' . $key . '" not found');
-                        }
-                        else {
+                        } else {
                             /** @var Model $model */
                             $model = $relation->getRelated()->find($val[$primaryKey]);
 
@@ -350,9 +347,7 @@ class ApiModel extends Model
                         }
                     }
                 }
-            }
-
-            else if ($relation instanceof BelongsToMany) {
+            } else if ($relation instanceof BelongsToMany) {
                 $relatedIds = [];
 
                 // Value is an array of related models
@@ -360,8 +355,7 @@ class ApiModel extends Model
                     if ($val !== null) {
                         if (!isset($val[$primaryKey])) {
                             throw new RelatedResourceNotFoundException('Resource for relation "' . $key . '" not found');
-                        }
-                        else {
+                        } else {
                             /** @var Model $model */
                             $model = $relation->getRelated()->find($val[$primaryKey]);
 
@@ -373,7 +367,7 @@ class ApiModel extends Model
                     }
 
                     if ($val !== null) {
-                       if(isset($val['pivot'])) {
+                        if (isset($val['pivot'])) {
                             // We have additional fields other than primary key
                             // that need to be saved to pivot table
                             /*
@@ -387,12 +381,11 @@ class ApiModel extends Model
                                 ]
                              */
                             $relatedIds[$model->getKey()] = $val['pivot'];
-                       }
-                       else {
+                        } else {
                             // We just have ids
                             $relatedIds[] = $model->getKey();
-                       }
-                   }
+                        }
+                    }
                 }
 
                 $relation->sync($relatedIds);
