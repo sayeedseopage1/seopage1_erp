@@ -1,0 +1,14 @@
+.customCopyToClipboard{
+    display: inline-block;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+@keyframes background {
+    0% {
+        background-color: #f5f5f5;
+    }
+    100% {
+        background-color: #e0e0e0;
+    }
+}

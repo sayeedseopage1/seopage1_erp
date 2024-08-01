@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import _ from 'lodash';
 import * as React from 'react';
+import PropTypes from "prop-types";
 
 
 const JqueryDateRangePicker = ({
@@ -99,3 +99,12 @@ const JqueryDateRangePicker = ({
 }
 
 export default JqueryDateRangePicker;
+
+
+JqueryDateRangePicker.propTypes = {
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    setStartDate: PropTypes.func,
+    setEndDate: PropTypes.func,
+    onApply: PropTypes.func
+}

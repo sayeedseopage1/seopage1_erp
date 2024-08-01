@@ -1,0 +1,81 @@
+import React from "react";
+import PropTypes from "prop-types";
+import { BsInfoCircle } from "react-icons/bs";
+
+// Components - Styled Components
+import { CardTitle } from "../styledComponents";
+
+// Components - Global
+import Switch from "../../../../global/Switch";
+
+// Components - UI - Popover
+import Popover from "../../Popover";
+
+// Styles
+import style from "../../popover.module.css";
+import { handleLoadingComponent } from "../../../helper";
+
+const DashboardCardTitle = ({
+    title,
+    isBorderUse = false,
+    borderType = "solid",
+    isInfoIconUse = false,
+    infoText,
+    rightText,
+    rightTextColor,
+    rightLoadingText = "Loading...",
+    className,
+    isLoading,
+}) => {
+    return (
+        <CardTitle
+            border={isBorderUse ? `1px ${borderType} #D8D8D8` : "none"}
+            className={`d-flex justify-content-between align-items-center ${className}`}
+        >
+            <Switch>
+                <p>
+                    {title}
+                    <Switch.Case condition={isInfoIconUse}>
+                        <Popover className="d-inline">
+                            <Popover.Button className="infoPopoverButton d-inline">
+                                <div className="d-inline">
+                                    <BsInfoCircle />
+                                </div>
+                            </Popover.Button>
+                            <Popover.Panel placement="bottom-start">
+                                <div className={`${style.infoPopoverPanel}`}>
+                                    <p>{infoText}</p>
+                                </div>
+                            </Popover.Panel>
+                        </Popover>
+                    </Switch.Case>
+                </p>
+
+                {rightText && (
+                    <span
+                        style={{
+                            color: rightTextColor,
+                        }}
+                    >
+                        {handleLoadingComponent(isLoading, rightLoadingText, rightText)}
+                    </span>
+                )}
+            </Switch>
+        </CardTitle>
+    );
+};
+
+export default DashboardCardTitle;
+
+DashboardCardTitle.propTypes = {
+    title: PropTypes.string.isRequired,
+    isBorderUse: PropTypes.bool,
+    rightLoadingText: PropTypes.string,
+    rightText: PropTypes.string,
+    rightTextColor: PropTypes.string,
+    isInfoIconUse: PropTypes.bool,
+    infoText: PropTypes.string,
+    className: PropTypes.string,
+    borderType: PropTypes.string,
+    isLoading: PropTypes.bool,
+};

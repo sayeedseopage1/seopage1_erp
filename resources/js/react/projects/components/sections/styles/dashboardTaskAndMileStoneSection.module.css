@@ -1,0 +1,12 @@
+.dashboardTaskAndMileStoneSection {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  grid-gap: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .dashboardTaskAndMileStoneSection {
+    grid-template-columns: minmax(300px, 1fr);
+  }
+
+}
