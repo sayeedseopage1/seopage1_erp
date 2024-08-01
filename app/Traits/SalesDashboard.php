@@ -9,6 +9,7 @@ use App\Helper\Reply;
 use App\Models\Project;
 use App\Models\Contract;
 use App\Models\Attendance;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -28,34 +29,34 @@ trait SalesDashboard
         if ($validator->fails()) {
             return Reply::error(__('validation_failed'), $validator->errors());
         } else {
-            $salesId   = auth()->id();
+            $salesId = auth()->id();
             $tableType = request('table_type');
 
             if (request('start_date') && request('end_date')) {
                 $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
-                $endDate   = Carbon::parse(request('end_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
             } else {
                 $startDate = Carbon::now()->startOfMonth();
-                $endDate   = Carbon::now()->endOfDay();
+                $endDate = Carbon::now()->endOfDay();
                 // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
                 // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
             }
 
             $exclude_end_date = Carbon::parse($endDate)->subDays(45)->format('Y-m-d');
-            $this->username   = auth()->user()->name;
+            $this->username = auth()->user()->name;
 
             $saleExecutive = [];
 
-            $leadsWithSaleId         = Lead::where('added_by', $salesId);
+            $leadsWithSaleId = Lead::where('added_by', $salesId);
             $leadsWithDateAndIdClone = clone $leadsWithSaleId;
 
-            $leadsWithDateAndId       = $leadsWithDateAndIdClone->with('currency:id,currency_symbol', 'addedByUser:id,name', 'addedByUser.employeeDetail:id,user_id,designation_id,employee_id', 'addedByUser.employeeDetail.designation:id,name')
+            $leadsWithDateAndId = $leadsWithDateAndIdClone->with('currency:id,currency_symbol', 'addedByUser:id,name', 'addedByUser.employeeDetail:id,user_id,designation_id,employee_id', 'addedByUser.employeeDetail.designation:id,name')
                 ->whereBetween('created_at', [$startDate, $endDate])->select('id', 'client_name', 'bid_value', 'created_at', 'deal_status', 'category_id', 'added_by');
             $numberOfLeadsReceivedGet = clone $leadsWithDateAndId;
 
-            $numberOfLeadsReceivedFixed  = clone $leadsWithDateAndId;
+            $numberOfLeadsReceivedFixed = clone $leadsWithDateAndId;
             $numberOfLeadsReceivedHourly = clone $leadsWithDateAndId;
-            $numberOfLeadsReceivedFixed  = clone $numberOfLeadsReceivedFixed->where('project_type', 'fixed');
+            $numberOfLeadsReceivedFixed = clone $numberOfLeadsReceivedFixed->where('project_type', 'fixed');
             $numberOfLeadsReceivedHourly = clone $numberOfLeadsReceivedHourly->where('project_type', 'hourly');
 
             if ($tableType == 'leads_received') {
@@ -67,8 +68,8 @@ trait SalesDashboard
                     'number_of_leads_received_list' => [],
                 ];
             }
-            $number_of_leads_received        = $numberOfLeadsReceivedGet->count();
-            $number_of_leads_received_fixed  = $numberOfLeadsReceivedFixed->count();
+            $number_of_leads_received = $numberOfLeadsReceivedGet->count();
+            $number_of_leads_received_fixed = $numberOfLeadsReceivedFixed->count();
             $number_of_leads_received_hourly = $numberOfLeadsReceivedHourly->count();
 
 
@@ -104,8 +105,8 @@ trait SalesDashboard
                     'number_of_leads_convert_deals_list' => [],
                 ];
             }
-            $this->number_of_leads_convert_deals        = $number_of_leads_convert_deals->count();
-            $this->number_of_leads_convert_deals_fixed  = $number_of_leads_convert_deals_fixed->count();
+            $this->number_of_leads_convert_deals = $number_of_leads_convert_deals->count();
+            $this->number_of_leads_convert_deals_fixed = $number_of_leads_convert_deals_fixed->count();
             $this->number_of_leads_convert_deals_hourly = $number_of_leads_convert_deals_hourly->count();
 
 
@@ -139,8 +140,8 @@ trait SalesDashboard
                 ];
             }
 
-            $this->number_of_leads_convert_won_deals        = $number_of_leads_convert_won_deals->count();
-            $this->number_of_leads_convert_won_deals_fixed  = $number_of_leads_convert_won_deals_fixed->count();
+            $this->number_of_leads_convert_won_deals = $number_of_leads_convert_won_deals->count();
+            $this->number_of_leads_convert_won_deals_fixed = $number_of_leads_convert_won_deals_fixed->count();
             $this->number_of_leads_convert_won_deals_hourly = $number_of_leads_convert_won_deals_hourly->count();
 
             $saleExecutive += [
@@ -168,7 +169,7 @@ trait SalesDashboard
 
             //---------------bidding frequency--------------------------------------
 
-            $total_minutes   = 0;
+            $total_minutes = 0;
             $frequency_count = 0;
 
             $attendance_data_by_user = Attendance::with('leads')
@@ -177,17 +178,17 @@ trait SalesDashboard
                 ->whereBetween('created_at', [$startDate, $endDate])
                 ->get();
             foreach ($attendance_data_by_user as $attendance) {
-                $flag      = 0;
+                $flag = 0;
                 $startTime = '';
                 foreach ($attendance?->leads as $lead) {
                     if ($lead->created_at >= $attendance->clock_in_time && $lead->created_at <= $attendance->clock_out_time) {
                         if ($flag == 0) {
-                            $flag      = 1;
+                            $flag = 1;
                             $startTime = Carbon::parse($lead->created_at);
                         } else {
-                            $endTime           = Carbon::parse($lead->created_at);
+                            $endTime = Carbon::parse($lead->created_at);
                             $minutesDifference = $endTime->diffInMinutes($startTime);
-                            $startTime         = $endTime;
+                            $startTime = $endTime;
                             $total_minutes += $minutesDifference;
                             $frequency_count++;
                         }
@@ -221,11 +222,11 @@ trait SalesDashboard
                     $won_deals_value += .25 * $won_deals->amount;
                 }
 
-                $qualify_contribution       = 0;
+                $qualify_contribution = 0;
                 $needs_defined_contribution = 0;
                 $proposal_made_contribution = 0;
-                $negotiation_contribution   = 0;
-                $milestone_contribution     = 0;
+                $negotiation_contribution = 0;
+                $milestone_contribution = 0;
 
                 foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
                     if ($dealStageChanges->updated_by == $salesId) {
@@ -305,11 +306,11 @@ trait SalesDashboard
                     $won_deals_value += .25 * $won_deals->hourly_rate;
                 }
 
-                $qualify_contribution       = 0;
+                $qualify_contribution = 0;
                 $needs_defined_contribution = 0;
                 $proposal_made_contribution = 0;
-                $negotiation_contribution   = 0;
-                $milestone_contribution     = 0;
+                $negotiation_contribution = 0;
+                $milestone_contribution = 0;
 
                 foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
                     if ($dealStageChanges->updated_by == $salesId) {
@@ -373,8 +374,8 @@ trait SalesDashboard
                 ->where('last_updated_by', $salesId)
                 ->where('updated_at', '<', $endDate);
 
-            $projectCompletionCountClone    = clone $contractsSaleEndDate;
-            $projectCanceledCountClone      = clone $contractsSaleEndDate;
+            $projectCompletionCountClone = clone $contractsSaleEndDate;
+            $projectCanceledCountClone = clone $contractsSaleEndDate;
             $wonDealCountRejectProjectClone = clone $contractsSaleEndDate;
 
             //--------Finished Projects---------------//
@@ -422,11 +423,11 @@ trait SalesDashboard
 
             if (false) {
                 $number_of_leads_convert_won_deals_table = $number_of_leads_convert_won_fix_deals;
-                $won_deals_count                         = 0;
-                $won_deals_value                         = 0;
-                $yes                                     = 'YES';
-                $no                                      = 'NO';
-                $numberOfLeadsConvertWonDeals            = [];
+                $won_deals_count = 0;
+                $won_deals_value = 0;
+                $yes = 'YES';
+                $no = 'NO';
+                $numberOfLeadsConvertWonDeals = [];
 
                 foreach ($number_of_leads_convert_won_deals_table as $won_deals) {
                     $deal = $won_deals->toArray();
@@ -449,10 +450,10 @@ trait SalesDashboard
                     }
 
 
-                    $qualify_contribution       = 0;
+                    $qualify_contribution = 0;
                     $needs_defined_contribution = 0;
                     $proposal_made_contribution = 0;
-                    $negotiation_contribution   = 0;
+                    $negotiation_contribution = 0;
                     // $milestone_contribution = 0;
 
                     foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
@@ -542,7 +543,7 @@ trait SalesDashboard
 
                     $won_deals_count = 0;
                     $won_deals_value = 0;
-                    $deal            = [];
+                    $deal = [];
                 }
 
                 $this->number_of_leads_convert_won_deals_table = $numberOfLeadsConvertWonDeals;
@@ -556,10 +557,10 @@ trait SalesDashboard
             if (false) {
                 $number_of_leads_convert_won_deals_table_hourly = $number_of_leads_convert_won_hourly_deals;
 
-                $won_deals_count                         = 0;
-                $won_deals_value                         = 0;
-                $yes                                     = 'YES';
-                $no                                      = 'NO';
+                $won_deals_count = 0;
+                $won_deals_value = 0;
+                $yes = 'YES';
+                $no = 'NO';
                 $numberOfLeadsConvertWonDealsTableHourly = [];
 
                 foreach ($number_of_leads_convert_won_deals_table_hourly as $won_deals) {
@@ -582,10 +583,10 @@ trait SalesDashboard
                         $deal += ['bidder' => $no];
                     }
 
-                    $qualify_contribution       = 0;
+                    $qualify_contribution = 0;
                     $needs_defined_contribution = 0;
                     $proposal_made_contribution = 0;
-                    $negotiation_contribution   = 0;
+                    $negotiation_contribution = 0;
                     // $milestone_contribution = 0;
 
                     foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
@@ -679,7 +680,7 @@ trait SalesDashboard
 
                     $won_deals_count = 0;
                     $won_deals_value = 0;
-                    $deal            = [];
+                    $deal = [];
                 }
 
                 $this->number_of_leads_convert_won_deals_table_hourly = $numberOfLeadsConvertWonDealsTableHourly;
@@ -693,9 +694,9 @@ trait SalesDashboard
                 ->where('added_by', $salesId)
                 ->whereBetween('created_at', [$startDate, $endDate]);
 
-            $dealWithSaleIdDateClone                  = clone $dealWithSaleIdDate;
+            $dealWithSaleIdDateClone = clone $dealWithSaleIdDate;
             $dealWithSaleIdDatePartiallyFinishedClone = clone $dealWithSaleIdDate;
-            $dealWithSaleIdDateDeniedClone            = clone $dealWithSaleIdDate;
+            $dealWithSaleIdDateDeniedClone = clone $dealWithSaleIdDate;
 
             $no_of_won_deals = $dealWithSaleIdDateClone->get();
 
@@ -721,7 +722,7 @@ trait SalesDashboard
 
             $this->no_of_won_deals_value = round($dealWithSaleIdDateClone->sum('amount'), 2);
 
-            $canceled_project       = $dealWithSaleIdDatePartiallyFinishedClone->with('project', 'user', 'currency')
+            $canceled_project = $dealWithSaleIdDatePartiallyFinishedClone->with('project', 'user', 'currency')
                 ->whereRelation('project', 'status', 'partially finished')
                 ->orWhereRelation('project', 'status', 'canceled');
             $canceled_project_count = $canceled_project->count();
@@ -750,12 +751,12 @@ trait SalesDashboard
             }
 
             if (count($no_of_won_deals)) {
-                $avg_deal_amount        = round($this->no_of_won_deals_value / count($no_of_won_deals), 2);
+                $avg_deal_amount = round($this->no_of_won_deals_value / count($no_of_won_deals), 2);
                 $finished_project_ratio = round($finished_project_count / count($no_of_won_deals), 2);
                 $canceled_project_ratio = round($canceled_project_count / count($no_of_won_deals), 2);
                 $rejected_project_ratio = round($rejected_project_count / count($no_of_won_deals), 2);
             } else {
-                $avg_deal_amount        = 0;
+                $avg_deal_amount = 0;
                 $finished_project_ratio = 0;
                 $canceled_project_ratio = 0;
                 $rejected_project_ratio = 0;
@@ -801,10 +802,10 @@ trait SalesDashboard
             $salesId = auth()->id();
             if (request('start_date') && request('end_date')) {
                 $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
-                $endDate   = Carbon::parse(request('end_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
             } else {
                 $startDate = Carbon::now()->startOfMonth();
-                $endDate   = Carbon::now()->endOfDay();
+                $endDate = Carbon::now()->endOfDay();
                 // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
                 // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
             }
@@ -816,13 +817,26 @@ trait SalesDashboard
 
             $number_of_leads_receivedClone = $number_of_leads_received;
 
-            $country_wise_lead_counts = $number_of_leads_receivedClone->select('country', DB::raw('COUNT(*) as lead_count'))
-                ->groupBy('country')->orderBy('lead_count', 'DESC')->get();
+            if ($number_of_leads_received->count()) {
+                $country_wise_lead = $number_of_leads_receivedClone->select('country', DB::raw('COUNT(*) as lead_count, SUM(value) as lead_value'))
+                    ->groupBy('country')->orderBy('lead_count', 'DESC')->get()->toArray();
+            } else {
+                $country_wise_lead = [];
+            }
+
+            if (count($country_wise_lead)) {
+                $totalValue = array_sum(array_column($country_wise_lead, 'lead_value'));
+                $country_wise_lead = Arr::map($country_wise_lead, function (array $value, string $key) use ($totalValue) {
+                    return $value += [
+                        'avg_lead_value'        => round($value['lead_value'] / $value['lead_count'], 2),
+                        'percentage_lead_value' => round(($value['lead_value'] / $totalValue) * 100, 2),
+                    ];
+                });
+            }
 
             $saleExecutive = [
-                'sale_id'                  => $salesId,
-                'country_wise_leads'       => $country_wise_lead_counts,
-                'country_wise_leads_count' => $country_wise_lead_counts->count(),
+                'country_wise_leads'       => $country_wise_lead,
+                'country_wise_leads_count' => count($country_wise_lead),
                 'number_of_leads_received' => $number_of_leads_received->count(),
             ];
             return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
@@ -842,10 +856,10 @@ trait SalesDashboard
 
             if (request('start_date') && request('end_date')) {
                 $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
-                $endDate   = Carbon::parse(request('end_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
             } else {
                 $startDate = Carbon::now()->startOfMonth();
-                $endDate   = Carbon::now()->endOfDay();
+                $endDate = Carbon::now()->endOfDay();
                 // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
                 // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
             }
@@ -871,6 +885,7 @@ trait SalesDashboard
 
             foreach ($leads_country_data as $key => $leads) {
                 $country_data = ['country' => $key];
+                $lead_count = count($leads);
 
                 $won_deals_count = 0;
                 $won_deals_value = 0;
@@ -887,11 +902,11 @@ trait SalesDashboard
                         $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
                     }
 
-                    $qualify_contribution       = 0;
+                    $qualify_contribution = 0;
                     $needs_defined_contribution = 0;
                     $proposal_made_contribution = 0;
-                    $negotiation_contribution   = 0;
-                    $milestone_contribution     = 0;
+                    $negotiation_contribution = 0;
+                    $milestone_contribution = 0;
 
                     foreach ($lead['lead_deal']['deal_stage_changes'] ?? [] as $dealStageChanges) {
                         if ($dealStageChanges['updated_by'] == $salesId) {
@@ -940,20 +955,23 @@ trait SalesDashboard
                     }
                 }
                 $country_data += [
-                    'won_deals_count' => round($won_deals_count, 2),
-                    'won_deals_value' => round($won_deals_value, 2),
+                    'won_deals_count'     => round($won_deals_count, 2),
+                    'won_deals_value'     => round($won_deals_value, 2),
+                    'avg_won_deals_value' => round($won_deals_value, 2) ? round($won_deals_value / $lead_count, 2) : 0,
                 ];
                 $leads_country[] = $country_data;
             }
 
-            // $this->leads_country_data = $leads_country;
+            $totalCount = array_sum(array_column($leads_country, 'won_deals_count'));
+            $totalValue = array_sum(array_column($leads_country, 'won_deals_value'));
 
-            // $saleExecutive += [
-            //     'leads_country_data' => $leads_country,
-            // ];
+            $leads_country = Arr::map($leads_country, function (array $value, string $key) use ($totalValue) {
+                return $value += [
+                    'percentage_won_deals_value' => round(($value['won_deals_value'] / $totalValue) * 100, 2),
+                ];
+            });
 
             $saleExecutive = [
-                'sale_id'                      => $salesId,
                 'country_wise_won_deals'       => $leads_country,
                 'country_wise_won_deals_count' => count($leads_country),
             ];

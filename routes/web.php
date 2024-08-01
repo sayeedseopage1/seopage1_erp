@@ -368,7 +368,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dashboard-sales-performance/admin-sale-dashboard-details/country-wise-bidding-breakdown/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
     Route::get('dashboard-sales-performance/admin-sale-dashboard-details/country-wise-won-deal/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
     // Role Wise get User api
-    Route::get('dashboard-user/{role}', [DashboardController::class, 'getUserRoleWise']);
+    Route::get('dashboard-user/with-lead/{role}', [DashboardController::class, 'getUserRoleWiseWithLead']);
     //sales dashboard temp
     Route::get('dashboard-sales-performance/{id}/temp', [DashboardController::class, 'tempSalesDashboard'])->name('temp-sales-dashboard');
 
