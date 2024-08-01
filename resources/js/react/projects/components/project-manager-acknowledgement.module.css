@@ -10,7 +10,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     font-weight: 400;
     box-shadow: 0 10px 10px 100vw rgb(0 0 0 / 20%);
 }
@@ -39,11 +39,11 @@
     max-height:80vh !important;
     overflow-y: auto;
     color: #232326;
-    font-family: Inter;
+    font-family: Inter, sans-serif;
 }
 
 .card_body h5{
-    font-family: Inter;
+    font-family: Inter, sans-serif;
 }
 
 .form_group{

@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import PropTypes from "prop-types";
 import Person from "../../tasks/components/Person";
 import StopWatch from "../../tasks/components/Timer";
 import { ExpandTask } from "../../tasks/components/table/ExpandTask";
@@ -395,22 +396,31 @@ const Menu = ({ row, table }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const close = () => setIsOpen(false);
 
-  return (
-    <React.Fragment>
-      <Dropdown>
-        <Dropdown.Toggle icon={false}>
-          <Button variant='tertiary'>
-            <i className="fa-solid fa-ellipsis-vertical"></i>
-          </Button>
-        </Dropdown.Toggle>
-        <Dropdown.Menu placement="bottom-end" className="p-1 sp1_tasks_tbl_action_dd_menu">
-          <Dropdown.Item onClick={() => setIsOpen(true)} className="sp1_tasks_tbl_action">
-            <i className="fa-regular fa-pen-to-square mr-2"></i>
-            Edit
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-      <TaskEditForm isOpen={isOpen} close={close} row={row} table={table} />
-    </React.Fragment>
-  )
-}
+    return(
+      <React.Fragment>
+        <Dropdown>
+          <Dropdown.Toggle icon={false}>
+            <Button variant='tertiary'>
+              <i className="fa-solid fa-ellipsis-vertical"></i>
+            </Button>
+          </Dropdown.Toggle>
+          <Dropdown.Menu placement="bottom-end" className="p-1 sp1_tasks_tbl_action_dd_menu">
+            <Dropdown.Item onClick={() => setIsOpen(true)} className="sp1_tasks_tbl_action">
+              <i className="fa-regular fa-pen-to-square mr-2"></i>
+              Edit
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <TaskEditForm isOpen={isOpen} close={close} row={row} table={table} />
+      </React.Fragment>
+    )
+  }
+
+
+
+  Menu.propTypes = {
+    row: PropTypes.object,
+    table: PropTypes.object
+  }
+
+  

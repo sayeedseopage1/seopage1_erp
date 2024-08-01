@@ -201,6 +201,8 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Project\ProjectDetailsController;
+use App\Http\Controllers\Project\ProjectInsightController;
 use App\Http\Controllers\SalesRiskPolicyController;
 
 /*
@@ -725,6 +727,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //projects json route
     Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
     Route::get('get-clients/{type?}', [ProjectController::class, 'get_client_json']);
+
+    // Project Dashboard API
+    Route::get('project-details/{project_id}', ProjectDetailsController::class)->name('project.details');
+    Route::get('project-milestones/{project_id}', [ProjectInsightController::class, 'getProjectMilestones'])->name('project.milestones');
+    Route::get('project-tasks/{project_id}', [ProjectInsightController::class, 'getProjectTasks'])->name('project.tasks');
+    Route::get('project-pending-extension/{project_id}', [ProjectInsightController::class, 'getPendingExtensionRequest'])->name('project.pending.extension');
 
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');

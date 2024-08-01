@@ -196,6 +196,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="drive_yesError" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-3" id="drive_yes_box">
@@ -557,6 +558,7 @@
                                         </label>
                                     </div>
                                 </div>
+                                <span id="dummy_yesError" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12 mt-3" id="dummy_yes_box">
@@ -637,6 +639,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="actual_yesError" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-3" id="actual_yes_box">
@@ -721,16 +724,25 @@
                 plugin_url_values.push(plugin_url[i].value);
             }
             var description = CKEDITOR.instances.descriptionText.getData();
+
+            var loginYesCheckbox = document.getElementById("login_yes");
+            var loginYesValue = loginYesCheckbox.checked ? "1" : null;
+            var driveYesCheckbox = document.getElementById("drive_yes");
+            var driveYesValue = driveYesCheckbox.checked ? "1" : null;
+            var dummyYesCheckbox = document.getElementById("dummy_yes");
+            var dummyYesValue = dummyYesCheckbox.checked ? "1" : null;
+            var actualYesCheckbox = document.getElementById("actual_yes");
+            var actualYesValue = actualYesCheckbox.checked ? "1" : null;
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'qc_protocol': qc_protocol,
-                'login_yes': document.getElementById("login_yes").value,
+                'login_yes': loginYesValue,
                 'login_information': login_information,
                 'login_url': document.getElementById("login_url").value,
                 'login': document.getElementById("login1").value,
                 'password': document.getElementById("password").value,
                 'screenshot': document.getElementById("screenshot").value,
-                'drive_yes': document.getElementById("drive_yes").value,
+                'drive_yes': driveYesValue,
                 'drive_information': drive_information,
                 'google_link': document.getElementById("google_link").value,
                 'rating': rating,
@@ -754,11 +766,11 @@
                 // 'theme_name': document.getElementById("theme_name").value,
                 // 'theme_url': document.getElementById("theme_url").value,
                 'theme_id': document.getElementById("theme_id").value,
-                'dummy_yes': document.getElementById("dummy_yes").value,
+                'dummy_yes': dummyYesValue,
                 'dummy_information': dummy_information,
                 'dummy_link': document.getElementById("dummy_link").value,
                 'notify': notify,
-                'actual_yes': document.getElementById("actual_yes").value,
+                'actual_yes': actualYesValue,
                 'actual_information': actual_information,
                 'actual_link': document.getElementById("actual_link").value,
                 'description': description,
@@ -873,8 +885,8 @@
                     }else{
                         $('#comments3Error').text('');
                     }
-                    if(error.responseJSON.errors.cms_category){
-                        $('#cms_categoryError').text(error.responseJSON.errors.cms_category);
+                    if(error.responseJSON.errors.cms_id){
+                        $('#cms_categoryError').text(error.responseJSON.errors.cms_id);
                     }else{
                         $('#cms_categoryError').text('');
                     }

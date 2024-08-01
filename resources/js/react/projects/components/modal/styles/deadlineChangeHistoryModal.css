@@ -1,0 +1,23 @@
+.deadlineChangeHistoryModalTable .sp1_tlr_tbl_container {
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.deadlineChangeHistoryModalTable .sp1_tlr_tbl_container th {
+  color: #000;
+  font-family: Poppins , sans-serif !important;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.deadlineChangeHistoryModalTable .sp1_tlr_tbl_container td {
+  color: #595959 !important;
+  font-family: Poppins , sans-serif !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: normal !important; 
+}

@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import PropTypes from "prop-types";
 import CKEditorComponent from "../../ckeditor";
 import { useStoreProjectGuidelineMutation } from "../../services/api/projectApiSlice";
 import Button from "../../tasks/components/Button";
@@ -1328,3 +1329,11 @@ const ProjectManagerGuideline = ({
 };
 
 export default ProjectManagerGuideline;
+
+
+ProjectManagerGuideline.propTypes = {
+    isOpen: PropTypes.bool,
+    close: PropTypes.func,
+    openTaskForm: PropTypes.func,
+    projectId: PropTypes.number,
+}

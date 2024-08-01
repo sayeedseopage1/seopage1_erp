@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import * as React from 'react';
+import PropTypes from "prop-types";
 import ReportForm from "../../single-task/section/task-actions/report/ReportForm";
 import Button from "../../tasks/components/Button";
 import Dropdown from '../../tasks/components/Dropdown';
