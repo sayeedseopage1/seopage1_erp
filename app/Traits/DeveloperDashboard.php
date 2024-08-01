@@ -565,7 +565,8 @@ trait DeveloperDashboard
             'stat:id,label_color,column_name',
             'project:id,pm_id,client_id',
             'project.client:id,name',
-            'submissions',
+            'historyForReviews',
+            'lastHistoryForDevReview',
         )->whereIn('id', $taskId)
             ->select('id', 'created_at', 'heading', 'board_column_id', 'start_date', 'project_id');
 

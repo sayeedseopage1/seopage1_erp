@@ -20,6 +20,7 @@
                             <th scope="col">Task Type</th>
                             <th scope="col">Client Name</th>
                             <th scope="col">Project Manager</th>
+                            <th scope="col">Submitted On</th>
                             <th scope="col">Created On</th>
                             <th scope="col">Started On</th>
                             <th scope="col">status</th>
@@ -43,6 +44,15 @@
                                 </td>
                                 <td>
                                     {{ $row?->project?->pm?->name }}
+                                </td>
+                                 <td>
+                                    <div class="hover-text">{{ $row?->lastHistoryForDevReview?->created_at }}
+                                        <span class="tooltip-text-submit" id="top-submit">
+                                            @foreach ($row?->historyForReviews as $revies)
+                                                 {{ $revies?->created_at }}<br/>
+                                            @endforeach
+                                        </span>
+                                    </div>
                                 </td>
                                 <td>
                                     {{ $row?->created_at }}

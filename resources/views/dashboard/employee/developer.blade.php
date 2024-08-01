@@ -83,6 +83,56 @@
             ;
         }
     </style>
+    <style>
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    color: black;
+    font-size: 12px;
+    background-color: #2b3f5046;
+    border-radius: 10px;
+    padding: 3px 7px 3px 7px;
+    text-align: center;
+}
+
+.hover-text:hover .tooltip-text {
+  visibility: visible;
+}
+
+#top {
+  top: -25px;
+  left: -0%;
+}
+.hover-text {
+  position: relative;
+  display: inline-block;
+  /* margin: 40px; */
+  font-family: Arial;
+  
+}
+</style>
+
+<style>
+.hover-text:hover .tooltip-text-submit {
+  visibility: visible;
+}
+    #top-submit {
+        top: -2px;
+        left: -120%;
+    }
+    .tooltip-text-submit {
+        visibility: hidden;
+        position: absolute;
+        z-index: 1;
+        color: white;
+        font-size: 12px;
+        background-color: #2b3f50;
+        border-radius: 10px;
+        padding: 3px 7px 3px 7px;
+        text-align: center;
+    }
+</style>
 @endpush
 @section('content')
     <div class="px-4 py-2 border-top-0">

@@ -76,35 +76,6 @@
     </div>
 </div>
 
-<style>
-.tooltip-text {
-    visibility: hidden;
-    position: absolute;
-    z-index: 1;
-    color: black;
-    font-size: 12px;
-    background-color: #2b3f5046;
-    border-radius: 10px;
-    padding: 3px 7px 3px 7px;
-    text-align: center;
-}
-
-.hover-text:hover .tooltip-text {
-  visibility: visible;
-}
-
-#top {
-  top: -25px;
-  left: -0%;
-}
-.hover-text {
-  position: relative;
-  display: inline-block;
-  /* margin: 40px; */
-  font-family: Arial;
-  
-}
-</style>
 
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
