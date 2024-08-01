@@ -174,7 +174,7 @@
                      </div>
                      @endif
                      {{-- For Admin Only --}}
-                    @if(Auth::user()->role_id == 1)
+                    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
                             <sup class="f-14 mr-1">*</sup>
@@ -333,7 +333,7 @@
                 }
             @endif
             // ONLY FOR ADMIN/Team lead
-            @if (Auth::user()->role_id == 1)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                 const selectedValue = $(this).val();
                 $('#clientField').hide();
                 $('#projectField').hide();
@@ -381,7 +381,7 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                         if(response.status == 'deal'){
                             $('#deal_id').empty();
                             $('#deal_id').append('<option value="">--</option>');
@@ -522,7 +522,7 @@
                 }
             });
         });
-        @if (Auth::user()->role_id == 1)
+        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
         // ONLY FOR CLIENTS DROPDOWN
         $('#note_type').change(function() {
             var note_type = $(this).val();
