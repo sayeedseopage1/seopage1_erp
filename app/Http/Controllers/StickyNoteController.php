@@ -130,12 +130,12 @@ class StickyNoteController extends AccountBaseController
             $validated = $request->validate([
                 'colour' => 'required',
                 'note_type' => 'required',
-                'client_id' => ['required_if:note_type,Project,Deal,Won Deal'],
-                'project_id' => ['required_if:note_type,Project,Deal,Won Deal'],
-                'milestone_id' => ['required_if:note_type,Project,Deal,Won Deal'],
-                'task_id' => ['required_if:note_type,Project,Deal,Won Deal'],
+                'client_id' => ['required_if:note_type,Project','required_if:note_type,Deal','required_if:note_type,Won Deal'],
+                'project_id' => ['required_if:note_type,Project'],
+                'milestone_id' => ['required_if:note_type,Project'],
+                'task_id' => ['required_if:note_type,Project'],
                 'deal_id' => ['required_if:note_type,Deal'],
-                'won_deal_id' => ['required_if:note_type,Deal'],
+                'won_deal_id' => ['required_if:note_type,Won Deal'],
                 'reminder_time' => 'required',
                 'notetext' => 'required',
             ]);
@@ -181,7 +181,7 @@ class StickyNoteController extends AccountBaseController
 
     public function edit($id)
     {
-        $this->stickyNote = StickyNote::with('client','project','milestone','task','subtask')->where('user_id', user()->id)->where('id', $id)->firstOrFail();
+        $this->stickyNote = StickyNote::with('client','project','milestone','task','subtask','deal','won_deal')->where('user_id', user()->id)->where('id', $id)->firstOrFail();
         $this->pageTitle = __('app.edit') . ' ' . __('app.note');
 
         if (request()->ajax()) {

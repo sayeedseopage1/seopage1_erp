@@ -12,7 +12,7 @@
                         </label>
                         <input type="text" name="colour" id="colour" class="form-control height-35 f-14" value="{{$stickyNote->colour}}" readonly>
                     </div>
-                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5)
+                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
                             <sup class="f-14 mr-1">*</sup>
@@ -51,6 +51,18 @@
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Subtask</label>
                         <input type="text" name="task_id" id="task_id" class="form-control height-35 f-14" value="{{$stickyNote->subtask->title}}" readonly>
+                    </div>
+                    @endif
+                    @if($stickyNote->deal_id)
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Deal</label>
+                        <input type="text" name="deal_id" id="deal_id" class="form-control height-35 f-14" value="{{$stickyNote->deal->project_name}}" readonly>
+                    </div>
+                    @endif
+                    @if($stickyNote->won_deal_id)
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Won Deal</label>
+                        <input type="text" name="won_deal" id="won_deal" class="form-control height-35 f-14" value="{{$stickyNote->won_deal->project_name}}" readonly>
                     </div>
                     @endif
                     @endif
