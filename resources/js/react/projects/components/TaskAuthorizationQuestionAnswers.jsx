@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import styles from "./taskAuthorization.module.css";
 import { User } from "../../utils/user-details";
 import _ from "lodash";
@@ -133,9 +134,10 @@ export default TaskAuthorizationQuestionAnswers;
 const Answer = ({ conversation, updateConversation, error }) => {
     return (
         <div className={styles.comment_field}>
-            <label className="task_info__label mt-2">Answer:</label>
+            <label htmlFor="answer" className="task_info__label mt-2">Answer:</label>
             <textarea
                 rows={3}
+                id="answer"
                 value={conversation.answer || ""}
                 onChange={(e) => updateConversation(e, conversation)}
                 placeholder="Write your answer here."
@@ -148,3 +150,14 @@ const Answer = ({ conversation, updateConversation, error }) => {
         </div>
     );
 };
+
+Answer.propTypes = {
+    conversation: PropTypes.object,
+    updateConversation: PropTypes.func,
+    error: PropTypes.object
+}
+
+TaskAuthorizationQuestionAnswers.propTypes = {
+    data: PropTypes.array,
+    updateConversations: PropTypes.func
+}
