@@ -207,6 +207,9 @@ export const validateDailySubPagesData = (
                 } else if (section.categoryId == 4) {
                     const bugName = section.bugName;
                     const bugFixedPercentage = section.bugFixedPercentage;
+                    const bugFixedPercentageValue = Number(
+                        section.bugFixedPercentage
+                    );
                     const comment = section.comment;
                     if (bugName === undefined || bugName === "") {
                         errors.push({
@@ -229,6 +232,22 @@ export const validateDailySubPagesData = (
                             errorMessage: "Bug Fixed Percentage is required.",
                         });
                     }
+                    if (
+                        bugFixedPercentage &&
+                        (Number.isNaN(bugFixedPercentageValue) ||
+                            bugFixedPercentageValue < 1 ||
+                            bugFixedPercentageValue > 100)
+                    ) {
+                        errors.push({
+                            pageId: section.pageId,
+                            categoryId: section.categoryId,
+                            sectionId: section.id,
+                            errorName: "bugFixedPercentage",
+                            errorMessage:
+                                "Bug Fixed Percentage must be a number between 1 and 100.",
+                        });
+                    }
+
                     if (comment === undefined || comment === "") {
                         errors.push({
                             pageId: section.pageId,
@@ -241,6 +260,8 @@ export const validateDailySubPagesData = (
                 } else if (section.categoryId == 5) {
                     const functionalityName = section.functionalityName;
                     const totalFixedPercentage = section.totalFixedPercentage;
+                    const totalFixedPercentageValue =
+                        Number(totalFixedPercentage);
                     const comment = section.comment;
                     if (
                         functionalityName === undefined ||
@@ -264,6 +285,22 @@ export const validateDailySubPagesData = (
                             sectionId: section.id,
                             errorName: "totalFixedPercentage",
                             errorMessage: "Total Fixed Percentage is required.",
+                        });
+                    }
+
+                    if (
+                        totalFixedPercentage &&
+                        (Number.isNaN(totalFixedPercentageValue) ||
+                            totalFixedPercentageValue < 1 ||
+                            totalFixedPercentageValue > 100)
+                    ) {
+                        errors.push({
+                            pageId: section.pageId,
+                            categoryId: section.categoryId,
+                            sectionId: section.id,
+                            errorName: "totalFixedPercentage",
+                            errorMessage:
+                                "Total Fixed Percentage must be a number between 1 and 100.",
                         });
                     }
                     if (comment === undefined || comment === "") {
@@ -402,6 +439,15 @@ export const validateDailySubPagesData = (
                             errorMessage: "Total Products is required.",
                         });
                     }
+                    if (Number.isNaN(Number(totalProducts))) {
+                        errors.push({
+                            pageId: section.pageId,
+                            categoryId: section.categoryId,
+                            sectionId: section.id,
+                            errorName: "totalProducts",
+                            errorMessage: "Total Products must be a number.",
+                        });
+                    }
                     if (
                         screenshotUrl === undefined ||
                         screenshotUrl === "" ||
@@ -428,6 +474,7 @@ export const validateDailySubPagesData = (
                     const totalBlogPosts = section.totalBlogPosts;
                     const screenshotUrl = section.screenshotUrl;
                     const comment = section.comment;
+
                     if (totalBlogPosts === undefined || totalBlogPosts === "") {
                         errors.push({
                             pageId: section.pageId,
@@ -435,6 +482,15 @@ export const validateDailySubPagesData = (
                             sectionId: section.id,
                             errorName: "totalBlogPosts",
                             errorMessage: "Total Blog Posts is required.",
+                        });
+                    }
+                    if (Number.isNaN(Number(totalBlogPosts))) {
+                        errors.push({
+                            pageId: section.pageId,
+                            categoryId: section.categoryId,
+                            sectionId: section.id,
+                            errorName: "totalBlogPosts",
+                            errorMessage: "Total Blog Posts must be a number",
                         });
                     }
                     if (
@@ -464,6 +520,7 @@ export const validateDailySubPagesData = (
                     const screenshotUrl = section.screenshotUrl;
                     const isContentChanged = section.isContentChanged;
                     const comment = section.comment;
+
                     if (
                         totalClonedPages === undefined ||
                         totalClonedPages === ""
@@ -474,6 +531,16 @@ export const validateDailySubPagesData = (
                             sectionId: section.id,
                             errorName: "totalClonedPages",
                             errorMessage: "Total Cloned Pages is required.",
+                        });
+                    }
+                    if (Number.isNaN(Number(totalClonedPages))) {
+                        errors.push({
+                            pageId: section.pageId,
+                            categoryId: section.categoryId,
+                            sectionId: section.id,
+                            errorName: "totalClonedPages",
+                            errorMessage:
+                                "Total Cloned Pages must be a number.",
                         });
                     }
 
