@@ -53,20 +53,20 @@ class PmGoalExtendRequestNotification extends Notification
         $client= User::where('id',$goal->client_id)->first();
         $pm= User::where('id',$goal->pm_id)->first();
 
-        $goal_count = '';
-        if($goal->duration ==3){
-            $goal_count = '1st';
-        }elseif($goal->duration ==7){
-            $goal_count = '2nd';
-        }elseif($goal->duration ==12){
-            $goal_count = '3rd';
-        }elseif($goal->duration ==15){
-            $goal_count = '4th';
-        }elseif($goal->duration ==22){
-            $goal_count = '5th';
-        }else{
-            $goal_count = '6th';
-        }
+        // calculating ordinal suffix 
+        $nthGoal = 0;
+        ProjectPmGoal::where('project_id', $goal->project_id)->orderBy('id', 'ASC')->each(function($item) use($goal, &$nthGoal) {
+            if ($goal->id == $item->id) 
+                return false;
+            $nthGoal++;
+        });
+
+        $ends = ['th','st','nd','rd','th','th','th','th','th','th'];
+        if (($nthGoal %100) >= 11 && ($nthGoal%100) <= 13)
+            $nthGoal = $nthGoal. 'th';
+        else
+            $nthGoal = $nthGoal. $ends[$nthGoal % 10];
+        // end calculation
         
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
         $header = '<strong>' . __('Goal deadline extension requested by PM ('.$pm->name.')') . '</strong>';
@@ -74,30 +74,30 @@ class PmGoalExtendRequestNotification extends Notification
         $body= '<p>'.'PM ('.$pm->name.') requested an extension for the following goal: </p>';
         $content =
         '<p>
-            <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
+            <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
         </p>'.
         '<p>
-            <b style="color: black">' . __('Client name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
+            <b style="color: black">' . __('Client Name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Project category') . ': '.'</b>' . '<span>'.$goal->project_category.'</span>'. '
+            <b style="color: black">' . __('Project Category') . ': '.'</b>' . '<span>'.$goal->project_category.'</span>'. '
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal number') . ': '.'</b>' . '<span>'.$goal_count.'</span>'. '
+            <b style="color: black">' . __('Goal Number') . ': '.'</b>' . '<span>'.$nthGoal.'</span>'. '
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal title') . ': '.'</b>' . '<span>'.$goal->goal_name.'</span>'. '
+            <b style="color: black">' . __('Goal Title') . ': '.'</b>' . '<span>'.$goal->goal_name.'</span>'. '
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Actual goal deadline') . ': '.'</b>' . '<span>'.$goal->goal_end_date.'</span>'. '
+            <b style="color: black">' . __('Actual Goal Deadline') . ': '.'</b>' . '<span>'.$goal->goal_end_date.'</span>'. '
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Extension requested') . ': '.'</b>' . '<span>'.$extension->extended_day. ' Days'.'</span>'. '
+            <b style="color: black">' . __('Extension Requested Till') . ': '.'</b>' . '<span>'.$extension->extended_day. ' Days'.'</span>'. '
         </p>'
         .
         '<p>

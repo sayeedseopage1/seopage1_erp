@@ -50,24 +50,24 @@ class PmGoalMissNotification extends Notification
         $url = url('/account/project-status?modal_type=individual_goal_details&status=expired');
         $client= User::where('id',$pm_goal->client_id)->first();
 
-        $goal_count = '';
-        if($pm_goal->duration ==3){
-            $goal_count = '1st';
-        }elseif($pm_goal->duration ==7){
-            $goal_count = '2nd';
-        }elseif($pm_goal->duration ==12){
-            $goal_count = '3rd';
-        }elseif($pm_goal->duration ==15){
-            $goal_count = '4th';
-        }elseif($pm_goal->duration ==22){
-            $goal_count = '5th';
-        }else{
-            $goal_count = '6th';
-        }
+        // calculating ordinal suffix 
+        $nthGoal = 0;
+        ProjectPmGoal::where('project_id', $goal->project_id)->orderBy('id', 'ASC')->each(function($item) use($goal, &$nthGoal) {
+            if ($goal->id == $item->id) 
+                return false;
+            $nthGoal++;
+        });
+
+        $ends = ['th','st','nd','rd','th','th','th','th','th','th'];
+        if (($nthGoal %100) >= 11 && ($nthGoal%100) <= 13)
+            $nthGoal = $nthGoal. 'th';
+        else
+            $nthGoal = $nthGoal. $ends[$nthGoal % 10];
+        // end calculation
 
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
 
-        $header = '<strong>' . __(''.$goal_count.' goal for client ' . $client->name . ' was not met') . '</strong>';
+        $header = '<strong>' . __(''.$nthGoal.' goal for client ' . $client->name . ' was not met') . '</strong>';
 
         $body= '<p>'.'You couldn’t meet this goal!'.'</p>';
         $content =
@@ -83,7 +83,7 @@ class PmGoalMissNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal number') . ': '.'</b>' . '<span>'.$goal_count.'</span>'. '
+            <b style="color: black">' . __('Goal number') . ': '.'</b>' . '<span>'.$nthGoal.'</span>'. '
         </p>'
         .
         '<p>
@@ -93,7 +93,7 @@ class PmGoalMissNotification extends Notification
         $pm_goal->save();
 
           return (new MailMessage)
-          ->subject(__(''.$goal_count.' goal for client ' . $client->name . ' was not met') )
+          ->subject(__(''.$nthGoal.' goal for client ' . $client->name . ' was not met') )
 
           ->greeting(__('email.Hi') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.pm-goal.miss_goal', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
