@@ -195,6 +195,8 @@ const TaskAuthorization = ({ title, filter }) => {
 
 TaskAuthorization.propTypes = {
     title: PropTypes.string,
+    filter: PropTypes.object,
+
 };
 
 export default TaskAuthorization;
@@ -210,3 +212,7 @@ const LoaderComponent = ({ columns }) => {
         </tr>
     ));
 };
+
+LoaderComponent.propTypes = {
+    columns: PropTypes.array,
+}
