@@ -536,7 +536,7 @@
                             $('#project_id').selectpicker('refresh');
                         }
 
-                    @elseif (Auth::user()->role_id == 6 || $role->role_id == 13)
+                    @elseif (Auth::user()->role_id == 6)
                         $('#task_id').empty();
                         $('#task_id').append('<option value="">--</option>');
                         $.each(response, function(index, task) {
@@ -544,12 +544,21 @@
                         });
                         $('#task_id').selectpicker('refresh');
                     @elseif (Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+                    @if ($role !=null && $role->role_id == 13)
+                        $('#task_id').empty();
+                        $('#task_id').append('<option value="">--</option>');
+                        $.each(response, function(index, task) {
+                            $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
+                        });
+                        $('#task_id').selectpicker('refresh');
+                    @else
                         $('#subtask_id').empty();
                         $('#subtask_id').append('<option value="">--</option>');
                         $.each(response, function(index, subtask) {
                             $('#subtask_id').append('<option value="' + subtask.id + '">' + subtask.title + '</option>');
                         });
                         $('#subtask_id').selectpicker('refresh');
+                    @endif
                     @endif
                 },
                 error: function(error) {
@@ -719,7 +728,11 @@
                 'milestone_id': document.getElementById("milestone_id").value,
                 'task_id': document.getElementById("task_id").value,
                 @endif
-                @if (Auth::user()->role_id == 6 || $role->role_id == 13)
+                @if (Auth::user()->role_id == 6)
+                'task_id': document.getElementById("task_id").value,
+                'subtask_id': document.getElementById("subtask_id").value,
+                @endif
+                @if (isset($role) && $role->role_id == 13)
                 'task_id': document.getElementById("task_id").value,
                 'subtask_id': document.getElementById("subtask_id").value,
                 @endif
