@@ -9,6 +9,7 @@ use App\Models\Deal;
 use App\Models\DealStage;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
+use App\Models\RoleUser;
 use App\Models\StickyNote;
 use App\Models\SubTask;
 use App\Models\Task;
@@ -98,6 +99,7 @@ class StickyNoteController extends AccountBaseController
 
     public function store(Request $request)
     {
+        $role = RoleUser::where('user_id', Auth::user()->id)->where('role_id', 13)->first();
         if (Auth::user()->role_id == 4) {
             $validated = $request->validate([
                 'colour' => 'required',
@@ -107,7 +109,7 @@ class StickyNoteController extends AccountBaseController
                 'reminder_time' => 'required',
                 'notetext' => 'required',
             ]);
-        }elseif(Auth::user()->role_id == 6){
+        }elseif(Auth::user()->role_id == 6 || $role->role_id == 13){
             $validated = $request->validate([
                 'colour' => 'required',
                 'note_type' => 'required',
@@ -220,11 +222,12 @@ class StickyNoteController extends AccountBaseController
 
     public function clientProject(Request $request)
     {
+        $role = RoleUser::where('user_id', Auth::user()->id)->where('role_id', 13)->first();
         if(Auth::user()->role_id == 4){
             $findClientProject = Project::where('client_id', $request->client_id)->where('pm_id', Auth::user()->id)->where('status', 'in progress')->select('id', 'project_name')->get();
 
             return response()->json($findClientProject);
-        }elseif(Auth::user()->role_id == 6){
+        }elseif(Auth::user()->role_id == 6 || $role->role_id == 13){
             $leadDevTasks = Project::leftJoin('tasks', 'projects.id', '=', 'tasks.project_id')
                         ->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
                         ->where('projects.client_id', $request->client_id)

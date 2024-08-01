@@ -133,7 +133,11 @@
                     </div>
                     @endif
                      {{-- For Developer/Ui-Ux/Graphics Only --}}
+                     @php
+                        $role = App\Models\RoleUser::where('user_id', Auth::user()->id)->where('role_id', 13)->first();
+                    @endphp
                      @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+                     @if ($role == null)
                      <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                          <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
                              <sup class="f-14 mr-1">*</sup>
@@ -172,6 +176,7 @@
                              <label id="subtask_id_error" class="text-danger" for="subtask_id"></label>
                          </div>
                      </div>
+                     @endif
                      @endif
                      {{-- For Admin/Team lead Only --}}
                     @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
@@ -305,6 +310,58 @@
                          </div>
                      </div>
                      @endif
+                    {{-- For Lead Only --}}
+                    @if($role != null && $role->role_id == 13)
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="note_type" id="note_type" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                <option value="Task">Task</option>
+                                <option value="Non-Task">Non-Task</option>
+                            </select>
+                            <label id="note_type_error" class="text-danger" for="note_type"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="clientField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_id">Clients
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                @foreach ($lead_dev_clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                @endforeach
+                            </select>
+                            <label id="client_id_error" class="text-danger" for="client_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="task_id" id="task_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="task_id_error" class="text-danger" for="task_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="subtaskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="subtask_id">Subtask
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="subtask_id" id="subtask_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="subtask_id_error" class="text-danger" for="subtask_id"></label>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="reminder_time">When should the system remind you about this note?
@@ -359,6 +416,7 @@
                     $('#taskField').hide();
                 }
             @endif
+            
             // ONLY FOR lEAD MANAGER
             @if(Auth::user()->role_id == 6)
                 if ($(this).val() == 'Task') {
@@ -371,16 +429,20 @@
                     $('#subtaskField').hide();
                 }
             @endif
+
             // ONLY FOR DEVELOPERS
             @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
-                if ($(this).val() == 'Sub-Task') {
-                    $('#clientField').show();
-                    $('#subtaskField').show();
-                } else {
-                    $('#clientField').hide();
-                    $('#subtaskField').hide();
-                }
+                @if($role == null)
+                    if ($(this).val() == 'Sub-Task') {
+                        $('#clientField').show();
+                        $('#subtaskField').show();
+                    } else {
+                        $('#clientField').hide();
+                        $('#subtaskField').hide();
+                    }
+                @endif
             @endif
+
             // ONLY FOR ADMIN/Team lead
             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
                 const selectedValue = $(this).val();
@@ -402,6 +464,19 @@
                 } else if (selectedValue == 'Won Deal') {
                     $('#clientField').show();
                     $('#wonDealField').show();
+                }
+            @endif
+
+            // ONLY FOR LEAD DESIGNER
+            @if ($role !=null && $role->role_id == 13)
+                if ($(this).val() == 'Task') {
+                    $('#clientField').show();
+                    $('#taskField').show();
+                    $('#subtaskField').show();
+                } else {
+                    $('#clientField').hide();
+                    $('#taskField').hide();
+                    $('#subtaskField').hide();
                 }
             @endif
         });
@@ -461,7 +536,7 @@
                             $('#project_id').selectpicker('refresh');
                         }
 
-                    @elseif (Auth::user()->role_id == 6)
+                    @elseif (Auth::user()->role_id == 6 || $role->role_id == 13)
                         $('#task_id').empty();
                         $('#task_id').append('<option value="">--</option>');
                         $.each(response, function(index, task) {
@@ -644,7 +719,7 @@
                 'milestone_id': document.getElementById("milestone_id").value,
                 'task_id': document.getElementById("task_id").value,
                 @endif
-                @if (Auth::user()->role_id == 6)
+                @if (Auth::user()->role_id == 6 || $role->role_id == 13)
                 'task_id': document.getElementById("task_id").value,
                 'subtask_id': document.getElementById("subtask_id").value,
                 @endif
