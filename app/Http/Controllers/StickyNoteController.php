@@ -126,7 +126,7 @@ class StickyNoteController extends AccountBaseController
                 'reminder_time' => 'required',
                 'notetext' => 'required',
             ]);
-        }elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+        }elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7){
             $validated = $request->validate([
                 'colour' => 'required',
                 'note_type' => 'required',
@@ -250,7 +250,7 @@ class StickyNoteController extends AccountBaseController
 
          return response()->json($devsubtasks);
 
-        }elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+        }elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7){
             if($request->note_type == 'Project'){
                 $findClientProject = Project::where('client_id', $request->client_id)->where('status', 'in progress')->select('id', 'project_name')->get();
                 return response()->json(['data'=> $findClientProject, 'status'=>'project']);

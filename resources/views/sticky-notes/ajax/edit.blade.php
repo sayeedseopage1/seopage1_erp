@@ -12,7 +12,7 @@
                         </label>
                         <input type="text" name="colour" id="colour" class="form-control height-35 f-14" value="{{$stickyNote->colour}}" readonly>
                     </div>
-                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
                             <sup class="f-14 mr-1">*</sup>

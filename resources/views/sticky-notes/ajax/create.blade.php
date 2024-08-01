@@ -173,7 +173,7 @@
                          </div>
                      </div>
                      @endif
-                     {{-- For Admin Only --}}
+                     {{-- For Admin/Team lead Only --}}
                     @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
@@ -256,6 +256,55 @@
                         </div>
                     </div>
                     @endif
+                     {{-- For Admin/Team lead Only --}}
+                     @if(Auth::user()->role_id == 7)
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="note_type" id="note_type" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                                 <option value="Deal">Deal</option>
+                                 <option value="Won Deal">Won Deal</option>
+                             </select>
+                             <label id="note_type_error" class="text-danger" for="note_type"></label>
+                         </div>
+                     </div>
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="clientField" style="display: none">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_id">Clients
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                             </select>
+                             <label id="client_id_error" class="text-danger" for="client_id"></label>
+                         </div>
+                     </div>
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="dealField" style="display: none">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="deal_id">Deal
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="deal_id" id="deal_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                             </select>
+                             <label id="deal_id_error" class="text-danger" for="deal_id"></label>
+                         </div>
+                     </div>
+                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="wonDealField" style="display: none">
+                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="won_deal_id">Won Deal
+                             <sup class="f-14 mr-1">*</sup>
+                         </label>
+                         <div class="dropdown bootstrap-select form-control select-picker">
+                             <select name="won_deal_id" id="won_deal_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                 <option value="">--</option>
+                             </select>
+                             <label id="won_deal_id_error" class="text-danger" for="won_deal_id"></label>
+                         </div>
+                     </div>
+                     @endif
 
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="reminder_time">When should the system remind you about this note?
@@ -333,7 +382,7 @@
                 }
             @endif
             // ONLY FOR ADMIN/Team lead
-            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
                 const selectedValue = $(this).val();
                 $('#clientField').hide();
                 $('#projectField').hide();
@@ -359,7 +408,7 @@
         // ONLY FOR PROJECTS DROPDOWN
         $('#client_id').change(function() {
             var client_id = $(this).val();
-            @if(Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+            @if(Auth::user()->role_id == 8 || Auth::user()->role_id == 1 || Auth::user()->role_id == 7)
             var note_type = $('#note_type').val();
             var data = {
                 'client_id': client_id,
@@ -381,7 +430,14 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                    @if (Auth::user()->role_id == 4)
+                        $('#project_id').empty();
+                        $('#project_id').append('<option value="">--</option>');
+                        $.each(response, function(index, project) {
+                            $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
+                        });
+                        $('#project_id').selectpicker('refresh');
+                    @elseif (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
                         if(response.status == 'deal'){
                             $('#deal_id').empty();
                             $('#deal_id').append('<option value="">--</option>');
@@ -522,7 +578,7 @@
                 }
             });
         });
-        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
         // ONLY FOR CLIENTS DROPDOWN
         $('#note_type').change(function() {
             var note_type = $(this).val();
@@ -540,7 +596,7 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    @if(Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+                    @if(Auth::user()->role_id == 8 || Auth::user()->role_id == 1 || Auth::user()->role_id == 7)
                         $('#client_id').empty();
                         $('#client_id').append('<option value="">--</option>');
                         $.each(response, function(index, data) {
@@ -555,6 +611,7 @@
                             $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
                         });
                         $('#task_id').selectpicker('refresh');
+
                     @elseif (Auth::user()->role_id == 5)
                         $('#subtask_id').empty();
                         $('#subtask_id').append('<option value="">--</option>');
@@ -594,7 +651,7 @@
                 @if (Auth::user()->role_id == 5)
                 'subtask_id': document.getElementById("subtask_id").value,
                 @endif
-                @if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+                @if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1 || Auth::user()->role_id == 7)
                 'deal_id': document.getElementById("deal_id").value,
                 'won_deal_id': document.getElementById("won_deal_id").value,
                 @endif
