@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
+
 const ProductUploading = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -19,6 +22,13 @@ const ProductUploading = ({
     });
 
     useEffect(() => {
+        setProductUpload((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
+
+    useEffect(() => {
         setSinglePageData((prev) => {
             const index = prev.findIndex(
                 (item) => item.id === productUpload.id
@@ -34,6 +44,7 @@ const ProductUploading = ({
             }
         });
     }, [productUpload]);
+
     useEffect(() => {
         return () => {
             setSinglePageData((prev) =>
@@ -41,12 +52,25 @@ const ProductUploading = ({
             );
         };
     }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
         setProductUpload({
             ...productUpload,
             [dataName]: value,
         });
     };
+
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === productUpload.pageId &&
+                errorField.categoryId === productUpload.categoryId &&
+                errorField.sectionId === productUpload.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields, productUpload]);
 
     // console.log("productUpload", productUpload);
     return (
@@ -60,6 +84,7 @@ const ProductUploading = ({
                         handleDataChange(e.target.value, "totalProducts")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="totalProducts" />
             </div>
             <div>
                 <div>
@@ -74,6 +99,7 @@ const ProductUploading = ({
                         handleDataChange(e.target.value, "screenshotUrl")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="screenshotUrl" />
             </div>
             <div>
                 <div>Comments</div>
@@ -84,6 +110,7 @@ const ProductUploading = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

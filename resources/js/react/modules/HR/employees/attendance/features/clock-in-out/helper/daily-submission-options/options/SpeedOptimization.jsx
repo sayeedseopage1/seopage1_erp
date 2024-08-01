@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
+
 const SpeedOptimization = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
     category,
     setSinglePageData,
 }) => {
-    const [speedOptimizationdata, setSpeedOptimizationdata] = useState({
+    const [speedOptimizationData, setSpeedOptimizationData] = useState({
         id: `${sectionId}`,
         pageId: `${pageNumber}`,
         pageUrl: `${pageUrl}`,
@@ -21,21 +24,29 @@ const SpeedOptimization = ({
     });
 
     useEffect(() => {
+        setSpeedOptimizationData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
+
+    useEffect(() => {
         setSinglePageData((prev) => {
             const index = prev.findIndex(
-                (item) => item.id === speedOptimizationdata.id
+                (item) => item.id === speedOptimizationData.id
             );
             if (index > -1) {
                 // Update existing section
                 const updatedData = [...prev];
-                updatedData[index] = speedOptimizationdata;
+                updatedData[index] = speedOptimizationData;
                 return updatedData;
             } else {
                 // Add new section
-                return [...prev, speedOptimizationdata];
+                return [...prev, speedOptimizationData];
             }
         });
-    }, [speedOptimizationdata]);
+    }, [speedOptimizationData]);
+
     useEffect(() => {
         return () => {
             setSinglePageData((prev) =>
@@ -43,14 +54,27 @@ const SpeedOptimization = ({
             );
         };
     }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
-        setSpeedOptimizationdata({
-            ...speedOptimizationdata,
+        setSpeedOptimizationData({
+            ...speedOptimizationData,
             [dataName]: value,
         });
     };
 
-    // console.log("speedOptimizationdata", speedOptimizationdata);
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === speedOptimizationData.pageId &&
+                errorField.categoryId === speedOptimizationData.categoryId &&
+                errorField.sectionId === speedOptimizationData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields, speedOptimizationData]);
+
+    // console.log("speedOptimizationData", speedOptimizationData);
     return (
         <div>
             <div>
@@ -62,10 +86,11 @@ const SpeedOptimization = ({
                         handleDataChange(e.target.value, "speedBeforeStarted")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="speedBeforeStarted" />
             </div>
             <div>
                 <div>
-                    Share screenshot of the the speed before you started today
+                    Share screenshot of the speed before you started today
                 </div>
                 <InputItem
                     width="100%"
@@ -77,6 +102,10 @@ const SpeedOptimization = ({
                         )
                     }
                 />
+                <ErrorDisplay
+                    errors={errors}
+                    errorName="screenshotUrlBeforeStarted"
+                />
             </div>
             <div>
                 <div>What is the speed after you finished working today?</div>
@@ -87,6 +116,7 @@ const SpeedOptimization = ({
                         handleDataChange(e.target.value, "speedAfterFinished")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="speedAfterFinished" />
             </div>
             <div>
                 <div>
@@ -103,8 +133,11 @@ const SpeedOptimization = ({
                         )
                     }
                 />
+                <ErrorDisplay
+                    errors={errors}
+                    errorName="screenshotUrlAfterFinished"
+                />
             </div>
-
             <div>
                 <div>Comments</div>
                 <InputItem
@@ -114,6 +147,7 @@ const SpeedOptimization = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

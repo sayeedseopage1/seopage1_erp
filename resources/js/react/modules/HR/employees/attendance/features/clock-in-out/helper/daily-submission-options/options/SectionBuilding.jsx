@@ -20,8 +20,10 @@ import {
 import FileUpload from "../components/FileUpload";
 import FileLists from "../components/FileLists";
 import { FileListSection } from "../components/FileListsSection";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const SectionBuilding = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -43,6 +45,12 @@ const SectionBuilding = ({
         tabVersionFile: [],
         comment: "",
     });
+    useEffect(() => {
+        setSectionBuildingData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
 
     useEffect(() => {
         setSinglePageData((prev) => {
@@ -91,6 +99,19 @@ const SectionBuilding = ({
     };
 
     // console.log("section building data", sectionBuildingData);
+    const [error, setError] = useState([]);
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === sectionBuildingData.pageId &&
+                errorField.categoryId === sectionBuildingData.categoryId &&
+                errorField.sectionId === sectionBuildingData.id
+        );
+        setError(filteredErrorFields);
+    }, [errorFields]);
+
+    // console.log("error fields", errorFields);
+    // console.log("error fields in section", error);
     return (
         <StyledSection>
             <SectionHeader>Section Name</SectionHeader>
@@ -102,6 +123,7 @@ const SectionBuilding = ({
                         handleDataChange(e.target.value, "sectionName")
                     }
                 />
+                <ErrorDisplay errors={error} errorName="sectionName" />
             </StyledInputItem>
             <LinkAndFileContainer>
                 <InstructionText>
@@ -134,6 +156,7 @@ const SectionBuilding = ({
                         />
                     </StyledFileUploadContainer>
                 </FlexSectionContainer>
+                <ErrorDisplay errors={error} errorName="webVersionUrl" />
 
                 <SectionHeader>(ii) Mobile Versions</SectionHeader>
                 <FlexSectionContainer>
@@ -162,7 +185,7 @@ const SectionBuilding = ({
                         />
                     </StyledFileUploadContainer>
                 </FlexSectionContainer>
-
+                <ErrorDisplay errors={error} errorName="mobileVersionUrl" />
                 <SectionHeader>(iii) Tab versions</SectionHeader>
                 <FlexSectionContainer>
                     <StyledInputItem>
@@ -190,6 +213,7 @@ const SectionBuilding = ({
                         />
                     </StyledFileUploadContainer>
                 </FlexSectionContainer>
+                <ErrorDisplay errors={error} errorName="tabVersionUrl" />
 
                 <FileMainContainer>
                     <FileMainHeader>Attached Files:</FileMainHeader>
@@ -220,6 +244,7 @@ const SectionBuilding = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={error} errorName="comment" />
             </StyledInputItem>
         </StyledSection>
     );

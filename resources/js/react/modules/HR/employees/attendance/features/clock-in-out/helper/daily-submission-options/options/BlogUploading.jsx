@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const BlogUploading = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -18,6 +20,13 @@ const BlogUploading = ({
         screenshotUrl: "",
         comment: "",
     });
+
+    useEffect(() => {
+        setBlogUploadData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
 
     useEffect(() => {
         setSinglePageData((prev) => {
@@ -48,7 +57,17 @@ const BlogUploading = ({
             [dataName]: value,
         });
     };
-
+    // console.log("section building data", sectionBuildingData);
+    const [errors, setErrors] = useState([]);
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === blogUploadData.pageId &&
+                errorField.categoryId === blogUploadData.categoryId &&
+                errorField.sectionId === blogUploadData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields]);
     // console.log("blogUploadData", blogUploadData);
     return (
         <div>
@@ -61,6 +80,7 @@ const BlogUploading = ({
                         handleDataChange(e.target.value, "totalBlogPosts")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="totalBlogPosts" />
             </div>
             <div>
                 <div>
@@ -74,6 +94,7 @@ const BlogUploading = ({
                         handleDataChange(e.target.value, "screenshotUrl")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="screenshotUrl" />
             </div>
             <div>
                 <div>Comments</div>
@@ -84,6 +105,7 @@ const BlogUploading = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

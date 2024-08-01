@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const MobileScreenResponsive = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -20,6 +22,13 @@ const MobileScreenResponsive = ({
     });
 
     useEffect(() => {
+        setResponsiveData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
+
+    useEffect(() => {
         setSinglePageData((prev) => {
             const index = prev.findIndex(
                 (item) => item.id === responsiveData.id
@@ -35,6 +44,7 @@ const MobileScreenResponsive = ({
             }
         });
     }, [responsiveData]);
+
     useEffect(() => {
         return () => {
             setSinglePageData((prev) =>
@@ -42,6 +52,7 @@ const MobileScreenResponsive = ({
             );
         };
     }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
         setResponsiveData({
             ...responsiveData,
@@ -49,7 +60,20 @@ const MobileScreenResponsive = ({
         });
     };
 
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === responsiveData.pageId &&
+                errorField.categoryId === responsiveData.categoryId &&
+                errorField.sectionId === responsiveData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields, responsiveData]);
+
     // console.log("responsiveData", responsiveData);
+
     return (
         <div>
             <div>
@@ -59,6 +83,7 @@ const MobileScreenResponsive = ({
                     placeHolder=""
                     onChange={(e) => handleDataChange(e.target.value, "name")}
                 />
+                <ErrorDisplay errors={errors} errorName="name" />
             </div>
             <div>
                 <div>
@@ -72,6 +97,7 @@ const MobileScreenResponsive = ({
                         handleDataChange(e.target.value, "screenshotUrl")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="screenshotUrl" />
             </div>
             <div>
                 <div>Comments</div>
@@ -82,6 +108,7 @@ const MobileScreenResponsive = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

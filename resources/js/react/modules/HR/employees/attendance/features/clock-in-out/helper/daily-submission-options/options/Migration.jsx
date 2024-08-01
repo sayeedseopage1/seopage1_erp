@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
+
 const Migration = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -19,6 +22,13 @@ const Migration = ({
     });
 
     useEffect(() => {
+        setMigrationData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
+
+    useEffect(() => {
         setSinglePageData((prev) => {
             const index = prev.findIndex(
                 (item) => item.id === migrationData.id
@@ -34,6 +44,7 @@ const Migration = ({
             }
         });
     }, [migrationData]);
+
     useEffect(() => {
         return () => {
             setSinglePageData((prev) =>
@@ -41,6 +52,7 @@ const Migration = ({
             );
         };
     }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
         setMigrationData({
             ...migrationData,
@@ -48,7 +60,20 @@ const Migration = ({
         });
     };
 
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === migrationData.pageId &&
+                errorField.categoryId === migrationData.categoryId &&
+                errorField.sectionId === migrationData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields, migrationData]);
+
     // console.log("migrationData", migrationData);
+
     return (
         <div>
             <div>
@@ -60,6 +85,7 @@ const Migration = ({
                         handleDataChange(e.target.value, "websiteSize")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="websiteSize" />
             </div>
             <div>
                 <div>
@@ -73,6 +99,7 @@ const Migration = ({
                         handleDataChange(e.target.value, "migrationReason")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="migrationReason" />
             </div>
             <div>
                 <div>Comments</div>
@@ -83,6 +110,7 @@ const Migration = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const BugFixing = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -18,6 +20,13 @@ const BugFixing = ({
         bugFixedPercentage: "",
         comment: "",
     });
+
+    useEffect(() => {
+        setBugFixingData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
 
     useEffect(() => {
         setSinglePageData((prev) => {
@@ -51,6 +60,16 @@ const BugFixing = ({
         });
     };
 
+    const [errors, setErrors] = useState([]);
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === bugFixingData.pageId &&
+                errorField.categoryId === bugFixingData.categoryId &&
+                errorField.sectionId === bugFixingData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields]);
     return (
         <div>
             <div>
@@ -65,6 +84,7 @@ const BugFixing = ({
                         handleDataChange(e.target.value, "bugName")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="bugName" />
             </div>
             <div>
                 <div>How much of it was fixed today? (In percentage)</div>
@@ -75,6 +95,7 @@ const BugFixing = ({
                         handleDataChange(e.target.value, "bugFixedPercentage")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="bugFixedPercentage" />
             </div>
             <div>
                 <div>Comments</div>
@@ -85,6 +106,7 @@ const BugFixing = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

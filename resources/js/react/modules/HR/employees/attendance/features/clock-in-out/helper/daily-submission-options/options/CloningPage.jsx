@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const CloningPage = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -19,7 +21,12 @@ const CloningPage = ({
         screenshotUrl: "",
         comment: "",
     });
-
+    useEffect(() => {
+        setCloningPageData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
     useEffect(() => {
         setSinglePageData((prev) => {
             const index = prev.findIndex(
@@ -49,7 +56,16 @@ const CloningPage = ({
             [dataName]: value,
         });
     };
-
+    const [errors, setErrors] = useState([]);
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === cloningPageData.pageId &&
+                errorField.categoryId === cloningPageData.categoryId &&
+                errorField.sectionId === cloningPageData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields]);
     // console.log("cloningPageData", cloningPageData);
     return (
         <div>
@@ -64,6 +80,7 @@ const CloningPage = ({
                         handleDataChange(e.target.value, "totalClonedPages")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="totalClonedPages" />
             </div>
             <div>
                 <div>Did you change content & Images on those cloned pages</div>
@@ -74,6 +91,7 @@ const CloningPage = ({
                         handleDataChange(e.target.value, "isContentChanged")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="isContentChanged" />
             </div>
             <div>
                 <div>
@@ -87,6 +105,7 @@ const CloningPage = ({
                         handleDataChange(e.target.value, "screenshotUrl")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="screenshotUrl" />
             </div>
             <div>
                 <div>Comments</div>
@@ -97,6 +116,7 @@ const CloningPage = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

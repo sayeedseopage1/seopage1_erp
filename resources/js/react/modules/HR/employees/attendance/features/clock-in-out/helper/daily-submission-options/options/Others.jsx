@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
+
 const Others = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -19,6 +22,13 @@ const Others = ({
     });
 
     useEffect(() => {
+        setOthersData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
+
+    useEffect(() => {
         setSinglePageData((prev) => {
             const index = prev.findIndex((item) => item.id === othersData.id);
             if (index > -1) {
@@ -32,6 +42,7 @@ const Others = ({
             }
         });
     }, [othersData]);
+
     useEffect(() => {
         return () => {
             setSinglePageData((prev) =>
@@ -39,12 +50,25 @@ const Others = ({
             );
         };
     }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
         setOthersData({
             ...othersData,
             [dataName]: value,
         });
     };
+
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === othersData.pageId &&
+                errorField.categoryId === othersData.categoryId &&
+                errorField.sectionId === othersData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields, othersData]);
 
     // console.log("othersData", othersData);
     return (
@@ -58,6 +82,7 @@ const Others = ({
                         handleDataChange(e.target.value, "workDone")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="workDone" />
             </div>
             <div>
                 <div>Screenshot/screen record of what you did</div>
@@ -68,6 +93,7 @@ const Others = ({
                         handleDataChange(e.target.value, "screenshotUrl")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="screenshotUrl" />
             </div>
             <div>
                 <div>Comments</div>
@@ -78,6 +104,7 @@ const Others = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );

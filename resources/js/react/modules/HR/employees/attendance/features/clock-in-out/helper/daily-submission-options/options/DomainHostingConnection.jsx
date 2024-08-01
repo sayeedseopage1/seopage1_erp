@@ -1,6 +1,9 @@
-import { InputItem } from "../../../DailySubmissionUI";
 import React, { useEffect, useState } from "react";
+import { InputItem } from "../../../DailySubmissionUI";
+import ErrorDisplay from "../components/ErrorDisplay";
+
 const DomainHostingConnection = ({
+    errorFields,
     pageUrl,
     sectionId,
     pageNumber,
@@ -13,9 +16,15 @@ const DomainHostingConnection = ({
         pageUrl: `${pageUrl}`,
         categoryId: `${category.id}`,
         categoryName: `${category.name}`,
-
         comment: "",
     });
+
+    useEffect(() => {
+        setDomainHostingData((prev) => ({
+            ...prev,
+            pageUrl: `${pageUrl}`,
+        }));
+    }, [pageUrl]);
 
     useEffect(() => {
         setSinglePageData((prev) => {
@@ -33,6 +42,7 @@ const DomainHostingConnection = ({
             }
         });
     }, [domainHostingData]);
+
     useEffect(() => {
         return () => {
             setSinglePageData((prev) =>
@@ -40,6 +50,7 @@ const DomainHostingConnection = ({
             );
         };
     }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
         setDomainHostingData({
             ...domainHostingData,
@@ -47,7 +58,20 @@ const DomainHostingConnection = ({
         });
     };
 
+    const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        const filteredErrorFields = errorFields.filter(
+            (errorField) =>
+                errorField.pageId === domainHostingData.pageId &&
+                errorField.categoryId === domainHostingData.categoryId &&
+                errorField.sectionId === domainHostingData.id
+        );
+        setErrors(filteredErrorFields);
+    }, [errorFields, domainHostingData]);
+
     // console.log("domainHostingData", domainHostingData);
+
     return (
         <div>
             <div>
@@ -59,6 +83,7 @@ const DomainHostingConnection = ({
                         handleDataChange(e.target.value, "comment")
                     }
                 />
+                <ErrorDisplay errors={errors} errorName="comment" />
             </div>
         </div>
     );
