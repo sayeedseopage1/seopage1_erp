@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import PropTypes from "prop-types";
 import styles from '../../tasks/components/table/TableFilter.module.css'
 import Dropdown from '../../global/Dropdown'
 import {PiGearDuotone} from 'react-icons/pi';
@@ -105,3 +106,11 @@ const TableColumnSetting = ({
 }
 
 export default TableColumnSetting
+
+
+TableColumnSetting.propTypes = {
+    columns: PropTypes.array,
+    columnVisibility: PropTypes.object,
+    tableName: PropTypes.string,
+    setColumnVisibility: PropTypes.func
+}

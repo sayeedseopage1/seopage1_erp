@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import PropTypes from "prop-types";
 import Person from "../../tasks/components/Person";
 import StopWatch from "../../tasks/components/Timer";
 import { ExpandTask } from "../../tasks/components/table/ExpandTask";
@@ -413,3 +414,12 @@ export const ProjectTableColumns = [
       </React.Fragment>
     )
   }
+
+
+
+  Menu.propTypes = {
+    row: PropTypes.object,
+    table: PropTypes.object
+  }
+
+  

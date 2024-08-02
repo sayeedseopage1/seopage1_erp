@@ -19,6 +19,7 @@ import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 import Tabbar from "../components/Tabbar";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
+import SubTaskExportButton from "../components/SubTaskExportButton";
 
 // current user
 const auth = new User(window.Laravel.user);
@@ -69,6 +70,11 @@ const Subtasks = () => {
                         auth.getRoleId() === 9 ||
                         auth.getRoleId() === 10
                     ) {
+                        _data = _.filter(
+                            res.tasks,
+                            (d) => Number(d.assigned_to_id) === auth.getId()
+                        );
+                    } else if (_.includes([14, 15, 16, 17], auth.getRoleId())) {
                         _data = _.filter(
                             res.tasks,
                             (d) => Number(d.assigned_to_id) === auth.getId()
@@ -146,6 +152,9 @@ const Subtasks = () => {
                                 </span>
                             </Button>
                         )}
+                        <div>
+                            <SubTaskExportButton filter={filter} />
+                        </div>
 
                         <div className="ml-auto mr-2">
                             <Button onClick={onRefreshButtonClick}>

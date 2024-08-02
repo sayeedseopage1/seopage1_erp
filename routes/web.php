@@ -2,6 +2,8 @@
 
 use Route as GlobalRoute;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CrossDeptWork;
+use App\Http\Controllers\DealController;
 use App\Http\Controllers\GdprController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeadController;
@@ -10,10 +12,16 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DMDealController;
+use App\Http\Controllers\DMLeadController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\PointsController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\InvoiceController;
@@ -22,24 +30,30 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EstimateController;
+use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\LeadFileController;
 use App\Http\Controllers\LeadNoteController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskFileController;
 use App\Http\Controllers\TaskNoteController;
 use App\Http\Controllers\ClientDocController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DealBoardController;
 use App\Http\Controllers\EventFileController;
+use App\Http\Controllers\IncentiveController;
 use App\Http\Controllers\LeadBoardController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\PaypalIPNController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PublicUrlController;
 use App\Http\Controllers\TaskBoardController;
 use App\Http\Controllers\TaskLabelController;
@@ -50,8 +64,11 @@ use App\Http\Controllers\ClientNoteController;
 use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\DMContractController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\StickyNoteController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TaskReportController;
 use App\Http\Controllers\TaxSettingController;
 use App\Http\Controllers\TicketFileController;
@@ -59,7 +76,6 @@ use App\Http\Controllers\TicketTypeController;
 use App\Http\Controllers\CustomFieldController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeDocController;
-use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\LeadCategoyController;
 use App\Http\Controllers\LeadSettingController;
 use App\Http\Controllers\LeaveReportController;
@@ -68,6 +84,7 @@ use App\Http\Controllers\MessageFileController;
 use App\Http\Controllers\ProductFileController;
 use App\Http\Controllers\ProjectFileController;
 use App\Http\Controllers\ProjectNoteController;
+use App\Http\Controllers\ReportIssueController;
 use App\Http\Controllers\SmtpSettingController;
 use App\Http\Controllers\SubTaskFileController;
 use App\Http\Controllers\TaskCommentController;
@@ -75,12 +92,16 @@ use App\Http\Controllers\TaskSettingController;
 use App\Http\Controllers\TicketAgentController;
 use App\Http\Controllers\TicketGroupController;
 use App\Http\Controllers\TicketReplyController;
+use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\ContractFileController;
 use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\CustomModuleController;
 use App\Http\Controllers\GdprSettingsController;
 use App\Http\Controllers\LeaveSettingController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\ProjectBoardController;
+use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\SlackSettingController;
 use App\Http\Controllers\TaskCalendarController;
 use App\Http\Controllers\TaskCategoryController;
@@ -90,11 +111,16 @@ use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ContractRenewController;
 use App\Http\Controllers\EmployeeShiftController;
 use App\Http\Controllers\EventCalendarController;
+use App\Http\Controllers\ExpenseReportController;
 use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\ModuleSettingController;
+use App\Http\Controllers\PendingActionController;
+use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\ProjectRatingController;
+use App\Http\Controllers\ProjectStatusController;
+use App\Http\Controllers\ReportCentralController;
 use App\Http\Controllers\TicketChannelController;
 use App\Http\Controllers\TicketSettingController;
 use App\Http\Controllers\TimelogReportController;
@@ -110,6 +136,7 @@ use App\Http\Controllers\ProfileSettingController;
 use App\Http\Controllers\ProjectSettingController;
 use App\Http\Controllers\PublicLeadGdprController;
 use App\Http\Controllers\PusherSettingsController;
+use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StorageSettingController;
 use App\Http\Controllers\TimeLogSettingController;
@@ -119,19 +146,26 @@ use App\Http\Controllers\CurrencySettingController;
 use App\Http\Controllers\DiscussionFilesController;
 use App\Http\Controllers\DiscussionReplyController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\IndependentTaskController;
 use App\Http\Controllers\LanguageSettingController;
 use App\Http\Controllers\Payment\PayfastController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProjectCategoryController;
 use App\Http\Controllers\ProjectTemplateController;
 use App\Http\Controllers\SecuritySettingController;
+use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\TimelogCalendarController;
 use App\Http\Controllers\AttendanceReportController;
+use App\Http\Controllers\ContractTemplateController;
 use App\Http\Controllers\EmergencyContactController;
+use App\Http\Controllers\IncentiveSettingController;
+use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\LeadAgentSettingController;
+use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\Payment\PaystackController;
 use App\Http\Controllers\Payment\RazorPayController;
 use App\Http\Controllers\ProjectMilestoneController;
+use App\Http\Controllers\ProposalTemplateController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\RecurringExpenseController;
 use App\Http\Controllers\RecurringInvoiceController;
@@ -143,64 +177,33 @@ use App\Http\Controllers\LeadSourceSettingController;
 use App\Http\Controllers\LeadStatusSettingController;
 use App\Http\Controllers\Payment\AuthorizeController;
 use App\Http\Controllers\SocialAuthSettingController;
+use App\Http\Controllers\TypeOfGraphicWorkController;
 use App\Http\Controllers\ContractDiscussionController;
-use App\Http\Controllers\ContractTemplateController;
 use App\Http\Controllers\DiscussionCategoryController;
 use App\Http\Controllers\ProductSubCategoryController;
+use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\TicketEmailSettingController;
 use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\ProjectTemplateTaskController;
 use App\Http\Controllers\ProjectTimelogBreakController;
+use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\TicketReplyTemplatesController;
 use App\Http\Controllers\DatabaseBackupSettingController;
 use App\Http\Controllers\EmployeeShiftScheduleController;
-use App\Http\Controllers\ExpenseReportController;
 use App\Http\Controllers\GoogleCalendarSettingController;
 use App\Http\Controllers\IncomeVsExpenseReportController;
+use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\Payment\StripeWebhookController;
 use App\Http\Controllers\ProjectTemplateMemberController;
 use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
-use App\Http\Controllers\ProposalTemplateController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
-use App\Http\Controllers\DealController;
-use App\Http\Controllers\DealBoardController;
-use App\Http\Controllers\ProjectBoardController;
-use App\Http\Controllers\ReportIssueController;
-use App\Http\Controllers\SuggestionController;
-use App\Http\Controllers\SoftwareProjectController;
-use App\Http\Controllers\InsightsController;
-use App\Http\Controllers\Seopage1TeamController;
-use App\Http\Controllers\KpiSettingController;
-use App\Http\Controllers\IncentiveSettingController;
-use App\Http\Controllers\PointsController;
-use App\Http\Controllers\PortfolioController;
-use App\Http\Controllers\ProjectCredential;
-use App\Http\Controllers\IncentiveController;
-use App\Http\Controllers\PolicyController;
-use App\Http\Controllers\ReportCentralController;
-use App\Http\Controllers\MonthlyIncentiveController;
-use App\Http\Controllers\QualifiedSalesController;
-use App\Http\Controllers\PendingActionController;
-use App\Http\Controllers\NonCashPointSettingsController;
-use App\Http\Controllers\ClientReviewController;
-use App\Http\Controllers\CrossDeptWork;
-use App\Http\Controllers\DisputeController;
-use App\Http\Controllers\FilterController;
-use App\Http\Controllers\DMContractController;
-use App\Http\Controllers\DMDealController;
-use App\Http\Controllers\DMLeadController;
 use App\Http\Controllers\EvaluationController;
-use App\Http\Controllers\IndependentTaskController;
-
-use App\Http\Controllers\RevisionCalculatorController;
-use App\Http\Controllers\PmPaymentReleaseHistory;
-use App\Http\Controllers\RevisionController;
-use App\Http\Controllers\IssuedTaskReportController;
-use App\Http\Controllers\PmGoalSetingController;
-use App\Http\Controllers\ProjectStatusController;
+use App\Http\Controllers\Project\ProjectDetailsController;
+use App\Http\Controllers\Project\ProjectInsightController;
+use App\Http\Controllers\SalesRiskPolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -381,6 +384,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     //sales point routes
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    Route::get('export-point-data', [PointsController::class, 'exportPointData']);
     //search bar routes
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
     //sales points all routes
@@ -410,8 +414,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /** DEVELOPER CHECK IN CHECK OUT START*/
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
-    Route::post('/developer/daily-minimum-track-hours-log/acknowledgement',[DashboardController::class,'developerDailytrackHoursLog']);
+    Route::post('/developer/daily-minimum-track-hours-log/acknowledgement', [DashboardController::class, 'developerDailytrackHoursLog']);
     Route::put('check-out-status', [DashboardController::class, 'clockOutStatus']);
+
     /** DEVELOPER CHECK IN CHECK OUT START*/
 
     /* Setting menu routes starts from here */
@@ -564,12 +569,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
         Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
         Route::resource('employee-shifts', EmployeeShiftController::class);
-        Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::post('past-pending-action-comment', [PendingActionController::class, 'pastAction']);
+        Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
-
-
-
     });
 
 
@@ -727,12 +729,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('project-notes', ProjectNoteController::class);
     //project task routes
     Route::get('projects/{project_id}/tasks/{any}', [ProjectController::class, 'tasks'])
-    ->where('any', '^(?!api\/)[\/\w\.-]*')
-    ->where('any', '^(?:(?!\d+).)*');
+        ->where('any', '^(?!api\/)[\/\w\.-]*')
+        ->where('any', '^(?:(?!\d+).)*');
     Route::resource('projects', ProjectController::class);
     //projects json route
     Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
     Route::get('get-clients/{type?}', [ProjectController::class, 'get_client_json']);
+
+    // Project Dashboard API
+    Route::get('project-details/{project_id}', ProjectDetailsController::class)->name('project.details');
+    Route::get('project-milestones/{project_id}', [ProjectInsightController::class, 'getProjectMilestones'])->name('project.milestones');
+    Route::get('project-tasks/{project_id}', [ProjectInsightController::class, 'getProjectTasks'])->name('project.tasks');
+    Route::get('project-pending-extension/{project_id}', [ProjectInsightController::class, 'getPendingExtensionRequest'])->name('project.pending.extension');
 
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');
@@ -803,6 +811,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
     //task revision
     Route::get('tasks/revisions', [TaskController::class, 'task_revisions']);
+    Route::get('export-task-revisions-data', [TaskController::class, 'exportTaskRevision']);
     //task revision json routes
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
     //developer daily routes
@@ -900,9 +909,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //get task project deliverables
     Route::get('tasks/add-tasks/project-deliverables/{id}', [TaskController::class, 'get_tasks_project_deliverable']);
     //new task store
-    Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
+    Route::post('new-task/store', [TaskController::class, 'StoreNewTask'])->name('store-new-tasks');
     //new task edit
-    Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
+    Route::post('new-task/edit', [TaskController::class, 'EditTask'])->name('edit-new-tasks');
     //pending parent task
     Route::get('tasks/pending-parent-tasks', [TaskController::class, 'PendingParentTasks']);
     //pending task authorization
@@ -910,7 +919,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //pm task guideline checking
     Route::get('tasks/check-pm-taskguideline/{id}', [TaskController::class, 'CheckPmTaskGuideline']);
     //task guideline store
-    Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
+    Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
     //task report issue resolve
     Route::post('tasks/report-issues/resolve', [TaskController::class, 'resolve_report']);
     //get parent tasks report table data
@@ -919,8 +928,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
     //subtasks table data
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
+    Route::get('export-subtask-data', [TaskController::class, 'exportSubTaskData']);
     //get tasks data
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    Route::get('export-task-data', [TaskController::class, 'exportTaskData']);
     //developers today task data
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     //developer daily submissions
@@ -935,8 +946,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     //tasks all data
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
-    ->where('any', '^(?!api\/)[\/\w\.-]*')
-    ->where('any', '^(?:(?!\d+).)*');
+        ->where('any', '^(?!api\/)[\/\w\.-]*')
+        ->where('any', '^(?:(?!\d+).)*');
     Route::resource('tasks', TaskController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
     //view tasl guideline
     Route::get('task-guideline/{project_id}', [TaskController::class, 'viewTaskGuideline'])->name('task-guideline');
@@ -947,7 +958,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
     Route::get('working-environment/task/{task_id}', [TaskController::class, 'taskWorkingEnvironment']);
 
-     /******* Independent TASK Start ******** */
+    /******* Independent TASK Start ******** */
     Route::get('independent/{any?}', [IndependentTaskController::class, 'index'])
     ->where('any', '^(?!api\/)[\/\w\.-]*')
     ->where('any', '^(?:(?!\d+).)*');
@@ -957,22 +968,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
     Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-independent-subtask');
     Route::get('independent-subtasks',[IndependentTaskController::class,'independentAllSubTask'])->name('get-independent-all-sub-task');
+    Route::get('export-independent-task', [IndependentTaskController::class, 'exportIndependentTask']);
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
-    Route::get('pending-task-conversations/{task_id}', [TaskController::class, 'get_pending_parent_task_conversation_question'] )->name('pending-task-conversations');
-    Route::post('pending-task-conversations', [TaskController::class, 'add_pending_parent_task_conversation_question'] )->name('create-pending-task-conversations');
-    Route::put('pending-task-conversations', [TaskController::class, 'update_pending_parent_task_conversation_question_by_answer'] )->name('update-pending-task-conversations');
+    Route::get('pending-task-conversations/{task_id}', [TaskController::class, 'get_pending_parent_task_conversation_question'])->name('pending-task-conversations');
+    Route::post('pending-task-conversations', [TaskController::class, 'add_pending_parent_task_conversation_question'])->name('create-pending-task-conversations');
+    Route::put('pending-task-conversations', [TaskController::class, 'update_pending_parent_task_conversation_question_by_answer'])->name('update-pending-task-conversations');
 
 
     /******* INDEPENDENT TASK CONVERSATION ******** */
-    Route::get('independent-task-conversations/{id}', [IndependentTaskController::class, 'get_independent_task_conversation_question'] )->name('independent-task-conversations');
-    Route::post('create-independent-task-conversations', [IndependentTaskController::class, 'add_independent_task_conversation_question'] )->name('create-independent-task-conversations');
-    Route::put('update-independent-task-conversations', [IndependentTaskController::class, 'update_independent_task_conversation_question_by_answer'] )->name('update-independent-task-conversations');
-    Route::put('independent-task/conversions/status/update', [IndependentTaskController::class, 'updateIndependentTaskHasUpdateStatus'] )->name('independent-task/conversions/update');
-    Route::get('independent-task-clients', [IndependentTaskController::class, 'clients'] );
+    Route::get('independent-task-conversations/{id}', [IndependentTaskController::class, 'get_independent_task_conversation_question'])->name('independent-task-conversations');
+    Route::post('create-independent-task-conversations', [IndependentTaskController::class, 'add_independent_task_conversation_question'])->name('create-independent-task-conversations');
+    Route::put('update-independent-task-conversations', [IndependentTaskController::class, 'update_independent_task_conversation_question_by_answer'])->name('update-independent-task-conversations');
+    Route::put('independent-task/conversions/status/update', [IndependentTaskController::class, 'updateIndependentTaskHasUpdateStatus'])->name('independent-task/conversions/update');
+    Route::get('independent-task-clients', [IndependentTaskController::class, 'clients']);
     /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
+    Route::get('export-task-dispute', [TaskController::class, 'exportTaskDisput']);
     Route::post('task-dispute-question', [TaskController::class, 'store_dispute_question'])->name('task-dispute-question');
     Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
     Route::put('task-dispute-submit-to-auth', [TaskController::class, 'dispute_send_for_authorization'])->name('task-dispute-submit-to-auth');
@@ -1033,17 +1046,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //web development leads
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
 
-    Route::get('get-all-leads', [LeadController::class,'getLead']);
-    Route::get('export-lead-data', [LeadController::class,'exportLead']);
+    Route::get('get-all-leads', [LeadController::class, 'getLead']);
+    Route::get('export-lead-data', [LeadController::class, 'exportLead']);
 
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
-    Route::resource('digital-marketing-lead',DMLeadController::class);
+    Route::resource('digital-marketing-lead', DMLeadController::class);
     Route::post('/dm-lead-store', [DMLeadController::class, 'storeDmLead']);
     Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
     Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
-    Route::get('get-all-dm-leads', [DMLeadController::class,'getDmLead']);
-    Route::get('export-dm-lead-data', [DMLeadController::class,'exportDmLead']);
+    Route::get('get-all-dm-leads', [DMLeadController::class, 'getDmLead']);
+    Route::get('export-dm-lead-data', [DMLeadController::class, 'exportDmLead']);
 
 
     /*=========================> DIGITAL MERKTING LEAD END <===========================*/
@@ -1117,7 +1130,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dm-award-time/increase/{id?}', [DMContractController::class, 'dm_award_time_increase_index'])->name('dm_award_time_check.index');
     Route::post('dm-award-time/increase/store', [DMContractController::class, 'dm_award_time_incress_store'])->name('dm_award_time_check.store');
     Route::post('dm-award-time/increase/update', [DMContractController::class, 'dm_award_time_incress_update'])->name('dm_award_time_check.update');
-        /*=========================> DIGITAL MERKTING AWARD TIME START <===========================*/
+    /*=========================> DIGITAL MERKTING AWARD TIME START <===========================*/
 
 
     //report-central
@@ -1149,18 +1162,34 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //Monthly Incentive Settings
     Route::resource('monthly-incentive', MonthlyIncentiveController::class);
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
-    
+
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
-    
+
     Route::resource('employee-evaluation', EvaluationController::class);
     Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
+    Route::get('get-single-evaluation/{user_id}', [EvaluationController::class, 'getSingleEvaluation']);
+    Route::get('employee-evaluation-task/{id}', [EvaluationController::class,'getEmployeeTask']);
+    Route::post('employee-task-evaluation-store', [EvaluationController::class,'storeEmployeeTaskEvaluation']);
+    Route::post('employee-evaluation-submission-store', [EvaluationController::class,'storeSubmissionEvaluation']);
+    Route::get('employee-task-evaluation-edit/{id}', [EvaluationController::class,'editEmployeeTaskEvaluation']);
+    Route::post('employee-task-evaluation-update', [EvaluationController::class,'updateEmployeeTaskEvaluation']);
+    Route::post('employee-evaluation-team-lead-cmnt', [EvaluationController::class,'storeTeamLeadCmnt']);
+    Route::post('employee-evaluation-authorization', [EvaluationController::class,'storeAuthorization']);
+    Route::post('employee-evaluation-acknowledged', [EvaluationController::class,'storeTeamLeadAcknowledged']);
+    Route::get('employee-evaluation-user/{id}', [EvaluationController::class,'getEmployeeUser']);
+    Route::get('employee-task-revision/{id}', [EvaluationController::class,'employeeTaskRevision']);
+    Route::get('evaluation-total-revision/{id}', [EvaluationController::class,'totalRevision']);
+    Route::get('evaluation-task/{id}', [EvaluationController::class,'EmployeeEvaluationTask']);
+    Route::get('evaluation-history/{id}', [EvaluationController::class,'EmployeeEvaluationHistory']);
+    Route::get('evaluation-total-task-revision/{user_id}/{round}', [EvaluationController::class,'evaluationTotalTaskRevision']);
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
-    Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
+    Route::post('pm-goal-setting-update', [PmGoalSetingController::class, 'pmGoalUpdate'])->name('pm-goal-setting-update');
 
     /* PM PROJECT STATUS */
-    Route::resource('project-status',ProjectStatusController::class);
+    Route::resource('project-status', ProjectStatusController::class);
     Route::get('get-project-status-date', [ProjectStatusController::class, 'allProjectStatus']);
+    Route::get('export-project-status-data', [ProjectStatusController::class, 'exportProjectStatus']);
     Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
     Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
@@ -1179,6 +1208,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::resource('qualified-sales',QualifiedSalesController::class);
     Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
+    Route::get('export-qualified-sales-data', [QualifiedSalesController::class,'exportQualifiedSales']);
 
 
 
@@ -1280,6 +1310,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('revision-calculator-data/total-dispute/{id}', [RevisionCalculatorController::class, 'TotalDispute']);
     Route::get('revision-calculator-data/dispute-not-resolve/{id}', [RevisionCalculatorController::class, 'DisputeNotResolve']);
     Route::get('revision-calculator-data/pending-issues/{id}', [RevisionCalculatorController::class, 'PendingIssues']);
+    Route::get('export-revision-calculator-data', [RevisionCalculatorController::class, 'exportRevisionCalculatorData']);
 
 
     // Contracts
@@ -1305,17 +1336,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
-    Route::get('get-deal-data', [DealController::class,'getDealData']);
-    Route::get('export-deal-data', [DealController::class,'exportDeal']);
+    Route::get('get-deal-data', [DealController::class, 'getDealData']);
+    Route::get('export-deal-data', [DealController::class, 'exportDeal']);
 
 
     /**ALL Currencie API START*/
-    Route::get('get-all-currencies', [DealController::class,'getAllCurrencie']);
+    Route::get('get-all-currencies', [DealController::class, 'getAllCurrencie']);
     /**ALL Currencie API END*/
 
 
     /**ALL Country API START*/
-    Route::get('get-all-country', [DealController::class,'getAllCountry']);
+    Route::get('get-all-country', [DealController::class, 'getAllCountry']);
     /**ALL Country API END*/
 
 
@@ -1333,11 +1364,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /*=========================> DIGITAL MERKTING DEALS START <===========================*/
 
-    Route::resource('digital-marketing-deals',DMDealController::class);
+    Route::resource('digital-marketing-deals', DMDealController::class);
     Route::post('/digital-marketing-leads/deals/store', [DMDealController::class, 'storeDMLeadDeal'])->name('digital-marketing-store-deals-stage');
     Route::post('/digital-marketing/deal/stage/lost', [DMDealController::class, 'dmDealStageUpdateLost'])->name('digital-marketing-deal-update-lost');
-    Route::get('get-dm-deal-data', [DMDealController::class,'getDmDealData']);
-    Route::get('export-dm-deal-data', [DMDealController::class,'exportDmDeal']);
+    Route::get('get-dm-deal-data', [DMDealController::class, 'getDmDealData']);
+    Route::get('export-dm-deal-data', [DMDealController::class, 'exportDmDeal']);
 
 
     /*=========================> DIGITAL MERKTING DEALS END <===========================*/
@@ -1347,8 +1378,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
     Route::resource('dealboards', DealBoardController::class);
 
-    Route::get('client-deal-create/{id}',[DealController::class,'createClientDeal'])->name('create-client-deal');
-    Route::post('client-deal-store',[DealController::class,'storeClientDeal'])->name('store-client-deal');
+    Route::get('client-deal-create/{id}', [DealController::class, 'createClientDeal'])->name('create-client-deal');
+    Route::post('client-deal-store', [DealController::class, 'storeClientDeal'])->name('store-client-deal');
 
     // Contract template
 
@@ -1499,46 +1530,46 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
     //basic apis for react for data checking
-    Route::get('/tasks/developer-task-history/{id}', [TimelogReportController::class,'DeveloperTaskHistory']);
-    Route::get('/tasks/parent-task-subtasks/{id}', [TaskController::class,'CHeckSubtasks'])->name('check-subtasks');
-    Route::post('/tasks/develoepr/report-issue', [TaskController::class,'DeveloperReportIssue'])->name('developer-report-issue');
-    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-    Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
-    Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
-    Route::get('/developer/tracked-time-this-task/{id}',[TaskController::class,'checkTaskTrackTime']);
-    Route::get('/developer/in-progress-tasks/{id}',[TaskController::class,'DeveloperInprogressTask']);
-    Route::get('/developer/check-editable-task/{id}',[TaskController::class,'checkEditableTask']);
-    Route::get('/developer/check-editable-subtask/{id}',[TaskController::class,'checkEditableSubTask']);
-    Route::get('/developer/primary-page-authorization-count/',[TaskController::class,'PrimaryPageAuthorization']);
+    Route::get('/tasks/developer-task-history/{id}', [TimelogReportController::class, 'DeveloperTaskHistory']);
+    Route::get('/tasks/parent-task-subtasks/{id}', [TaskController::class, 'CHeckSubtasks'])->name('check-subtasks');
+    Route::post('/tasks/develoepr/report-issue', [TaskController::class, 'DeveloperReportIssue'])->name('developer-report-issue');
+    Route::post('/insights/sections/add', [InsightsController::class, 'storeSection'])->name('insights/sections/add');
+    Route::get('/developer/tracked-time-today/{id}', [TaskController::class, 'DeveloperTrackedTime'])->name('developer-tracked-time');
+    Route::post('/developer/stop-tasks-timer', [TaskController::class, 'DeveloperStopTask'])->name('developer-stop-task');
+    Route::get('/developer/tracked-time-this-task/{id}', [TaskController::class, 'checkTaskTrackTime']);
+    Route::get('/developer/in-progress-tasks/{id}', [TaskController::class, 'DeveloperInprogressTask']);
+    Route::get('/developer/check-editable-task/{id}', [TaskController::class, 'checkEditableTask']);
+    Route::get('/developer/check-editable-subtask/{id}', [TaskController::class, 'checkEditableSubTask']);
+    Route::get('/developer/primary-page-authorization-count/', [TaskController::class, 'PrimaryPageAuthorization']);
 
-    Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
-    Route::get('/check-independent-task/{id}',[TaskController::class,'independenttask']);
-    Route::post('/developer/checkout',[DashboardController::class,'DeveloperCheckOut'])->name('developer-check-out');
+    Route::get('/check-project-first-tasks/{id}', [TaskController::class, 'checkfirstTask']);
+    Route::get('/check-independent-task/{id}', [TaskController::class, 'independenttask']);
+    Route::post('/developer/checkout', [DashboardController::class, 'DeveloperCheckOut'])->name('developer-check-out');
 
 
 
     //task type
-    Route::get('/tasks-type',[TaskController::class,'getTasksType']);
-    Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
+    Route::get('/tasks-type', [TaskController::class, 'getTasksType']);
+    Route::put('/tasks-type-authorization/{id}', [TaskController::class, 'taskTypeAuthorization']);
 
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-    
+
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
-    Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);
+    Route::get('get-task-report', [IssuedTaskReportController::class, 'getTaskReport']);
     //cross departmental work
-    Route::resource('cross-dept-work',CrossDeptWork::class);
-    Route::get('view-web-content',[CrossDeptWork::class,'adminViewWebContent'])->name('adminViewWebContent');
-    Route::get('view-blog-article',[CrossDeptWork::class,'adminViewBlogArticle'])->name('adminViewBlogArticle');
-    Route::get('view-product-description',[CrossDeptWork::class,'adminViewProductDescription'])->name('adminViewProductDescription');
-    Route::get('view-product-category',[CrossDeptWork::class,'adminViewProductCategory'])->name('adminViewProductCategory');
-    Route::get('view-basic-seo',[CrossDeptWork::class,'adminViewBasicSEO'])->name('adminViewBasicSEO');
+    Route::resource('cross-dept-work', CrossDeptWork::class);
+    Route::get('view-web-content', [CrossDeptWork::class, 'adminViewWebContent'])->name('adminViewWebContent');
+    Route::get('view-blog-article', [CrossDeptWork::class, 'adminViewBlogArticle'])->name('adminViewBlogArticle');
+    Route::get('view-product-description', [CrossDeptWork::class, 'adminViewProductDescription'])->name('adminViewProductDescription');
+    Route::get('view-product-category', [CrossDeptWork::class, 'adminViewProductCategory'])->name('adminViewProductCategory');
+    Route::get('view-basic-seo', [CrossDeptWork::class, 'adminViewBasicSEO'])->name('adminViewBasicSEO');
     //task revisions
     Route::get('revision/{any?}', [RevisionController::class, 'index'])->where('any', '.*');
-    Route::resource('revision',RevisionController::class);
+    Route::resource('revision', RevisionController::class);
 
-    Route::resource('pm-payment-history',PmPaymentReleaseHistory::class);
-    Route::post('pm-payment-history-filter-date',[PmPaymentReleaseHistory::class,'getMonthDate'])->name('getMonthDate');
+    Route::resource('pm-payment-history', PmPaymentReleaseHistory::class);
+    Route::post('pm-payment-history-filter-date', [PmPaymentReleaseHistory::class, 'getMonthDate'])->name('getMonthDate');
 
     //Portfolio Section
     Route::get('/portfolio/filter-menu', [PortfolioController::class, 'get_filter_data'])->name("filter-menu");
@@ -1548,14 +1579,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
+    Route::post('portfolio-rating-store', [PortfolioController::class, 'ratingStore']);
+    Route::post('portfolio-rating-update', [PortfolioController::class, 'ratingUpdate']);
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
+
+    // Graphic task files delete
+    Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
 });
 
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
 Route::get('/deals/details/{id}', [ContractController::class, 'dealDetails'])->name('dealDetails');
-Route::get('/deals/details/edit/{id}', [ContractController::class, 'dealDetailsedit']);
+Route::get('/deals/details/edit/{id}', [ContractController::class, 'dealDetailsedit'])->name('edit-deal-details');
 Route::post('/deals/details/store', [ContractController::class, 'storedealDetails'])->name('store-deal-details');
 Route::post('/deals/details/update', [ContractController::class, 'updatedealDetails'])->name('update-deal-details');
 Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-deal');
@@ -1563,12 +1599,12 @@ Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
 
-    /*=========================> DIGITAL MERKTING DEALS DETAILS START <===========================*/
-    Route::get('/dm-deals/details/{id}', [DMContractController::class, 'dmDealDetails'])->name('dm-dealDetails');
-    Route::post('/dm-deals/details/store', [DMContractController::class, 'dmStoredealDetails'])->name('dm-store-deal-details');
-    Route::get('/dm-deals/details/edit/{id}', [DMContractController::class, 'dmDealDetailsedit']);
-    Route::post('/dm-deals/details/update', [DMContractController::class, 'updateDmDealDetails'])->name('dm-update-deal-details');
-        /*=========================> DIGITAL MERKTING DEALS DETAILS END <===========================*/
+/*=========================> DIGITAL MERKTING DEALS DETAILS START <===========================*/
+Route::get('/dm-deals/details/{id}', [DMContractController::class, 'dmDealDetails'])->name('dm-dealDetails');
+Route::post('/dm-deals/details/store', [DMContractController::class, 'dmStoredealDetails'])->name('dm-store-deal-details');
+Route::get('/dm-deals/details/edit/{id}', [DMContractController::class, 'dmDealDetailsedit']);
+Route::post('/dm-deals/details/update', [DMContractController::class, 'updateDmDealDetails'])->name('dm-update-deal-details');
+/*=========================> DIGITAL MERKTING DEALS DETAILS END <===========================*/
 
 //Service type section
 Route::get('/deals/service-type/web-content/{id}/{random_id}', [HomeController::class, 'webContent']);
@@ -1675,27 +1711,37 @@ Route::get('/project-deadline-ext-view', [ProjectController::class, 'pDExtension
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}', [ProjectController::class, 'parentCategoryId']);
-Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
+Route::get('/project/edit/category', [ProjectController::class, 'editCategory'])->name('edit-niche-category');
+Route::post('/projects/update-niche-category', [ProjectController::class, 'updateCategory'])->name('update-niche-category');
+Route::get('/check-niche-category', [ProjectController::class, 'checkCategory'])->name('check-niche-category');
 
 //add project cms
 Route::get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
 Route::post('/projects/add-cms', [ProjectController::class, 'storeCms'])->name('add-cms');
-Route::put('/projects/update-cms/{id}', [ProjectController::class, 'updateCms']);
+Route::get('/project/cms/edit', [ProjectController::class, 'editCms'])->name('edit-cms');
+Route::post('/projects/update-cms', [ProjectController::class, 'updateCms'])->name('update-cms');
+Route::get('/check-cms', [ProjectController::class, 'checkCms'])->name('check-cms');
 
 //add project website type
 Route::get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');
 Route::post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
-Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'updateWebsiteType']);
+Route::get('/project/edit-website-type', [ProjectController::class, 'editWebsiteType'])->name('edit-website-type');
+Route::post('/projects/update-website-type', [ProjectController::class, 'updateWebsiteType'])->name('update-website-type');
+Route::get('/check-website-type', [ProjectController::class, 'checkWebsiteType'])->name('check-website-type');
 
 //add project website theme
 Route::get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');
 Route::post('/projects/add-website-theme', [ProjectController::class, 'storeWebsiteTheme'])->name('add-website-theme');
-Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'updateWebsiteTheme']);
+Route::get('/project/edit-website-theme', [ProjectController::class, 'editWebsiteTheme'])->name('edit-website-theme');
+Route::post('/projects/update-website-theme', [ProjectController::class, 'updateWebsiteTheme'])->name('update-website-theme');
+Route::get('/check-website-theme', [ProjectController::class, 'checkWebsiteTheme'])->name('check-website-theme');
 
 //add project website plugin
 Route::get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
 Route::post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
-Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
+Route::get('/project/edit-website-plugin', [ProjectController::class, 'editWebsitePlugin'])->name('edit-website-plugin');
+Route::post('/projects/update-website-plugin', [ProjectController::class, 'updateWebsitePlugin'])->name('update-website-plugin');
+Route::get('/check-website-plugin', [ProjectController::class, 'checkWebsitePlugin'])->name('check-website-plugin');
 
 
 //Cross Departmental Work
@@ -1832,4 +1878,10 @@ Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 't
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
+
+// sale risk policies
+SalesRiskPolicyController::Routes();
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('type-of-graphic-works', TypeOfGraphicWorkController::class)->name('typeof.graphic.works');
+});
 

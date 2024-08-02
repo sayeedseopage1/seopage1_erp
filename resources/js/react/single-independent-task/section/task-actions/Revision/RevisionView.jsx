@@ -36,6 +36,7 @@ const RevisionView = ({
         } else if (
             auth?.isHasRolePermission(9) ||
             auth?.isHasRolePermission(10) ||
+            auth?.isHasRolePermission(14) ||
             auth?.isHasRolePermission(5)
         ) {
             if (

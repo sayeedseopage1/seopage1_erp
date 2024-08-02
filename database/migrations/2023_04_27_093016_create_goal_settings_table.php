@@ -33,7 +33,6 @@ return new class extends Migration
             $table->string('dealType');
             $table->string('goalType');
             $table->integer('achievablePoints');
-            $table->string('title')->nullable();
             $table->boolean('goal_status')->default(false);
             $table->float('goal_progress')->default(0);
             $table->string('title')->nullable();

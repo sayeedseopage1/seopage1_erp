@@ -53,6 +53,7 @@ const TimeLogHistory = () => {
                     ["employee_id"],
                     ["desc"]
                 );
+
                 if (auth?.getRoleId() !== 1) {
                     sortedData = [];
                 }

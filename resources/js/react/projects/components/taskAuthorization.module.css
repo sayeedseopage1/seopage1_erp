@@ -1,9 +1,9 @@
 .task_authorization {
-    font-family: Inter;
+    font-family: Inter, sans-serif;
 }
 
 .authorize_task {
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
     font-weight: 500 !important;
     background: #199CDE !important;
     color: #f9f9f9 !important;
@@ -11,7 +11,7 @@
 }
 
 .authorize_task:hover {
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
     background-color: #1492d2 !important;
     border-color: #1492d2 !important;
 }
@@ -28,7 +28,7 @@
 .card {
     width: 80vw;
     max-height: 95vh;
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
     box-shadow: 0 0 10px rgb(0 0 0 / 15%);
 }
 
@@ -60,7 +60,7 @@
     /* width: clamp(255px, 100%, 350px); */
     width: 100%;
     max-width: 350px;
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
 }
 
 .action {
@@ -102,13 +102,13 @@
 
 .task_project {
     text-align: center;
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
 }
 
 .task_project h6 {
     width: 80%;
     text-align: center;
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
     margin-inline: auto;
 }
 
@@ -118,7 +118,7 @@
     flex-direction: column;
     gap: 10px;
     font-size: 14px;
-    font-family: Inter;
+    font-family: Inter, sans-serif;;
 }
 
 .inline_flex {
@@ -257,7 +257,6 @@
     font-size: 12px !important;
     color: #797979;
     padding-inline: 10px;
-    font-size: 400px;
     display: block;
     padding-left: 16px;
 }

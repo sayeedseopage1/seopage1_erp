@@ -9,6 +9,8 @@ import subtaskReducer from './features/subTaskSlice';
 import timeLogHistoryReducer from "./features/timeLogHistorySlice";
 import tasksReducer from './features/tasksSlice';
 import errorSlice from "./features/errorSlice";
+import filterOptionReducer from "./features/filterOptionSlice";
+import saleRiskAnalysisReducer from './features/saleRiskAnalysisSlice';
 
 export const store = configureStore({
     reducer: {
@@ -16,11 +18,13 @@ export const store = configureStore({
         employeeWiseTableData: employeeWiseTableDataReducer,
         projectWiseDataTable: projectWiseDataTableReducer,
         taskWiseDataTable: taskWiseDataTableReducer,
+        saleRiskAnalysis: saleRiskAnalysisReducer,
         users: usersReducer,
         pointPageFilterOption: pointPageFilterReducer,
         subTask: subtaskReducer,
         timeLogHistory: timeLogHistoryReducer,
         tasks: tasksReducer,
+        filterOptions: filterOptionReducer,
         error: errorSlice
     },
 

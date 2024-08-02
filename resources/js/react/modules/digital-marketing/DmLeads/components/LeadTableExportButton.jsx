@@ -14,8 +14,7 @@ const LeadTableExportButton = ({ filter }) => {
     const [isRender, setIsRender] = React.useState(false);
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
-    const [allLeads, { data, isFetching, isSuccess }] =
-        useLazyAllDmLeadsQuery();
+    const [allLeads, { data, isLoading, isSuccess }] = useLazyAllDmLeadsQuery();
 
     const leads = data?.data;
 
@@ -197,7 +196,7 @@ const LeadTableExportButton = ({ filter }) => {
     return ReactDOM.createPortal(
         <React.Fragment>
             <ExportButton onClick={handleRender}>
-                {isFetching ? (
+                {isLoading ? (
                     <>
                         <Loader title="Processing..." />
                     </>

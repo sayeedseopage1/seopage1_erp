@@ -1,4 +1,6 @@
 @import "single-task-page";
+@import "evaluation-page" ;
+
 
 .text-hover-underline:hover{
   text-decoration: underline;
@@ -29,6 +31,11 @@
     }
   }
 
+
+  .link_color{
+    color: #2323ee !important;
+    cursor:pointer;
+  }
   .skeleton-loading {
     width: fit-content;
     padding: 3px ;
@@ -83,26 +90,27 @@
 }
 
 .sp1_modal-panel{
-  width: fit-content;
-  max-width: 90vw;
+ 
+  max-width: 956px;
   min-width: 300px;
   height: fit-content;
   min-height: 300px;
   margin-inline: auto;
   margin-top: 40px;
   background: #fff;
-  border-radius: 10px;
-}
+  border-radius: 29px 29px}
 
 .sp1_modal-head{
   display: flex;
+  height: 80px;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 6px 10px;
+ font-size: 20px;
+  padding: 20px 40px ;
   border-bottom: 1px solid rgb(0 0 0 / 10%);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+background: #1D82F5;
+color: white;
+  border-radius: 29px 29px 0px 0px;
 }
 
 .sp1_modal-close{
@@ -112,6 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .sp1_modal-body{
@@ -164,6 +173,10 @@ abbr{
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+}
+.cnx_dropdown__item_disabled{
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .font-medium{

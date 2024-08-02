@@ -45,15 +45,15 @@
 
           <!-- CARD BODY START -->
           <div class="card-body">
-             
+
                 <h5>Deal Details</h5>
-           
+
             <hr>
             <?php
             $url= url('/');
              ?>
               <div class="invoice-table-wrapper">
-               
+
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -102,7 +102,7 @@
                                   <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the deadline you mentioned when you submitted the bid. If you have discussed the deadline in-details with client, please based on your discussion enter the deadline here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                       <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                   </svg>
-                              <input type="datetime-local" name="deadline" value="{{$deal->lead->deadline}}"  class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
+                              <input type="datetime-local" name="deadline" value="{{$deal->deadline}}"  class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
                                   <label id="deadlineError" class="error text-danger" for="deadline"></label>
                               </div>
                             </div>
@@ -690,17 +690,42 @@
                                 </div>
                             </div>
                           @endif
-                          <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-check">
+                          <div class="d-flex flex-row">
+                            
+                            @if ($deal->project_type == 'hourly')
+                                <div class="form-check mr-3">
                                     <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
                                     <label class="form-check-label m-1" for="flexCheckDefault">
                                         Keep it as draft
                                     </label>
                                 </div>
-                              </div>
+                            @else
+                                <div class="form-check mr-3">
+
+                                    @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted" checked disabled>
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft <b>(Awaiting for admin authorization)</b>
+                                    </label>
+                                    @else
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft
+                                    </label>
+                                    @endif
+                                </div>
+                                @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" name="final_submission" id="final_submission">
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Final Submission
+                                    </label>
+                                </div>
+                                @endif
+                            @endif
+                            
                           </div>
-                          
+
                           <br>
                           <div class="d-flex justify-content-center">
                               <button class="btn btn-primary" type="submit" id="createDeal"><span class="btn-txt">Complete Deal Creation</span></button>
@@ -709,7 +734,7 @@
 
                     </div>
                 </div>
-               
+
               </div>
 
               <div class="d-flex flex-column">
@@ -976,6 +1001,7 @@
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
                 'is_drafted': $('#is_drafted').is(":checked") ? 1 : 0,
+                'is_final': $('#final_submission').is(":checked") ? 1 : 0,
                 'deal_category': deal_category,
                 'cms_id': cms_id,
                 'message_link': message_links_values,
@@ -1433,7 +1459,11 @@
              });
          </script>
     <script>
-        flatpickr("input[type=datetime-local]", {});
+        flatpickr("input[type=datetime-local]", {
+            minDate: "today",
+            defaultDate: $('#deadline').attr('value')
+        });
+
         $("#createDeal").on('click',function() {
             $("#createDeal").attr("disabled", true);
             // $(".btn-txt").text("Processing ...");

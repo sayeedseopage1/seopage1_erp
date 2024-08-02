@@ -47,7 +47,6 @@ const ProjectTasks = () => {
         React.useState(false);
     const [showProjectGuidelineEditForm, setShowProjectGuidelineEditForm] =
         React.useState(null);
-    const [hasPMGuideline, setHasPMGuideline] = React.useState(false);
     const [getAllSubtask, { isFetching: subtaskFetching }] =
         useLazyGetAllSubtaskQuery();
     const params = useParams();
@@ -215,17 +214,15 @@ const ProjectTasks = () => {
                                 <Dropdown.Menu className="sp1_table_tab--dd-menu">
                                     <Dropdown.Item
                                         onClick={() => setTableType("Tasks")}
-                                        className={`sp1_table_tab--dd-item ${
-                                            tableType === "Tasks" && "active"
-                                        }`}
+                                        className={`sp1_table_tab--dd-item ${tableType === "Tasks" && "active"
+                                            }`}
                                     >
                                         Tasks
                                     </Dropdown.Item>
                                     <Dropdown.Item
                                         onClick={() => setTableType("Subtasks")}
-                                        className={`sp1_table_tab--dd-item ${
-                                            tableType === "Subtasks" && "active"
-                                        }`}
+                                        className={`sp1_table_tab--dd-item ${tableType === "Subtasks" && "active"
+                                            }`}
                                     >
                                         Subtasks
                                     </Dropdown.Item>
@@ -321,8 +318,8 @@ const ProjectTasks = () => {
                                         <strong>
                                             {singleTask?.pm_id_name}
                                         </strong>
-                                    </a>
-                                    ,
+                                    </a>{/*
+                                    */},
                                 </span>
                                 <span>
                                     <span style={{ color: "#5c5e60" }}>

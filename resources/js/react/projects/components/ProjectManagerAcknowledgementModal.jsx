@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./project-manager-acknowledgement.module.css";
 import Modal from "../../global/Modal";
 import Card from "../../global/Card";
@@ -193,3 +194,11 @@ const ProjectManagerAcknowledgementModal = ({
 };
 
 export default ProjectManagerAcknowledgementModal;
+
+
+ProjectManagerAcknowledgementModal.propTypes = {
+    onConfirm: PropTypes.func,
+    onClose: PropTypes.func,
+    isOpen: PropTypes.bool,
+    isLoading: PropTypes.bool,
+}

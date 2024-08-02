@@ -215,4 +215,103 @@ class QualifiedSalesController extends AccountBaseController
     {
         //
     }
+    public function exportQualifiedSales(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
+
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+            {
+                $this->data = QualifiedSale::select([
+                    'qualified_sales.*',
+
+                    'converted_by.id as closed_by',
+                    'converted_by.name as closed_by_name',
+                    DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id) as total_points'),
+                ])
+                ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+                ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
+                ;
+
+
+
+            }else
+            {
+                $userId = Auth::id();
+        $shiftId = Auth::user()->shift;
+
+        $this->data = QualifiedSale::select([
+                'qualified_sales.*',
+                'converted_by.id as closed_by',
+                'converted_by.name as closed_by_name',
+                DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id AND cash_points.user_id = '.Auth::id().') as total_points'),
+                'cash_points.user_id',
+            ])
+            ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+            ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
+            ->leftJoin('cash_points', function ($join) use ($userId, $shiftId) {
+                $join->on('cash_points.project_id', '=', 'qualified_sales.project_id')
+                    ->whereIn('cash_points.user_id', function ($query) use ($shiftId) {
+                        $query->select('id')
+                            ->from('users')
+                            ->where('shift', '=', $shiftId);
+                    });
+            })
+            ->groupBy('qualified_sales.id', 'converted_by.id', 'converted_by.name', 'cash_points.user_id');
+
+            }
+
+            if ($request->project_id != null) {
+                $this->data = $this->data->where('qualified_sales.project_id', $request->project_id);
+            }
+            if ($request->client_id != null) {
+                $this->data = $this->data->where('qualified_sales.client_id', $request->client_id);
+
+            }
+            if ($startDate != null) {
+                $this->data = $this->data->where(DB::raw('DATE(qualified_sales.created_at)'), '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+
+            if ($endDate != null) {
+                $this->data = $this->data->where(DB::raw('DATE(qualified_sales.created_at)'), '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+
+            if ($request->pm_id != null) {
+                $this->data = $this->data->where('qualified_sales.pm_id', $request->pm_id);
+            }
+            if ($request->closed_by != null) {
+                $this->data = $this->data->where('deals.added_by', $request->closed_by);
+            }
+
+            if($request->search != null) {
+                $this->data = $this->data->where('deals.project_name', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('qualified_sales.pm_name', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('qualified_sales.client_name', 'LIKE', '%'.$request->search.'%')
+
+                ;
+            }
+            if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
+                return response()->json($this->data->get()->toArray());
+            }else
+            {
+                return response()->json(
+                    $this->data
+                        ->groupBy('cash_points.user_id')
+                        ->having('cash_points.user_id', Auth::id())
+                        ->get()
+                        ->toArray()
+                );
+            }
+
+
+        
+        return response()->json([
+            'status' => 200,
+            'data' => $this->data
+        ]);
+    }
 }

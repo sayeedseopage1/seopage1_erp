@@ -20,7 +20,27 @@ const pendingActions = apiSlice.injectEndpoints({
                 "PAST_ACTIONS",
             ],
         }),
+        acknowledgePendingActionsPast: build.mutation({
+            query: (data) => ({
+                url: `account/employee-evaluation-acknowledged`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: [
+                "LIVE_ACTIONS",
+                "EXPIRED_ACTIONS",
+                "PAST_ACTIONS",
+            ],
+        }),
     }),
 });
 
-export const { usePendingActionsIdMutation } = pendingActions;
+export const {
+    usePendingActionsIdMutation,
+    useAcknowledgePendingActionsPastMutation,
+} = pendingActions;

@@ -48,6 +48,7 @@ use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Admin\Employee\UpdateRequest;
 use App\Http\Requests\User\CreateInviteLinkRequest;
 use App\Http\Requests\Admin\Employee\ImportProcessRequest;
+use App\Models\EmployeeEvaluation;
 use App\Models\LanguageSetting;
 use App\Models\PMAssign;
 use App\Models\SalesCount;
@@ -133,7 +134,7 @@ class EmployeeController extends AccountBaseController
 
     public function assignRole(Request $request)
     {
-      //dd($request);
+    //   dd($request->all());
       $user= User::find($request->userId);
       $user->role_id= $request->role;
       $user->save();
@@ -181,6 +182,40 @@ class EmployeeController extends AccountBaseController
 
         $userSession = new AppSettingController();
         $userSession->deleteSessions([$user->id]);
+
+        /**EVALUATION START */
+        if($request->role == 14){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->save();
+        }
+        if($request->role == 15){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->user_status = 'PM';
+            $employee_evaluation->save();
+        }
+        if($request->role == 16){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->user_status = 'LD';
+            $employee_evaluation->save();
+        }
+        if($request->role == 17){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->user_status = 'SE';
+            $employee_evaluation->save();
+        }
+        /**EVALUATION END */
 
 
         return Reply::success(__('messages.roleAssigned'));

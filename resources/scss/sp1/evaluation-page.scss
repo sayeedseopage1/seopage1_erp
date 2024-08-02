@@ -1,0 +1,48 @@
+
+
+
+.average_rating {
+  font-size: 16px;
+  position: absolute;
+  top: 30px;
+  right: 50px;
+}
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+  .average_rating {
+      top: 20px;
+      right: 40px;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .average_rating {
+      top: 10px;
+      right: 20px;
+  }
+}
+
+/* Adjust for smaller mobile screens */
+@media screen and (max-width: 480px) {
+  .average_rating {
+      top: 5px;
+      right: 10px;
+  }
+}
+.ReactModal__Overlay {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: all 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+  transform: translateX(-100px);
+}

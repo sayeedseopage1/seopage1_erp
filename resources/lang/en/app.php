@@ -143,6 +143,7 @@ return array (
     'issues' => 'Issues',
     'timeLogs' => 'Time Logs',
     'tasks' => 'Tasks',
+    'sales-analysis-report' => 'Sales Analysis Report',
     'attendance' => 'Attendance',
     'estimates' => 'Estimates',
     'expenses' => 'Expenses',

@@ -12,7 +12,7 @@
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="cms_name">Cms Name
                             <sup class="f-14 mr-1">*</sup>
                         </label>
-                        <input type="text" class="form-control height-35 f-14 error" placeholder="Type cms name" name="cms_name" id="cms_name" autocomplete="off" aria-invalid="true">
+                        <input type="text" class="form-control height-35 f-14 error search-cms" placeholder="Type cms name" name="cms_name" id="cms_name" autocomplete="off" aria-invalid="true">
                         <label id="cms_nameError" class="text-danger" for="cms_name"></label>
                     </div>
                 </div>
@@ -24,53 +24,44 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script>
+    var path = "{{ route('check-cms') }}";
+    $('input.search-cms').typeahead({
+        source: function(cms_name, process){
+            return $.get(path, {cms_name: cms_name}, function(data){
+                return process(data)
+            })
+        }
+    });
+
     $('#add_cms').click(function(e){
-        // alert('ok');
         e.preventDefault();
-        $('#add_cms').attr("disabled", true);
-        $('#add_cms').html("Processing...");
+        $('#add_cms').attr("disabled", true).html("Processing...");
         var data = {
             '_token': "{{ csrf_token() }}",
-            'cms_name': document.getElementById("cms_name").value,
+            'cms_name': $('#cms_name').val(),
         };
-        // console.log(data);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+
         $.ajax({
             type: "POST",
-            url: "{{route('add-cms')}}",
+            url: "{{ route('add-cms') }}",
             data: data,
             dataType: "json",
             success: function (response) {
-                // console.log(response.message);
                 if (response.status == 200){
                     window.location.reload();
-                    $('#addcmsmodal').modal('hide');
-                    $('#addcmsmodal').find('input').val("");
-                    $('#add_cms').attr("disabled", false);
-                    $('#add_cms').html("Save");
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Cms Added Successfully',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
                 }
-
             },
             error: function(error) {
                 if(error.responseJSON.errors.cms_name){
                     $('#cms_nameError').text(error.responseJSON.errors.cms_name);
-                }else{
+                } else {
                     $('#cms_nameError').text('');
                 }
-                $('#add_cms').attr("disabled", false);
-                $('#add_cms').html("Save");
+            },
+            complete: function() {
+                $('#add_cms').attr("disabled", false).html("Save");
             }
         });
     });

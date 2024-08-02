@@ -7,37 +7,26 @@ import SearchBox from "../../global/Searchbox";
 import { useUsers } from "../../hooks/useUsers";
 import JqueryDateRangePicker from "./Table/JqueryDateRangePicker";
 
-const EvaluationTableFilterBar = ({ setFilter }) => {
-    const { users } = useUsers();
+import FilterItemEvaluation from "./FilterItemEvaluation";
+
+const EvaluationTableFilterBar = ({ setFilter, tableType, setTableType }) => {
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
     const [sale, setSale] = React.useState(null);
-    const [convertStatus, setConvertStatus] = React.useState(null);
 
     const searchText = React.useDeferredValue(search);
 
-    const saleId = sale?.id;
-
     const _startData = React.useMemo(() => startDate, [startDate]);
     const _endData = React.useMemo(() => endDate, [endDate]);
-    const _saleId = React.useMemo(() => sale?.id, [saleId]);
-    const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
 
     React.useEffect(() => {
         setFilter((prev) => ({
             ...prev,
             start_date: _startData,
             end_date: _endData,
-            sales_executive_id: _saleId,
-            sale_name: sale?.name,
-            convert_status: convertStatus?.id
-                ? convertStatus?.status
-                    ? "1"
-                    : "0"
-                : 0,
         }));
-    }, [_startData, _endData, _saleId, _convertStatus]);
+    }, [_startData, _endData]);
 
     // search data
     React.useEffect(() => {
@@ -66,29 +55,18 @@ const EvaluationTableFilterBar = ({ setFilter }) => {
                         <SearchBox value={search} onChange={setSearch} />
                     </div>
 
-                    {/* <SalesFilter
-                        value={sale}
-                        onChange={setSale}
-                        data={_.filter(users, (user) =>
-                            _.includes([1, 7, 8], Number(user.role_id))
-                        )}
-                    /> */}
-                    {/* <ConvertStatus
-                        value={convertStatus}
-                        onChange={setConvertStatus}
-                        data={[
-                            {
-                                id: 1,
-                                name: "Converted to Deal ",
-                                status: true,
-                            },
-                            {
-                                id: 2,
-                                name: "Not Converted to Deal ",
-                                status: false,
-                            },
+                    <FilterItemEvaluation
+                        title="Evaluation Type"
+                        items={[
+                            "Developer",
+                            "Project Manager",
+                            "Lead Developer",
+                            "Sales Executive",
                         ]}
-                    /> */}
+                        selected={tableType}
+                        isLoading={false}
+                        onSelect={setTableType}
+                    />
                 </Flex>
             </div>
         </React.Fragment>

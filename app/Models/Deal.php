@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Currency;
-use App\Models\User;
 use App\Models\Lead;
+use App\Models\User;
+use App\Models\Currency;
+use App\Models\DealStage;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Deal extends Model
 {
     use HasFactory;
     protected $table = 'deals';
+
+    static $saleAnalysisStatus = ['previous-won', 'previous-denied', 'pending', 'analysis', 'authorized', 'auto-authorized', 'denied', 'no-analysis'];
 
     public function original_currency()
     {
@@ -45,5 +48,10 @@ class Deal extends Model
 
     public function pm_project(){
         return $this->hasOne(PMProject::class, 'deal_id');
+    }
+
+    public function dealStage()
+    {
+        return $this->hasOne(DealStage::class, 'short_code', 'deal_id');
     }
 }

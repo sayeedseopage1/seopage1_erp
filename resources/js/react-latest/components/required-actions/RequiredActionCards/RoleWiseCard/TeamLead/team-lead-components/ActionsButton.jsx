@@ -2,7 +2,6 @@ import ModalForm from "./ModalForm";
 import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
 import React, { useEffect, useState } from "react";
 
 //mitul work start
@@ -18,6 +17,8 @@ import CommentContainerDecider from "../../../../../../../react/UI/comments/Comm
 import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
+import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
+import EvaluationAcknowledgeTaskModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeTaskModal";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -27,10 +28,11 @@ const ActionsButton = ({ data }) => {
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [viewModal, setViewModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
-
+    const [acknowledgement, setAcknowledgement] = React.useState(false);
+    const [acknowledgementTask, setAcknowledgementTask] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
-
+    const developerId = data?.developer_id;
     const {
         data: comments,
         isFetching,
@@ -61,11 +63,15 @@ const ActionsButton = ({ data }) => {
                             {btn.button_name}
                         </button>
                     );
-                } else if (btn.button_type === "modal") {
+                } else if (
+                    btn.button_type === "modal" &&
+                    data?.code === "TCOA"
+                ) {
                     return (
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(8)}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
@@ -79,6 +85,7 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(8)}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
@@ -92,6 +99,7 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(8)}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
@@ -99,6 +107,48 @@ const ActionsButton = ({ data }) => {
                                     className={`${style.action_btn}`}
                                 >
                                     View
+                                </button>
+                            )}
+                        </div>
+                    );
+                } else if (btn.button_type === "modal") {
+                    return (
+                        <div>
+                            {btn.button_name === "Acknowledge It" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setAcknowledgement((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge It
+                                </button>
+                            )}
+                            {btn.button_name ===
+                                "Acknowledge & create a task" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setAcknowledgementTask((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge & create a task
+                                </button>
+                            )}
+                            {btn.button_name === "Create a new task" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setAcknowledgementTask((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Create a new task
                                 </button>
                             )}
                         </div>
@@ -155,6 +205,17 @@ const ActionsButton = ({ data }) => {
             <RelevantModal
                 setIsRelevantModal={setIsRelevantModal}
                 isRelevantModal={isRelevantModal}
+            />
+
+            <EvaluationAcknowledgeTaskModal
+                developerId={developerId}
+                setAcknowledgementTask={setAcknowledgementTask}
+                acknowledgementTask={acknowledgementTask}
+            />
+            <EvaluationAcknowledgeModal
+                developerId={developerId}
+                setAcknowledgement={setAcknowledgement}
+                acknowledgement={acknowledgement}
             />
         </>
     );

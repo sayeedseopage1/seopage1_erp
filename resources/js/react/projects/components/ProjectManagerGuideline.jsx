@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import PropTypes from "prop-types";
 import CKEditorComponent from "../../ckeditor";
 import { useStoreProjectGuidelineMutation } from "../../services/api/projectApiSlice";
 import Button from "../../tasks/components/Button";
@@ -262,7 +263,7 @@ const ProjectManagerGuideline = ({
     };
 
     // handle submit
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const data = {
             project_id: projectId,
@@ -293,7 +294,7 @@ const ProjectManagerGuideline = ({
         if (isValid()) {
             try {
                 const res = await storeProjectGuideline(data).unwrap();
-                if(res){
+                if (res) {
                     toast.success("Task Guideline Store Successfully");
                     close();
                 }
@@ -330,12 +331,12 @@ const ProjectManagerGuideline = ({
                                 <h5>Provide Design Reference</h5>
                             </div>
 
-                           <Switch>
-                             {/* form */}
+                            <Switch>
+                                {/* form */}
                                 <ol className="py-4 px-3">
                                     {/* type  */}
-                                    <li style={{listStyle: 'unset'}}>
-                                        <div className="form-group"> 
+                                    <li style={{ listStyle: 'unset' }}>
+                                        <div className="form-group">
                                             <label
                                                 htmlFor=""
                                                 className="font-weight-bold"
@@ -372,7 +373,7 @@ const ProjectManagerGuideline = ({
                                                         className="form-check-label"
                                                         htmlFor="taskType_development"
                                                     >
-                                                        Development 
+                                                        Development
                                                     </label>
                                                 </div>
 
@@ -403,16 +404,16 @@ const ProjectManagerGuideline = ({
                                                         className="form-check-label"
                                                         htmlFor="taskType_design"
                                                     >
-                                                    Design 
+                                                        Design
                                                     </label>
-                                                </div>  
+                                                </div>
                                             </div>
                                         </div>
-                                    </li> 
+                                    </li>
                                     {/* theme details */}
                                     <Switch.Case condition={taskType === 'development'}>
-                                        <li style={{listStyle: "unset"}}> 
-                                            <div className="form-group"> 
+                                        <li style={{ listStyle: "unset" }}>
+                                            <div className="form-group">
                                                 <label
                                                     htmlFor=""
                                                     className="font-weight-bold"
@@ -525,7 +526,7 @@ const ProjectManagerGuideline = ({
                                     {/* end theme details */}
 
                                     {/* design Provide */}
-                                    <li style={{listStyle: "unset"}}>
+                                    <li style={{ listStyle: "unset" }}>
                                         <div className="form-group">
                                             <label
                                                 htmlFor=""
@@ -690,116 +691,116 @@ const ProjectManagerGuideline = ({
                                             {/* if design type Photoshop*/}
                                             {designFileType ===
                                                 "The Reference Site That Has to Be Clone" && (
-                                                <div
-                                                    className="mx-3 p-3"
-                                                    style={{
-                                                        background: "#F9F9F9",
-                                                        borderRadius: "10px",
-                                                    }}
-                                                >
-                                                    <div className="form-group">
-                                                        {_.map(
-                                                            designRefURL,
-                                                            (item) => (
-                                                                <div
-                                                                    key={item.id}
-                                                                    className="multipleInputItem"
-                                                                >
-                                                                    <Input
-                                                                        label="Reference URL"
-                                                                        placeholder="Reference URL"
-                                                                        required={
-                                                                            true
-                                                                        }
-                                                                        error={
-                                                                            error?.designRef
-                                                                        }
-                                                                        value={
-                                                                            item.url
-                                                                        }
-                                                                        type="url"
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleRefUrlChange(
-                                                                                e,
-                                                                                item.id
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                    {_.size(
-                                                                        designRefURL
-                                                                    ) > 1 && (
-                                                                        <button
-                                                                            aria-label="RemoveLink"
-                                                                            onClick={(
+                                                    <div
+                                                        className="mx-3 p-3"
+                                                        style={{
+                                                            background: "#F9F9F9",
+                                                            borderRadius: "10px",
+                                                        }}
+                                                    >
+                                                        <div className="form-group">
+                                                            {_.map(
+                                                                designRefURL,
+                                                                (item) => (
+                                                                    <div
+                                                                        key={item.id}
+                                                                        className="multipleInputItem"
+                                                                    >
+                                                                        <Input
+                                                                            label="Reference URL"
+                                                                            placeholder="Reference URL"
+                                                                            required={
+                                                                                true
+                                                                            }
+                                                                            error={
+                                                                                error?.designRef
+                                                                            }
+                                                                            value={
+                                                                                item.url
+                                                                            }
+                                                                            type="url"
+                                                                            onChange={(
                                                                                 e
                                                                             ) =>
-                                                                                removeDesignRef(
+                                                                                handleRefUrlChange(
                                                                                     e,
                                                                                     item.id
                                                                                 )
                                                                             }
-                                                                            type="button"
-                                                                            className="multipleInputItemButton"
-                                                                        >
-                                                                            <i className="fa-solid fa-trash-can" />
-                                                                        </button>
-                                                                    )}
-                                                                </div>
-                                                            )
-                                                        )}
+                                                                        />
+                                                                        {_.size(
+                                                                            designRefURL
+                                                                        ) > 1 && (
+                                                                                <button
+                                                                                    aria-label="RemoveLink"
+                                                                                    onClick={(
+                                                                                        e
+                                                                                    ) =>
+                                                                                        removeDesignRef(
+                                                                                            e,
+                                                                                            item.id
+                                                                                        )
+                                                                                    }
+                                                                                    type="button"
+                                                                                    className="multipleInputItemButton"
+                                                                                >
+                                                                                    <i className="fa-solid fa-trash-can" />
+                                                                                </button>
+                                                                            )}
+                                                                    </div>
+                                                                )
+                                                            )}
 
-                                                        <button
-                                                            type="button"
-                                                            onClick={
-                                                                addDesignRefURL
-                                                            }
-                                                            className="bg-transparent text-primary hover-underline"
-                                                        >
-                                                            + Another Reference URL
-                                                        </button>
-                                                    </div>
-
-                                                    <div className="form-group">
-                                                        <label htmlFor="ckeditor">
-                                                            Add Instraction
-                                                            <sup>*</sup>
-                                                        </label>
-                                                        <div className="ck-editor-holder">
-                                                            <CKEditorComponent
-                                                                onChange={(
-                                                                    e,
-                                                                    editor
-                                                                ) =>
-                                                                    setDesignRefDescription(
-                                                                        editor.getData()
-                                                                    )
+                                                            <button
+                                                                type="button"
+                                                                onClick={
+                                                                    addDesignRefURL
                                                                 }
-                                                            />
-                                                        </div>
-                                                        {error?.designRefDescripton && (
-                                                            <div
-                                                                className=""
-                                                                style={{
-                                                                    color: "red",
-                                                                }}
+                                                                className="bg-transparent text-primary hover-underline"
                                                             >
-                                                                {" "}
-                                                                {
-                                                                    error?.designRefDescripton
-                                                                }{" "}
+                                                                + Another Reference URL
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="form-group">
+                                                            <label htmlFor="ckeditor">
+                                                                Add Instraction
+                                                                <sup>*</sup>
+                                                            </label>
+                                                            <div className="ck-editor-holder">
+                                                                <CKEditorComponent
+                                                                    onChange={(
+                                                                        e,
+                                                                        editor
+                                                                    ) =>
+                                                                        setDesignRefDescription(
+                                                                            editor.getData()
+                                                                        )
+                                                                    }
+                                                                />
                                                             </div>
-                                                        )}
+                                                            {error?.designRefDescripton && (
+                                                                <div
+                                                                    className=""
+                                                                    style={{
+                                                                        color: "red",
+                                                                    }}
+                                                                >
+                                                                    {" "}
+                                                                    {
+                                                                        error?.designRefDescripton
+                                                                    }{" "}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )}
                                         </div>
                                     </li>
                                     {/* end design provide */}
 
-                                    {/* color schema */}
-                                    <li style={{listStyle: 'unset'}}>
+                                    {/* color scheme */}
+                                    <li style={{ listStyle: 'unset' }}>
                                         <div className="form-group">
                                             <label
                                                 htmlFor=""
@@ -1055,21 +1056,21 @@ const ProjectManagerGuideline = ({
                                                                                     secondaryColors
                                                                                 ) >
                                                                                     1 && (
-                                                                                    <button
-                                                                                        aria-label="remove"
-                                                                                        onClick={(
-                                                                                            e
-                                                                                        ) =>
-                                                                                            removeSecondaryColor(
-                                                                                                e,
-                                                                                                item.id
-                                                                                            )
-                                                                                        }
-                                                                                        className="py-2 px-3 ml-auto rounded color_remove_btn"
-                                                                                    >
-                                                                                        <i className="fa-solid fa-trash-can" />
-                                                                                    </button>
-                                                                                )}
+                                                                                        <button
+                                                                                            aria-label="remove"
+                                                                                            onClick={(
+                                                                                                e
+                                                                                            ) =>
+                                                                                                removeSecondaryColor(
+                                                                                                    e,
+                                                                                                    item.id
+                                                                                                )
+                                                                                            }
+                                                                                            className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                                        >
+                                                                                            <i className="fa-solid fa-trash-can" />
+                                                                                        </button>
+                                                                                    )}
                                                                             </div>
                                                                         </div>
 
@@ -1138,14 +1139,14 @@ const ProjectManagerGuideline = ({
 
                                     {/* Plugin Research */}
                                     <Switch.Case condition={taskType === 'development'}>
-                                        <li style={{listStyle: 'unset'}}>
+                                        <li style={{ listStyle: 'unset' }}>
                                             <div className="form-group">
                                                 <label
                                                     htmlFor=""
                                                     className="font-weight-bold"
                                                     style={{ color: "#808080" }}
                                                 >
-                                                Plugin Research
+                                                    Plugin Research
                                                 </label>
                                                 <div className="d-block pl-3">
                                                     <div className="form-check form-check-inline">
@@ -1317,7 +1318,7 @@ const ProjectManagerGuideline = ({
                                         />
                                     </div>
                                 </ol>
-                           </Switch>
+                            </Switch>
                         </div>
                         {/* end body */}
                     </div>
@@ -1328,3 +1329,11 @@ const ProjectManagerGuideline = ({
 };
 
 export default ProjectManagerGuideline;
+
+
+ProjectManagerGuideline.propTypes = {
+    isOpen: PropTypes.bool,
+    close: PropTypes.func,
+    openTaskForm: PropTypes.func,
+    projectId: PropTypes.number,
+}

@@ -31,8 +31,10 @@ import {
 import axios from "axios";
 import ReactDatePicker from "react-datepicker";
 import dayjs from "dayjs";
-import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../../utils/stateValidation";
-
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../../utils/stateValidation";
 
 const LeadCreationForm = ({ isOpen, close }) => {
     return (
@@ -122,7 +124,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         bidding_minutes: "",
         bidding_seconds: "",
         description: "",
-        cover_letter: "", 
+        cover_letter: "",
         explanation: "",
         insight_screenshot: "",
         bidpage_screenshot: "",
@@ -130,30 +132,31 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         original_currency_id: "",
         country: "",
     });
-    const [leadInputDataValidation, setLeadInputDataValidation] = React.useState({
-        client_name: false,
-        project_id: false,
-        project_link: false,
-        isProjectIdUnique: false,
-        isProjectLinkValid: false,
-        project_type: false,
-        deadline: false,
-        bid_value: false,
-        bid_value2: false,
-        value: false,
-        bidding_minutes: false,
-        bidding_seconds: false,
-        description: false,
-        cover_letter: false,
-        insight_screenshot: false,
-        isIninsightScreenshotLinkValid: false,
-        isBidpageScreenshotLinkValid: false,
-        projectpage_screenshot: false,
-        isProjectpageScreenshotLinkValid: false,
-        original_currency_id: false,
-        country: false,
-        isSubmitting: false,
-    });
+    const [leadInputDataValidation, setLeadInputDataValidation] =
+        React.useState({
+            client_name: false,
+            project_id: false,
+            project_link: false,
+            isProjectIdUnique: false,
+            isProjectLinkValid: false,
+            project_type: false,
+            deadline: false,
+            bid_value: false,
+            bid_value2: false,
+            value: false,
+            bidding_minutes: false,
+            bidding_seconds: false,
+            description: false,
+            cover_letter: false,
+            insight_screenshot: false,
+            isIninsightScreenshotLinkValid: false,
+            isBidpageScreenshotLinkValid: false,
+            projectpage_screenshot: false,
+            isProjectpageScreenshotLinkValid: false,
+            original_currency_id: false,
+            country: false,
+            isSubmitting: false,
+        });
     const [error, setError] = React.useState(initialError);
     const [currency, setCurrency] = React.useState(null);
     const [clientCountry, setClientCountry] = React.useState(null);
@@ -184,8 +187,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         }));
     };
 
-
-    const handleOnkeypress = e => {
+    const handleOnkeypress = (e) => {
         const keyCode = e.keyCode || e.which;
         if (
             (keyCode < 48 || keyCode > 57) && // 0-9
@@ -195,8 +197,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         ) {
             e.preventDefault();
         }
-    }
-
+    };
 
     // rich editor field change
 
@@ -224,7 +225,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     React.useEffect(() => {
         formData.project_type = "fixed";
     }, []);
-
 
     const isValid = () => {
         const _error = {};
@@ -256,13 +256,11 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     }
                 } else if (key === "bid_value") {
                     if (!formData[key]) {
-                        _error[key] =
-                            "Please enter maximum project budget!";
+                        _error[key] = "Please enter maximum project budget!";
                     }
                 } else if (key === "bid_value2") {
                     if (!formData[key]) {
-                        _error[key] =
-                            "Please enter minimum project budget!";
+                        _error[key] = "Please enter minimum project budget!";
                     }
                 } else if (key === "value") {
                     if (!formData[key]) {
@@ -321,10 +319,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             delete _error["deadline"];
         }
 
-        if (
-            !formData.project_link ||
-            !validator.isURL(formData.project_link)
-        ) {
+        if (!formData.project_link || !validator.isURL(formData.project_link)) {
             _error.project_link =
                 "Invalid Url, Please enter a correct project link (Freelancer.com)";
         } else if (
@@ -337,31 +332,29 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             formData.bidpage_screenshot &&
             !validator.isURL(formData.bidpage_screenshot)
         ) {
-            _error.bidpage_screenshot = "Invalid Url, Please enter a correct screenshot link";
+            _error.bidpage_screenshot =
+                "Invalid Url, Please enter a correct screenshot link";
         } else if (
             !formData.projectpage_screenshot ||
             !validator.isURL(formData.projectpage_screenshot)
         ) {
             _error.projectpage_screenshot =
                 "Invalid Url, Please enter a correct screenshot link";
-        } 
+        }
 
         setError(_error);
         return Object.keys(_error)?.length === 0;
     };
 
-
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-       
-        if(leadInputData.project_type === "hourly") delete leadInputData.deadline;
-        if(!leadInputData.explanation) delete leadInputData.explanation;
-        if(!leadInputData.bidpage_screenshot) delete leadInputData.bidpage_screenshot;
-        console.log({ leadInputData });
+        if (leadInputData.project_type === "hourly")
+            delete leadInputData.deadline;
+        if (!leadInputData.explanation) delete leadInputData.explanation;
+        if (!leadInputData.bidpage_screenshot)
+            delete leadInputData.bidpage_screenshot;
         const isEmpty = isStateAllHaveValue(leadInputData);
-        console.log({ isEmpty });
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
@@ -374,59 +367,101 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             return;
         }
 
-        console.log({ leadInputData });
-
         const isProjectLinkValid = validator.isURL(leadInputData.project_link, {
-            protocols: ['http','https','ftp'],
+            protocols: ["http", "https", "ftp"],
         });
 
-        if(!isProjectLinkValid){
+        const isProjectpageScreenshotLinkValid = validator.isURL(
+            leadInputData.projectpage_screenshot,
+            {
+                protocols: ["http", "https", "ftp"],
+            }
+        );
+        const isInsightScreenshotLinkValid = validator.isURL(
+            leadInputData.insight_screenshot,
+            {
+                protocols: ["http", "https", "ftp"],
+            }
+        );
+
+        if (
+            !isProjectLinkValid ||
+            !isProjectpageScreenshotLinkValid ||
+            !isInsightScreenshotLinkValid
+        ) {
             setLeadInputDataValidation({
                 ...leadInputDataValidation,
-                isProjectLinkValid: true,
+                isProjectLinkValid: isProjectLinkValid ? false : true,
+                isProjectpageScreenshotLinkValid:
+                    isProjectpageScreenshotLinkValid ? false : true,
+                isIninsightScreenshotLinkValid: isInsightScreenshotLinkValid
+                    ? false
+                    : true,
             });
             return;
         }
 
-        console.log({ leadInputData });
+        if (leadInputData?.bidpage_screenshot) {
+            const isBidpageScreenshotLinkValid = validator.isURL(
+                leadInputData?.bidpage_screenshot,
+                {
+                    protocols: ["http", "https", "ftp"],
+                }
+            );
 
+            if (!isBidpageScreenshotLinkValid) {
+                setLeadInputDataValidation({
+                    ...leadInputDataValidation,
+                    isBidpageScreenshotLinkValid: isBidpageScreenshotLinkValid
+                        ? false
+                        : true,
+                });
+                return;
+                Ff;
+            }
+        }
 
 
         try {
-            
             const res = await leadCreate(formData).unwrap();
 
-                if(res?.status === 400){
-                        setLeadInputDataValidation({
-                            ...leadInputDataValidation,
-                            isProjectIdUnique: true,
-                        });
-                } else {
-                    toast.success("Lead Created Successfully");
-                    handleClose();
-                }
+            if (res?.status === 400) {
+                setLeadInputDataValidation({
+                    ...leadInputDataValidation,
+                    isProjectIdUnique: true,
+                });
+            } else {
+                toast.success("Lead Created Successfully");
+                handleClose();
+            }
         } catch (error) {
-            if(error?.status === 400){
-                const errors = error?.message?.customMessages?.project_id === "The project id has already been taken!" ? ["The project id has already been taken."] : error?.message?.customMessages;
+            if (error?.status === 400) {
+                const errors =
+                    error?.message?.customMessages?.project_id ===
+                    "The project id has already been taken!"
+                        ? ["The project id has already been taken."]
+                        : error?.message?.customMessages;
                 setValidationErrors(errors);
-                if(errors.includes("The project id has already been taken.")){
+                if (errors.includes("The project id has already been taken.")) {
+                    toast.error("The project id has already been taken.");
                     setLeadInputDataValidation({
                         ...leadInputDataValidation,
                         isProjectIdUnique: true,
                     });
-                } else if(errors.includes("The project link format is invalid.")){
+                } else if (
+                    errors.includes("The project link format is invalid.")
+                ) {
                     setLeadInputDataValidation({
                         ...leadInputDataValidation,
                         isProjectLinkValid: true,
                     });
                 }
-                errors.forEach(error => {
+                errors.forEach((error) => {
                     toast.error(error);
                 });
             } else {
                 toast.error("Something went wrong");
             }
-            
         }
     };
 
@@ -444,7 +479,10 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const handleCurrencySelection = (value) => {
         setCurrency(value);
         setFormData((state) => ({ ...state, original_currency_id: value.id }));
-        setLeadInputData((state) => ({ ...state, original_currency_id: value.id }));
+        setLeadInputData((state) => ({
+            ...state,
+            original_currency_id: value.id,
+        }));
     };
 
     // handle clientCountrySelection
@@ -469,8 +507,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
     // filter
     const getCountries = (data, query) => {
-        return data?.filter((d) =>
-            d?.name?.toLowerCase()?.includes(query?.toLowerCase())
+        return data?.filter(
+            (d) =>
+                d?.name?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso3?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.nicename?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso?.toLowerCase()?.includes(query?.toLowerCase())
         );
     };
 
@@ -487,43 +529,65 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         }
     }, [deadline]);
 
-    React.useEffect (() => {
-         if(error?.isSubmitting){
-            console.log("error", error);
-            isValid();
-         }
-    }, [formData]);
+    // React.useEffect(() => {
+    //     if (error?.isSubmitting) {
+    //         console.log("error", error);
+    //         isValid();
+    //     }
+    // }, [formData]);
 
     React.useEffect(() => {
-        if(leadInputDataValidation.isSubmitting){
-            if(!leadInputData.explanation) delete leadInputData.explanation;
-            if(!leadInputData.bidpage_screenshot) delete leadInputData.bidpage_screenshot;
+        if (leadInputDataValidation.isSubmitting) {
+            if (!leadInputData.explanation) delete leadInputData.explanation;
+            if (!leadInputData.bidpage_screenshot)
+                delete leadInputData.bidpage_screenshot;
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
                 ...leadInputDataValidation,
                 ...validation,
-                project_link:false,
+                project_link: false,
                 isProjectIdUnique: false,
-                isProjectLinkValid: !validator.isURL(leadInputData.project_link),
-                isBidpageScreenshotLinkValid: leadInputData.bidpage_screenshot && !validator.isURL(leadInputData.bidpage_screenshot),
-                isProjectpageScreenshotLinkValid: leadInputData.projectpage_screenshot && !validator.isURL(leadInputData.projectpage_screenshot),
-                isIninsightScreenshotLinkValid: leadInputData.insight_screenshot && !validator.isURL(leadInputData.insight_screenshot),
+                isProjectLinkValid: !validator.isURL(
+                    leadInputData.project_link
+                ),
+                isBidpageScreenshotLinkValid:
+                    leadInputData.bidpage_screenshot &&
+                    !validator.isURL(leadInputData.bidpage_screenshot),
+                isProjectpageScreenshotLinkValid:
+                    leadInputData.projectpage_screenshot &&
+                    !validator.isURL(leadInputData.projectpage_screenshot),
+                isIninsightScreenshotLinkValid:
+                    leadInputData.insight_screenshot &&
+                    !validator.isURL(leadInputData.insight_screenshot),
             });
-            if(validationErrors?.length){
+            if (validationErrors?.length) {
                 setLeadInputDataValidation({
                     ...leadInputDataValidation,
-                    isProjectIdUnique: validationErrors?.includes("The project id has already been taken."),
-                    isProjectLinkValid: validationErrors?.includes("The project link format is invalid."),
-                    isBidpageScreenshotLinkValid: validationErrors?.includes("The bidpage screenshot format is invalid."),
-                    isProjectpageScreenshotLinkValid: validationErrors?.includes("The projectpage screenshot format is invalid."),
-                    isIninsightScreenshotLinkValid: validationErrors?.includes("The insight screenshot format is invalid."),
+                    isProjectIdUnique: validationErrors?.includes(
+                        "The project id has already been taken."
+                    ),
+                    isProjectLinkValid: validationErrors?.includes(
+                        "The project link format is invalid."
+                    ),
+                    isBidpageScreenshotLinkValid: validationErrors?.includes(
+                        "The bidpage screenshot format is invalid."
+                    ),
+                    isProjectpageScreenshotLinkValid:
+                        validationErrors?.includes(
+                            "The Project Page screenshot format is invalid."
+                        ),
+                    isIninsightScreenshotLinkValid: validationErrors?.includes(
+                        "The insight screenshot format is invalid."
+                    ),
                 });
             }
         }
-    }, [leadInputData, leadInputDataValidation.isSubmitting, leadInputDataValidation.isProjectLinkValid, validationErrors]);
-
-
-
+    }, [
+        leadInputData,
+        leadInputDataValidation.isSubmitting,
+        leadInputDataValidation.isProjectLinkValid,
+        validationErrors,
+    ]);
 
     return (
         <Card>
@@ -554,9 +618,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.client_name && <ErrorText> Project Name is required </ErrorText>
-                                }
+                                {leadInputDataValidation.client_name && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Name is required{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -580,12 +647,18 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.project_id && <ErrorText> Project Id is required </ErrorText>
-                                }
-                                {
-                                    leadInputDataValidation.isProjectIdUnique && <ErrorText> The project id has already been taken. </ErrorText>
-                                }
+                                {leadInputDataValidation.project_id && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Id is required{" "}
+                                    </ErrorText>
+                                )}
+                                {leadInputDataValidation.isProjectIdUnique && (
+                                    <ErrorText>
+                                        {" "}
+                                        The project id has already been taken.{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -611,12 +684,18 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.project_link && <ErrorText> Project Link is required </ErrorText>
-                                }
-                                {
-                                    leadInputDataValidation.isProjectLinkValid && <ErrorText> The project link format is invalid. </ErrorText>
-                                }
+                                {leadInputDataValidation.project_link && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Link is required{" "}
+                                    </ErrorText>
+                                )}
+                                {leadInputDataValidation.isProjectLinkValid && (
+                                    <ErrorText>
+                                        {" "}
+                                        The project link format is invalid.{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
                         {/* Project Type */}
@@ -727,9 +806,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.original_currency_id && <ErrorText> Currency is required </ErrorText>
-                                }
+                                {leadInputDataValidation.original_currency_id && (
+                                    <ErrorText>
+                                        {" "}
+                                        Currency is required{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -784,9 +866,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.country && <ErrorText> Client Country is required </ErrorText>
-                                }
+                                {leadInputDataValidation.country && (
+                                    <ErrorText>
+                                        {" "}
+                                        Client Country is required{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -803,7 +888,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                             <div className="col-md-6">
                                                 <Input
                                                     min={0}
-                                                    onKeyPress={handleOnkeypress}
+                                                    onKeyPress={
+                                                        handleOnkeypress
+                                                    }
                                                     type="number"
                                                     name="bid_value"
                                                     value={formData.bid_value}
@@ -818,14 +905,20 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
-                                                {
-                                                    leadInputDataValidation.bid_value && <ErrorText> Minimum bid value is required </ErrorText>
-                                                }
+                                                {leadInputDataValidation.bid_value && (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        Minimum bid value is
+                                                        required{" "}
+                                                    </ErrorText>
+                                                )}
                                             </div>
                                             <div className="col-md-6">
                                                 <Input
                                                     min={0}
-                                                    onKeyPress={handleOnkeypress}
+                                                    onKeyPress={
+                                                        handleOnkeypress
+                                                    }
                                                     type="number"
                                                     name="bid_value2"
                                                     value={formData.bid_value2}
@@ -840,9 +933,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
-                                                {
-                                                    leadInputDataValidation.bid_value2 && <ErrorText> Maximum bid value is required </ErrorText>
-                                                }
+                                                {leadInputDataValidation.bid_value2 && (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        Maximum bid value is
+                                                        required{" "}
+                                                    </ErrorText>
+                                                )}
                                             </div>
                                         </div>
                                     </InputGroup>
@@ -882,9 +979,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         ) : (
                                             <></>
                                         )}
-                                        {
-                                            leadInputDataValidation.deadline && <ErrorText> Project Deadline is required </ErrorText>
-                                        }
+                                        {leadInputDataValidation.deadline && (
+                                            <ErrorText>
+                                                {" "}
+                                                Project Deadline is required{" "}
+                                            </ErrorText>
+                                        )}
                                     </InputGroup>
                                 </div>
 
@@ -899,7 +999,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                             <div className="col-md-6">
                                                 <Input
                                                     min={0}
-                                                    onKeyPress={handleOnkeypress}
+                                                    onKeyPress={
+                                                        handleOnkeypress
+                                                    }
                                                     type="number"
                                                     name="bid_value"
                                                     value={formData.bid_value}
@@ -914,14 +1016,20 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
-                                                {
-                                                    leadInputDataValidation.bid_value && <ErrorText> Minimum bid value is required </ErrorText>
-                                                }
+                                                {leadInputDataValidation.bid_value && (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        Minimum bid value is
+                                                        required{" "}
+                                                    </ErrorText>
+                                                )}
                                             </div>
                                             <div className="col-md-6">
                                                 <Input
                                                     min={0}
-                                                    onKeyPress={handleOnkeypress}
+                                                    onKeyPress={
+                                                        handleOnkeypress
+                                                    }
                                                     type="number"
                                                     name="bid_value2"
                                                     value={formData.bid_value2}
@@ -936,9 +1044,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
-                                                {
-                                                    leadInputDataValidation.bid_value2 && <ErrorText> Maximum bid value is required </ErrorText>
-                                                }
+                                                {leadInputDataValidation.bid_value2 && (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        Maximum bid value is
+                                                        required{" "}
+                                                    </ErrorText>
+                                                )}
                                             </div>
                                         </div>
                                     </InputGroup>
@@ -971,9 +1083,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.value && <ErrorText> Bid value is required </ErrorText>
-                                }
+                                {leadInputDataValidation.value && (
+                                    <ErrorText>
+                                        {" "}
+                                        Bid value is required{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -1004,9 +1119,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         ) : (
                                             <></>
                                         )}
-                                        {
-                                            leadInputDataValidation.bidding_minutes && <ErrorText> Bidding Delay Time (minutes) is required </ErrorText>
-                                        }
+                                        {leadInputDataValidation.bidding_minutes && (
+                                            <ErrorText>
+                                                {" "}
+                                                Bidding Delay Time (minutes) is
+                                                required{" "}
+                                            </ErrorText>
+                                        )}
                                     </div>
                                     <div className="col-md-6">
                                         <Input
@@ -1027,9 +1146,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         ) : (
                                             <></>
                                         )}
-                                        {
-                                            leadInputDataValidation.bidding_seconds && <ErrorText> Bidding Delay Time (seconds) is required </ErrorText>
-                                        }
+                                        {leadInputDataValidation.bidding_seconds && (
+                                            <ErrorText>
+                                                {" "}
+                                                Bidding Delay Time (seconds) is
+                                                required{" "}
+                                            </ErrorText>
+                                        )}
                                     </div>
                                 </div>
                             </InputGroup>
@@ -1061,9 +1184,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.description && <ErrorText> Project Description is required </ErrorText>
-                                }
+                                {leadInputDataValidation.description && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Description is required{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -1094,9 +1220,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.cover_letter && <ErrorText> Cover Letter is required </ErrorText>
-                                }
+                                {leadInputDataValidation.cover_letter && (
+                                    <ErrorText>
+                                        {" "}
+                                        Cover Letter is required{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -1123,7 +1252,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                              
                             </InputGroup>
                         </div>
 
@@ -1152,12 +1280,20 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.insight_screenshot && <ErrorText> Bid Insights Page (Screenshot) is required </ErrorText>
-                                }
-                                {
-                                    leadInputDataValidation.isIninsightScreenshotLinkValid && <ErrorText> The insight screenshot format is invalid. </ErrorText>
-                                }
+                                {leadInputDataValidation.insight_screenshot && (
+                                    <ErrorText>
+                                        {" "}
+                                        Bid Insights Page (Screenshot) is
+                                        required{" "}
+                                    </ErrorText>
+                                )}
+                                {leadInputDataValidation.isIninsightScreenshotLinkValid && (
+                                    <ErrorText>
+                                        {" "}
+                                        The insight screenshot format is
+                                        invalid.{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -1180,12 +1316,19 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.bidpage_screenshot && <ErrorText> Bid Page (Screenshot) is required </ErrorText>
-                                }
-                                {
-                                    leadInputDataValidation.isBidpageScreenshotLinkValid && <ErrorText> The bidpage screenshot format is invalid. </ErrorText>
-                                }
+                                {leadInputDataValidation.bidpage_screenshot && (
+                                    <ErrorText>
+                                        {" "}
+                                        Bid Page (Screenshot) is required{" "}
+                                    </ErrorText>
+                                )}
+                                {leadInputDataValidation.isBidpageScreenshotLinkValid && (
+                                    <ErrorText>
+                                        {" "}
+                                        The bidpage screenshot format is
+                                        invalid.{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
@@ -1213,12 +1356,19 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
-                                {
-                                    leadInputDataValidation.projectpage_screenshot && <ErrorText> Project Page (Screenshot) is required </ErrorText>
-                                }
-                                {
-                                    leadInputDataValidation.isProjectpageScreenshotLinkValid && <ErrorText> The projectpage screenshot format is invalid.  </ErrorText>
-                                }
+                                {leadInputDataValidation.projectpage_screenshot && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Page (Screenshot) is required{" "}
+                                    </ErrorText>
+                                )}
+                                {leadInputDataValidation.isProjectpageScreenshotLinkValid && (
+                                    <ErrorText>
+                                        {" "}
+                                        The project Page screenshot format is
+                                        invalid.{" "}
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
                     </div>
