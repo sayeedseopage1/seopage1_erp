@@ -4,7 +4,10 @@ import Button from "../../../global/Button";
 import { Flex } from "../table/ui";
 import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
-import { useCreateReviewExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
+import {
+    useCreateReviewExtendRequestMutation,
+    useGetGoalDeadlineExtendDetailsQuery,
+} from "../../../services/api/projectStatusApiSlice";
 import ImageViewer from "./ImageViewer";
 import { toast } from "react-toastify";
 import {
@@ -15,6 +18,7 @@ import {
 import "../styles/reviewExtendModal.css";
 import { over } from "lodash";
 import Switch from "../Switch";
+import { Placeholder } from "../../../global/Placeholder";
 
 const ReviewExtendRequestModal = ({
     projectDetails,
@@ -42,6 +46,16 @@ const ReviewExtendRequestModal = ({
     // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
+    const {
+        data: goalDeadlineExtendDetails,
+        isFetching: isFetchingGoalDeadlineExtendDetails,
+        refetch: refetchGoalDeadlineExtendDetails,
+        isLoading: isLoadingGoalDeadlineExtendDetails,
+    } = useGetGoalDeadlineExtendDetailsQuery(reviewExtendRequestData?.goal_id, {
+        refetchOnMountOrArgChange: true,
+        skip: !reviewExtendRequestData?.goal_id,
+    });
+
     // Get image data
     const imageData = projectExtendImages?.data;
 
@@ -59,6 +73,8 @@ const ReviewExtendRequestModal = ({
             goal_extension_auth_checkbox: false,
         });
     };
+
+    console.log(goalDeadlineExtendDetails);
 
     // Accept request
     const handleAccept = async (e) => {
@@ -270,20 +286,40 @@ const ReviewExtendRequestModal = ({
                             <strong>Extended Days:</strong>{" "}
                         </p>
                         <div className="col-12 col-md-8">
-                            <input
-                                className="p-1 rounded"
-                                defaultValue={reviewExtendState?.extended_day}
-                                placeholder="Enter extended days"
-                                type="number"
-                                onKeyPress={handleOnkeypress}
-                                min={1}
-                                onChange={(e) =>
-                                    setReviewExtendState({
-                                        ...reviewExtendState,
-                                        extended_day: e.target.value,
-                                    })
-                                }
-                            ></input>
+                            <Switch>
+                                <Switch.Case
+                                    condition={
+                                        isLoadingGoalDeadlineExtendDetails &&
+                                        isFetchingGoalDeadlineExtendDetails
+                                    }
+                                >
+                                    <Placeholder width="200px" height="30px" />
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={
+                                        !isLoadingGoalDeadlineExtendDetails ||
+                                        !isFetchingGoalDeadlineExtendDetails
+                                    }
+                                >
+                                    <input
+                                        className="p-1 rounded"
+                                        defaultValue={
+                                            goalDeadlineExtendDetails?.data
+                                                ?.extended_day
+                                        }
+                                        placeholder="Enter extended days"
+                                        type="number"
+                                        onKeyPress={handleOnkeypress}
+                                        min={1}
+                                        onChange={(e) =>
+                                            setReviewExtendState({
+                                                ...reviewExtendState,
+                                                extended_day: e.target.value,
+                                            })
+                                        }
+                                    />
+                                </Switch.Case>
+                            </Switch>
                             {reviewExtendStateValidation.extended_day && (
                                 <p className="text-danger my-1">
                                     Extended days is required
@@ -296,11 +332,29 @@ const ReviewExtendRequestModal = ({
                             <strong>Extended Reason:</strong>{" "}
                         </p>
                         <div className="col-12 col-md-8">
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: reviewExtendRequestData?.extended_pm_reason,
-                                }}
-                            />
+                            <Switch>
+                                <Switch.Case
+                                    condition={
+                                        isLoadingGoalDeadlineExtendDetails &&
+                                        isFetchingGoalDeadlineExtendDetails
+                                    }
+                                >
+                                    <Placeholder width="200px" height="30px" />
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={
+                                        !isLoadingGoalDeadlineExtendDetails ||
+                                        !isFetchingGoalDeadlineExtendDetails
+                                    }
+                                >
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: goalDeadlineExtendDetails
+                                                ?.data?.extended_pm_reason,
+                                        }}
+                                    />
+                                </Switch.Case>
+                            </Switch>
                         </div>
                     </div>
                     <div className="row my-3">
