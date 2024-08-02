@@ -4,7 +4,7 @@ import { SalesExecutiveDashboardTableColumn } from "../components/table/columns/
 const checkIsAdmin = () => {
   const user = window.Laravel.user
   if (user) {
-    return user.role_id === 1
+    return user?.role_id === 1
   }
 }
 
@@ -73,7 +73,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.added_by_user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -136,7 +136,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.added_by_user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -197,7 +197,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.added_by_user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -257,7 +257,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.added_by_user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -317,7 +317,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.added_by_user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -377,7 +377,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.added_by_user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -436,7 +436,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -479,7 +479,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -522,7 +522,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -565,7 +565,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -608,7 +608,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
@@ -651,7 +651,7 @@ export const SaleExecutiveDashboardDataConstant = [
             bidding_time: biddingTime,
             created_by: item?.user,
             deal_status: item?.deal_status,
-            is_admin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
+            isAdmin: checkIsAdmin(), // This function data is not available in the response data so we are using this function to check the user is admin or not from the window object of the browser
           }
 
         })
