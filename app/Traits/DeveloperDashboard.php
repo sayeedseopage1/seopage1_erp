@@ -12,9 +12,9 @@ use App\Models\TaskHistory;
 use App\Models\ProjectTimeLog;
 use App\Models\DashboardWidget;
 use App\Models\AttendanceSetting;
+use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\TaskRevisionDispute;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 trait DeveloperDashboard
@@ -72,15 +72,19 @@ trait DeveloperDashboard
             $devId = request('user_id');
 
             $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
-            $endDate = Carbon::parse(request('endDate'))->addDays(1)->format('Y-m-d');
+            $endDate = Carbon::parse(request('endDate'))->endOfDay()->format('Y-m-d');
+
 
             $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
                 ->whereRelation('taskUsers', 'user_id', $devId);
 
             $this->username = auth()->user()->name;
 
-            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
-                ->where('user_id', auth()->id());
+            $taskHistoryWithDate = TaskHistory::whereBetween('created_at', [$startDate, $endDate])->whereRelation('task', 'subtask_id', '!=', null);
+
+            $taskHistoryWithDateClone = clone $taskHistoryWithDate;
+
+            $taskHistoryWithDateAndId = $taskHistoryWithDateClone->where('user_id', $devId);
 
 
             $numberOfTasksReceived = clone $tasksUserInDate;
@@ -114,7 +118,7 @@ trait DeveloperDashboard
             ] = $this->numberOfSubmittedTasks($numberOfSubmittedTasks, $startDate, $endDate);
 
 
-            $numberOfApprovedTasksOn1stAttemptByLeadDeveloper = clone $tasksUserInDate;
+            $numberOfApprovedTasksOn1stAttemptByLeadDeveloper = clone $taskHistoryWithDate;
             [
                 $this->first_attempt_approve_task_in_this_month,
                 $this->first_attempt_approve_task_in_this_month_count,
@@ -124,7 +128,7 @@ trait DeveloperDashboard
                 $this->first_attempt_approve_task_secondary_page_in_this_month,
                 $this->first_attempt_approve_task_others_page_in_this_month_data,
                 $this->first_attempt_approve_task_others_page_in_this_month,
-            ] = $this->numberOfApprovedTasksOn1stAttemptByLeadDeveloper($numberOfApprovedTasksOn1stAttemptByLeadDeveloper);
+            ] = $this->numberOfApprovedTasksOn1stAttemptByLeadDeveloper($numberOfApprovedTasksOn1stAttemptByLeadDeveloper, $devId);
 
             [
                 $this->approved_task_by_client_in_first_attempt_data,
@@ -268,12 +272,13 @@ trait DeveloperDashboard
                 'html'   => $html,
             ]);
         } else {
-            $devId = Auth::id();
+            $devId = auth()->id();
+            // $devId = 224;
 
-            // $startDate = Carbon::now()->startOfMonth();
-            // $endDate = Carbon::now()->endOfMonth()->addDays(1);
-            $startDate = Carbon::parse('2024-05-01')->startOfMonth();
-            $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth()->addDays(1);
+            // $startDate = Carbon::parse('2024-05-01')->startOfMonth();
+            // $endDate = Carbon::parse('2024-05-31')->endOfMonth();
 
             $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
                 ->whereRelation('taskUsers', 'user_id', $devId);
@@ -281,8 +286,11 @@ trait DeveloperDashboard
 
             $this->username = auth()->user()->name;
 
-            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
-                ->where('user_id', auth()->id());
+            $taskHistoryWithDate = TaskHistory::whereBetween('created_at', [$startDate, $endDate])->whereRelation('task', 'subtask_id', '!=', null);
+
+            $taskHistoryWithDateClone = clone $taskHistoryWithDate;
+
+            $taskHistoryWithDateAndId = $taskHistoryWithDateClone->where('user_id', $devId);
 
             $numberOfTasksReceived = clone $tasksUserInDate;
             [
@@ -316,7 +324,7 @@ trait DeveloperDashboard
 
             //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
 
-            $numberOfApprovedTasksOn1stAttemptByLeadDeveloper = clone $tasksUserInDate;
+            $numberOfApprovedTasksOn1stAttemptByLeadDeveloper = clone $taskHistoryWithDate;
             [
                 $this->first_attempt_approve_task_in_this_month,
                 $this->first_attempt_approve_task_in_this_month_count,
@@ -326,7 +334,7 @@ trait DeveloperDashboard
                 $this->first_attempt_approve_task_secondary_page_in_this_month,
                 $this->first_attempt_approve_task_others_page_in_this_month_data,
                 $this->first_attempt_approve_task_others_page_in_this_month,
-            ] = $this->numberOfApprovedTasksOn1stAttemptByLeadDeveloper($numberOfApprovedTasksOn1stAttemptByLeadDeveloper);
+            ] = $this->numberOfApprovedTasksOn1stAttemptByLeadDeveloper($numberOfApprovedTasksOn1stAttemptByLeadDeveloper, $devId);
 
             [
                 $this->approved_task_by_client_in_first_attempt_data,
@@ -541,16 +549,14 @@ trait DeveloperDashboard
 
     private function numberOfSubmittedTasks($taskHistoryWithDateAndId, $startDate, $endDate)
     {
-
-
         $taskHistoryWithDateAndId = $taskHistoryWithDateAndId->where('board_column_id', 6)
             ->groupBy('task_id')
             ->get()
             ->pluck('task_id')->toArray();
 
         $taskFirstSubmitted = TaskHistory::where('board_column_id', 6)
-            ->groupBy('task_id')
             ->whereIn('task_id', $taskHistoryWithDateAndId)
+            ->groupBy('task_id')
             ->select('id', 'task_id', 'created_at', 'board_column_id')
             ->get();
 
@@ -561,7 +567,7 @@ trait DeveloperDashboard
             }
         }
         $tasksUserInDate = Task::with(
-            'taskType:id,task_id,task_type',
+            'taskType:id,task_id,task_type,page_type,task_type_other',
             'stat:id,label_color,column_name',
             'project:id,pm_id,client_id',
             'project.client:id,name',
@@ -600,16 +606,42 @@ trait DeveloperDashboard
         ];
     }
 
-    private function numberOfApprovedTasksOn1stAttemptByLeadDeveloper($tasksUserInDate)
+    private function numberOfApprovedTasksOn1stAttemptByLeadDeveloper($taskHistoryWithDate, $devId)
     {
-        $approved_1st_time_by_lead_dev = $tasksUserInDate->with(
-            'taskType:id,task_id,task_type',
+        $taskHistoryBoardColumnCompleted = $taskHistoryWithDate->where('board_column_id', 4)
+            ->groupBy('task_id')
+            ->get()
+            ->pluck('task_id')
+            ->toArray();
+
+        $taskHistoryBoardColumnReview = TaskHistory::whereIn('task_id', $taskHistoryBoardColumnCompleted)
+            ->join('tasks', 'task_history.task_id', '=', 'tasks.id')
+            ->where('task_history.board_column_id', 6)
+            ->where('task_history.user_id', $devId)
+            ->groupBy('task_history.task_id')
+            ->select('task_history.task_id')
+            ->addSelect(DB::raw('(SELECT created_at FROM task_history WHERE (task_history.task_id = tasks.id AND task_history.board_column_id = 6) ORDER BY created_at ASC LIMIT 1) as first_submitted_created_at'))
+            ->addSelect(DB::raw('(SELECT created_at FROM task_history WHERE (task_history.task_id = tasks.id AND (task_history.board_column_id = 4 OR task_history.board_column_id = 8 )) ORDER BY created_at ASC LIMIT 1) as first_approved_created_at'))
+            ->addSelect(DB::raw('(SELECT created_at FROM task_history WHERE (task_history.task_id = tasks.id AND task_history.board_column_id = 1 ) ORDER BY created_at ASC LIMIT 1) as first_revision_created_at'))
+            ->get();
+
+        $approved_1st_time_by_lead_dev_id = [];
+        foreach ($taskHistoryBoardColumnReview as $taskHistory) {
+            if (
+                !($taskHistory->first_revision_created_at > $taskHistory->first_submitted_created_at &&
+                    $taskHistory->first_revision_created_at < $taskHistory->first_approved_created_at)
+            ) {
+                $approved_1st_time_by_lead_dev_id[] = $taskHistory->task_id;
+            }
+        }
+        $approved_1st_time_by_lead_dev = Task::with(
+            'taskType:id,task_id,task_type,page_type,task_type_other',
             'project:id,pm_id,client_id',
             'project.client:id,name',
-            'latestTaskSubmission',
-            'latestTaskApprove',
-            'createBy'
-        )->where('board_column_id', 4)->whereNotNull('subtask_id')->doesntHave('revisions')
+            'latestTaskSubmission:id,task_id,created_at',
+            'latestTaskApprove:id,task_id,created_at',
+            'createBy:id,name'
+        )->whereIn('id', $approved_1st_time_by_lead_dev_id)
             ->select('id', 'created_at', 'created_by', 'heading', 'board_column_id', 'start_date', 'project_id');
 
         if ($approved_1st_time_by_lead_dev->count()) {

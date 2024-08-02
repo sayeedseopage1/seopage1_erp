@@ -25,6 +25,7 @@
                             <th scope="col">Sl No</th>
                             <th scope="col">Created On</th>
                             <th scope="col">Task Name</th>
+                            <th scope="col">Task Type Name</th>
                             <th scope="col">Task Type</th>
                             <th scope="col">Client Name</th>
                             <th scope="col">Project Manager</th>
@@ -45,6 +46,13 @@
                                 </td>
                                 <td>
                                     {{ $row?->taskType?->task_type }}
+                                </td>
+                                <td>
+                                    @if ($row?->taskType?->task_type == 'Others')
+                                        {{ $row?->taskType?->task_type_other }}
+                                    @else
+                                        {{ $row?->taskType?->page_type }}
+                                    @endif
                                 </td>
                                 <td>
                                     @if ($row?->project?->client)

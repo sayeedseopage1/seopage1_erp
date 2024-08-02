@@ -266,60 +266,6 @@
                         <div
                             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Primary Pages</h5>
-                                <div class="d-flex flex-wrap">
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        <a href="#" data-toggle="modal"
-                                            data-target="#number_of_task_received_primary_pages{{ $number_of_tasks_received_primary_page }}">
-                                            {{ $number_of_tasks_received_primary_page }}
-                                        </a>
-                                    </p>
-                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_primary_pages')
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Secondary Pages
-                                </h5>
-                                <div class="d-flex flex-wrap">
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        <a href="#" data-toggle="modal"
-                                            data-target="#number_of_task_received_secondary_pages{{ $number_of_tasks_received_secondary_page }}">
-                                            {{ $number_of_tasks_received_secondary_page }}
-                                        </a>
-                                    </p>
-                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_secondary_pages')
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Others</h5>
-                                <div class="d-flex flex-wrap">
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        <a href="#" data-toggle="modal"
-                                            data-target="#number_of_task_received_others_pages{{ $number_of_task_others_page_in_this_month }}">
-                                            {{ $number_of_task_others_page_in_this_month }}
-                                        </a>
-                                    </p>
-                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_others_pages')
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of submitted tasks</h5>
                                 <div class="d-flex flex-wrap">
 
@@ -333,74 +279,6 @@
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted')
 
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Primary Page
-                                </h5>
-                                <div class="d-flex flex-wrap">
-
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        <a href="#" data-toggle="modal"
-                                            data-target="#submit_number_of_tasks_in_this_month_primary_page{{ $submit_number_of_tasks_primary_page_in_this_month }}">
-
-                                            {{ $submit_number_of_tasks_primary_page_in_this_month }}
-
-                                        </a>
-                                    </p>
-                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_primary_page')
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Secondary Page
-                                </h5>
-                                <div class="d-flex flex-wrap">
-
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        <a href="#" data-toggle="modal"
-                                            data-target="#submit_number_of_tasks_in_this_month_secondary_page{{ $submit_number_of_tasks_secondary_page_in_this_month }}">
-
-                                            {{ $submit_number_of_tasks_secondary_page_in_this_month }}
-
-                                        </a>
-                                    </p>
-                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_secondary_page')
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Others</h5>
-                                <div class="d-flex flex-wrap">
-
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        <a href="#" data-toggle="modal"
-                                            data-target="#submit_number_of_tasks_in_this_month_other_page{{ $submit_number_of_tasks_others_page_in_this_month }}">
-
-                                            {{ $submit_number_of_tasks_others_page_in_this_month }}
-
-                                        </a>
-                                    </p>
-                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_other_page')
                                 </div>
                             </div>
 
@@ -425,8 +303,130 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
+                {{-- <div class="row mt-3"> --}}
+                    {{-- <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Primary Pages</h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#number_of_task_received_primary_pages{{ $number_of_tasks_received_primary_page }}">
+                                            {{ $number_of_tasks_received_primary_page }}
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_primary_pages')
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                    {{-- <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Secondary Pages
+                                </h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#number_of_task_received_secondary_pages{{ $number_of_tasks_received_secondary_page }}">
+                                            {{ $number_of_tasks_received_secondary_page }}
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_secondary_pages')
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                    {{-- <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Others</h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#number_of_task_received_others_pages{{ $number_of_task_others_page_in_this_month }}">
+                                            {{ $number_of_task_others_page_in_this_month }}
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_others_pages')
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                {{-- </div>
+                <div class="row mt-3"> --}}
+                    {{-- <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Primary Page
+                                </h5>
+                                <div class="d-flex flex-wrap">
+
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#submit_number_of_tasks_in_this_month_primary_page{{ $submit_number_of_tasks_primary_page_in_this_month }}">
+
+                                            {{ $submit_number_of_tasks_primary_page_in_this_month }}
+
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_primary_page')
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> --}}
+                    {{-- <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Secondary Page
+                                </h5>
+                                <div class="d-flex flex-wrap">
+
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#submit_number_of_tasks_in_this_month_secondary_page{{ $submit_number_of_tasks_secondary_page_in_this_month }}">
+
+                                            {{ $submit_number_of_tasks_secondary_page_in_this_month }}
+
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_secondary_page')
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> --}}
+                    {{-- <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Others</h5>
+                                <div class="d-flex flex-wrap">
+
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#submit_number_of_tasks_in_this_month_other_page{{ $submit_number_of_tasks_others_page_in_this_month }}">
+
+                                            {{ $submit_number_of_tasks_others_page_in_this_month }}
+
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_other_page')
+                                </div>
+                            </div>
+
+                        </div>
+                    </div> --}}
+                {{-- </div>
+                <div class="row mt-3"> --}}
+                    {{-- <div class="col-md-4">
                         <div
                             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
@@ -443,8 +443,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
+                    </div> --}}
+                    {{-- <div class="col-md-4">
                         <div
                             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
@@ -461,8 +461,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
+                    </div> --}}
+                    {{-- <div class="col-md-4">
                         <div
                             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
@@ -479,8 +479,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> --}}
+                {{-- </div> --}}
                 <div class="row mt-3">
                     <div class="col-md-4">
                         <div
