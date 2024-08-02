@@ -73,6 +73,11 @@ export class User {
       return this.roleId;
     }
 
+    // get employee id
+    getEmployeeId(){
+      return this.employeeDetail?.employeeId;
+    }
+
     // designation name
     getDesignationName(){ 
       return this.employeeDetail.getEmployeeDesignationName();

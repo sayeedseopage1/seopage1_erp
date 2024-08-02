@@ -6,6 +6,7 @@ import {
     getFilteredRowModel,
     getExpandedRowModel,
     getSortedRowModel,
+    getPaginationRowModel,
     flexRender,
 } from "@tanstack/react-table";
 
@@ -13,8 +14,6 @@ import {
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import DraggableColumnHeader from "./DraggableColumnHeader";
 
-// Components - Table Pagination
-import DashboardDataTablePagination from "./DashboardDataTablePagination";
 
 // Components - Table Empty
 import EmptyTable from "../../../global/EmptyTable";
@@ -24,6 +23,9 @@ import "./style/dashboardDataTable.css";
 
 // Components - Logic - Global
 import Switch from "../../../global/Switch";
+
+// Components - Table - Pagination
+import DashboardDataTableFrontPagination from "./DashboardDataTableFrontPagination";
 
 const DashboardDataTable = ({
     tableData,
@@ -38,11 +40,24 @@ const DashboardDataTable = ({
         isDraggable: false,
         sortingColumn: [],
     },
+    tableStyles = {
+        width: {
+            width: "auto",
+            maxWidth: "auto",
+            minWidth: "auto",
+        },
+        height: {
+            height: "auto",
+            maxHeight: "auto",
+            minHeight: "auto",
+        },
+        justifyStyleColumn: {}
+    },
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [data, setData] = React.useState(tableData?.data || []);
+    const [data, setData] = React.useState(tableData || []);
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -50,10 +65,7 @@ const DashboardDataTable = ({
     });
 
     // Price Quotations Data
-    const _dashboardTableData = React.useMemo(
-        () => tableData?.data,
-        [tableData?.data]
-    );
+    const _dashboardTableData = React.useMemo(() => tableData, [tableData]);
     React.useEffect(() => {
         if (_.size(_dashboardTableData) === _.size(data)) {
             setSkipPageReset(true);
@@ -78,16 +90,6 @@ const DashboardDataTable = ({
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
-    // handle page size change
-    const handlePageSizeChange = (e) => {
-        e.preventDefault();
-        const paginate = {
-            pageIndex,
-            pageSize: e.target.value,
-        };
-        setPagination({ ...paginate, pageIndex: 0 });
-        onPageChange(paginate);
-    };
 
     // pagination
     const pagination = React.useMemo(
@@ -105,14 +107,17 @@ const DashboardDataTable = ({
             tableName,
         },
         autoResetPageIndex: !skipPageReset,
+        onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
         getSubRows: (row) => row.subtasks,
         onColumnOrderChange: setColumnOrder,
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        paginateExpandedRows: false,
         meta: tableActions,
     });
 
@@ -123,8 +128,9 @@ const DashboardDataTable = ({
             <div
                 className={`sp1_dashboard_data_table_wrapper ${className}`}
                 style={{
-                    height: "100%",
-                    maxHeight: "100%",
+                    height: tableStyles?.height?.height,
+                    maxHeight: tableStyles?.height?.maxHeight,
+                    minHeight: tableStyles?.height?.minHeight,
                 }}
             >
                 <table className={`sp1_dashboard_data_table`}>
@@ -153,6 +159,7 @@ const DashboardDataTable = ({
                                                     sortingColumn={
                                                         options.sortingColumn
                                                     }
+                                                    justifyStyleColumn={tableStyles?.justifyStyleColumn}
                                                 />
                                             </Switch.Case>
                                             <Switch.Case
@@ -162,6 +169,7 @@ const DashboardDataTable = ({
                                                     header={header}
                                                     table={table}
                                                     key={header.id}
+                                                    justifyStyleColumn={tableStyles?.justifyStyleColumn}
                                                 />
                                             </Switch.Case>
                                         </>
@@ -219,10 +227,17 @@ const DashboardDataTable = ({
                 )}
             </div>
             <Switch.Case condition={options?.isPagination}>
-                <DashboardDataTablePagination
-                    tableData={tableData}
-                    handlePageSizeChange={handlePageSizeChange}
-                    className="px-0"
+                <DashboardDataTableFrontPagination
+                    currentPage={pageIndex + 1 }
+                    perPageRow={pageSize}
+                    onPageSize={(size) => table?.setPageSize(size)}
+                    onPaginate={(page) => table?.setPageIndex(page - 1)}
+                    totalEntry={_.size(data)}
+                    onNext={(page) => table?.getCanNextPage() && table.nextPage()}
+                    disableNext={!table?.getCanNextPage()}
+                    onPrevious={(page) => table?.getCanPreviousPage() && table.previousPage()}
+                    disablePrevious={!table?.getCanPreviousPage()}
+                    totalPages={table?.getPageCount()}
                 />
             </Switch.Case>
         </Switch>
@@ -243,5 +258,17 @@ DashboardDataTable.propTypes = {
         isPagination: PropTypes.bool,
         isDraggable: PropTypes.bool,
         sortingColumn: PropTypes.array,
+    }),
+    tableStyles: PropTypes.shape({
+        width: PropTypes.shape({
+            width: PropTypes.string,
+            maxWidth: PropTypes.string,
+            minWidth: PropTypes.string,
+        }),
+        height: PropTypes.shape({
+            height: PropTypes.string,
+            maxHeight: PropTypes.string,
+            minHeight: PropTypes.string,
+        }),
     }),
 };

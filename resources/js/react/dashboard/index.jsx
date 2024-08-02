@@ -23,10 +23,15 @@ import Toaster from "../global/Toaster";
 // Error boundary component
 import ErrorBoundary from "./helper/ErrorBoundary.jsx";
 
-// Context
+// Context for user
 import { LeadDeveloperProvider } from "./context/LeadDeveloperContext.jsx";
 import { DeveloperDashboardProvider } from "./context/DeveloperDashboardContext.jsx";
 import { SaleExecutiveDashboardProvider } from "./context/SalesExecutiveDashboardContext.jsx";
+
+// Context for admin
+import { SaleExecutiveAdminDashboardProvider } from "./context/SalesExecutiveAdminDashboardContext.jsx";
+
+// Context for admin
 
 // Content component
 const Content = () => (
@@ -80,15 +85,14 @@ const dashboardComponents = {
     7: SalesExecutiveDashboard,
 };
 
-// Mapping roles to their respective context providers
+// Mapping roles to their respective context providers for user
 const dashboardContextProviders = {
     5: DeveloperDashboardProvider,
     6: LeadDeveloperProvider,
-    7: SaleExecutiveDashboardProvider
+    7: SaleExecutiveDashboardProvider,
 };
 
-
-// Function to get the appropriate dashboard component based on user role
+//Function to get the appropriate dashboard component based on user role
 const renderEmployeeDashboardById = () => {
     const DashboardComponent =
         dashboardComponents[user?.role_id] || PMDashboard;
@@ -100,7 +104,7 @@ const routes = [
     {
         id: 1,
         containerId: "employeeDashboard",
-        baseUrl: "/account/dashboard/temp",
+        baseUrl: "/account/dashboard",
         contextProvider: dashboardContextProviders[user?.role_id] || null,
         pageComponent: renderEmployeeDashboardById(),
     },
@@ -129,7 +133,7 @@ const routes = [
         id: 5,
         containerId: "salesAdminDashboard",
         baseUrl: "/account/dashboard-sales-performance",
-        contextProvider: SaleExecutiveDashboardProvider,
+        contextProvider: SaleExecutiveAdminDashboardProvider,
         pageComponent: <SalesExecutiveDashboard />,
     },
 ];
@@ -150,7 +154,6 @@ const renderRoutes = () => {
         if (!container) return;
 
         const ContextProvider = route.contextProvider || React.Fragment;
-
         ReactDOM.createRoot(container).render(
             <React.StrictMode key={route.id}>
                 <ErrorBoundary>
@@ -162,9 +165,7 @@ const renderRoutes = () => {
                                         <Route path="/" element={<Content />}>
                                             <Route
                                                 path={
-                                                    route.id === 1
-                                                        ? ""
-                                                        : ":id/temp"
+                                                    route.id === 1 ? "" : ":id"
                                                 }
                                                 element={route.pageComponent}
                                             />

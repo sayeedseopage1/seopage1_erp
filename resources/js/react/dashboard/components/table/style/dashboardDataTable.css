@@ -2,7 +2,6 @@
 .sp1_dashboard_data_table_wrapper {
   max-height: calc(100vh - 330px);
   overflow: auto;
-  overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: #99BCD4 transparent;
   scroll-behavior: smooth !important;

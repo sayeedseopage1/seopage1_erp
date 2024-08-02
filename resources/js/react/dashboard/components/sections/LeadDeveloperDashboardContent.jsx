@@ -46,7 +46,7 @@ const LeadDeveloperDashboardContent = ({
                     backgroundColor="var(--primaryDarkBlue)"
                     padding="0px"
                     border="1px solid var(--primaryDarkBorderBlue)"
-                     flex="1"
+                    flex="1"
                 >
                     {leadDeveloperDashboardData?.slice(0, 2)?.map((data) => {
                         return (
@@ -64,11 +64,13 @@ const LeadDeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -112,7 +114,10 @@ const LeadDeveloperDashboardContent = ({
                                             cardData={{
                                                 subTitle: data?.subTitle,
                                                 value: data?.value,
-                                                valueType: data?.valueType,
+                                                valueTypeBefore:
+                                                    data?.valueTypeBefore,
+                                                valueTypeAfter:
+                                                    data?.valueTypeAfter,
                                                 hasPermissionForModal:
                                                     data?.hasPermissionForModal,
                                                 onClick: () => {
@@ -153,7 +158,10 @@ const LeadDeveloperDashboardContent = ({
                                         cardData={{
                                             subTitle: data?.subTitle,
                                             value: data?.value,
-                                            valueType: data?.valueType,
+                                            valueTypeBefore:
+                                                data?.valueTypeBefore,
+                                            valueTypeAfter:
+                                                data?.valueTypeAfter,
                                             hasPermissionForModal:
                                                 data?.hasPermissionForModal,
                                             onClick: () => {
@@ -200,11 +208,13 @@ const LeadDeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -247,7 +257,10 @@ const LeadDeveloperDashboardContent = ({
                                             cardData={{
                                                 subTitle: data?.subTitle,
                                                 value: data?.value,
-                                                valueType: data?.valueType,
+                                                valueTypeBefore:
+                                                    data?.valueTypeBefore,
+                                                valueTypeAfter:
+                                                    data?.valueTypeAfter,
                                                 hasPermissionForModal:
                                                     data?.hasPermissionForModal,
                                                 onClick: () => {
@@ -283,11 +296,13 @@ const LeadDeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -330,11 +345,13 @@ const LeadDeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -369,11 +386,13 @@ const LeadDeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -416,11 +435,13 @@ const LeadDeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -464,7 +485,10 @@ const LeadDeveloperDashboardContent = ({
                                                 title: data?.title,
                                                 subTitle: data?.subTitle,
                                                 value: data?.value,
-                                                valueType: data?.valueType,
+                                                valueTypeBefore:
+                                                    data?.valueTypeBefore,
+                                                valueTypeAfter:
+                                                    data?.valueTypeAfter,
                                                 hasPermissionForModal:
                                                     data?.hasPermissionForModal,
                                                 onClick: () => {
@@ -472,7 +496,6 @@ const LeadDeveloperDashboardContent = ({
                                                 },
                                                 loadingValueWidth: "20%",
                                                 info: data?.info,
-
                                             }}
                                             isLoading={isLoading}
                                             className="align-items-start"
@@ -514,7 +537,10 @@ const LeadDeveloperDashboardContent = ({
                                                 title: data?.title,
                                                 subTitle: data?.subTitle,
                                                 value: data?.value,
-                                                valueType: data?.valueType,
+                                                valueTypeBefore:
+                                                    data?.valueTypeBefore,
+                                                valueTypeAfter:
+                                                    data?.valueTypeAfter,
                                                 hasPermissionForModal:
                                                     data?.hasPermissionForModal,
                                                 onClick: () => {
@@ -533,7 +559,11 @@ const LeadDeveloperDashboardContent = ({
                 </SectionWrapper>
             </SectionWrapper>
             {/* End 4th Section  */}
-            <SectionWrapper className="sp1_dashboard_lead_developer_table_section" padding="0px" gap="10px">
+            <SectionWrapper
+                className="sp1_dashboard_lead_developer_table_section"
+                padding="0px"
+                gap="10px"
+            >
                 <SectionWrapper
                     className="d-flex w-50 flex-column"
                     backgroundColor="var(--priMaryWhiteBg)"

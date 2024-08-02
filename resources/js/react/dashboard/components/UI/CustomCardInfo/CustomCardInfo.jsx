@@ -18,6 +18,8 @@ const defaultProps = {
         title: "",
         subTitle: "",
         value: "",
+        valueTypeAfter: "",
+        valueTypeBefore: "",
         isColorChange: false,
         colors: {
             positive: "var(--primaryBlue)",
@@ -42,7 +44,8 @@ const CustomCardInfo = ({
     const {
         info,
         value,
-        valueType,
+        valueTypeBefore,
+        valueTypeAfter,
         title,
         onClick,
         subTitle,
@@ -108,7 +111,9 @@ const CustomCardInfo = ({
                             hasPermissionForModal && onClick(cardData)
                         }
                     >
-                        {value} {valueType}
+                        {valueTypeBefore}
+                        {value}{"  "}
+                        {valueTypeAfter}
                     </button>
                 </Switch.Case>
             </Switch>

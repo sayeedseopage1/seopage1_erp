@@ -8,23 +8,40 @@ import { SectionWrapper } from "../UI/StyledComponents";
 import CustomCardHeader from "../UI/CustomCardHeader/CustomCardHeader";
 import CustomCardInfo from "../UI/CustomCardInfo/CustomCardInfo";
 
-// context
+// context for user
 import { SaleExecutiveDashboardContext } from "../../context/SalesExecutiveDashboardContext";
+// context for admin
+import { SalesExecutiveAdminDashboardContext } from "../../context/SalesExecutiveAdminDashboardContext";
+
+// Components - shared - Custom
 import RefreshButton from "../shared/RefreshButton";
-import DashboardDataTable from "../table/DashboardDataTable";
 
 // table columns
 import { SalesExecutiveDashboardTableColumn } from "../table/columns/SalesExecutiveDashboardTableColumn";
 import SaleExecutiveDashboardTableLoader from "../loader/SaleExecutiveDashboardTableLoader";
+import DashboardDataTable from "../table/DashboardDataTable";
 
-const SalesExecutiveDashboardContent = ({
-    isLoading,
-    handleLoadingCheck,
-    handleModalOpen,
-}) => {
-    const { saleExecutiveDashboardData } = useContext(
-        SaleExecutiveDashboardContext
-    );
+// hooks
+import { useAuth } from "../../../hooks/useAuth";
+
+const SalesExecutiveDashboardContent = ({ isLoading, handleModalOpen }) => {
+    const auth = useAuth();
+    // Get the context based on the user role ID to access the user data
+    const DashboardContext =
+        auth.getRoleId() === 1
+            ? SalesExecutiveAdminDashboardContext
+            : SaleExecutiveDashboardContext;
+    const {
+        saleExecutiveDashboardData,
+        countryWBB,
+        isCountryWBBLoading,
+        countryWBBRefetch,
+        countryWWD,
+        isCountryWWDLoading,
+        countryWWDRefetch,
+    } = useContext(DashboardContext);
+
+    
     return (
         <SectionWrapper
             className="sp1_dashboard_sale_executive_content"
@@ -63,11 +80,13 @@ const SalesExecutiveDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -101,11 +120,13 @@ const SalesExecutiveDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -139,11 +160,13 @@ const SalesExecutiveDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -159,6 +182,9 @@ const SalesExecutiveDashboardContent = ({
                     className="d-flex flex-column"
                     backgroundColor="var(--primaryDarkBlue)"
                     padding="0px"
+                    style={{
+                        minHeight: "47vh",
+                    }}
                 >
                     <SectionWrapper
                         backgroundColor="var(--primaryDarkBlue)"
@@ -166,8 +192,8 @@ const SalesExecutiveDashboardContent = ({
                     >
                         <CustomCardHeader title="Country Wise Bidding Breakdown" />
                         <RefreshButton
-                            onClick={handleLoadingCheck}
-                            isLoading={isLoading}
+                            onClick={countryWBBRefetch}
+                            isLoading={isCountryWBBLoading}
                         />
                     </SectionWrapper>
 
@@ -176,13 +202,24 @@ const SalesExecutiveDashboardContent = ({
                             tableColumns={
                                 SalesExecutiveDashboardTableColumn?.CountryWiseBiddingBreakdown
                             }
-                            tableData={[]}
-                            isLoading={isLoading}
+                            tableData={countryWBB?.country_wise_leads}
+                            isLoading={isCountryWBBLoading}
                             tableName="Lead Developer Table"
                             getLoadingComponent={
                                 SaleExecutiveDashboardTableLoader
                             }
                             className="sp1_dashboard_sale_executive_table"
+                            tableStyles={{
+                                height: {
+                                    minHeight: "35vh",
+                                    maxHeight: "35vh",
+                                },
+                                justifyStyleColumn: {
+                                    total_leads: "center",
+                                    percentage: "center",
+                                    average_bidding_amount: "center",
+                                },
+                            }}
                         />
                     </SectionWrapper>
                 </SectionWrapper>
@@ -191,10 +228,9 @@ const SalesExecutiveDashboardContent = ({
                 gap="10px"
                 className="d-flex flex-column w-50"
                 backgroundColor="var(--priMaryWhiteBg)"
-                
             >
                 <CustomCardHeader
-                    title="Core Metrics For Bidders"
+                    title="Core Metrics For Closers"
                     border={true}
                     borderStyle="1px dotted var(--primaryLightBorder)"
                 />
@@ -220,11 +256,13 @@ const SalesExecutiveDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -258,11 +296,13 @@ const SalesExecutiveDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -296,11 +336,13 @@ const SalesExecutiveDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -317,7 +359,9 @@ const SalesExecutiveDashboardContent = ({
                     className="d-flex flex-column"
                     backgroundColor="var(--primaryDarkBlue)"
                     padding="0px"
-                    
+                    style={{
+                        minHeight: "47vh",
+                    }}
                 >
                     <SectionWrapper
                         backgroundColor="var(--primaryDarkBlue)"
@@ -325,8 +369,8 @@ const SalesExecutiveDashboardContent = ({
                     >
                         <CustomCardHeader title="Country Wise Won Deals" />
                         <RefreshButton
-                            onClick={handleLoadingCheck}
-                            isLoading={isLoading}
+                            onClick={countryWWDRefetch}
+                            isLoading={isCountryWWDLoading}
                         />
                     </SectionWrapper>
 
@@ -335,13 +379,25 @@ const SalesExecutiveDashboardContent = ({
                             tableColumns={
                                 SalesExecutiveDashboardTableColumn?.CountryWiseWonDeals
                             }
-                            tableData={[]}
-                            isLoading={isLoading}
+                            tableData={countryWWD?.country_wise_won_deals}
+                            isLoading={isCountryWWDLoading}
                             tableName="Lead Developer Table"
                             getLoadingComponent={
                                 SaleExecutiveDashboardTableLoader
                             }
                             className="sp1_dashboard_sale_executive_table"
+                            tableStyles={{
+                                height: {
+                                    minHeight: "35vh",
+                                    maxHeight: "35vh",
+                                },
+                                justifyStyleColumn: {
+                                    percentage_won_deals_value: "center",
+                                    avg_won_deals_value: "center",
+                                    won_deals_count: "center",
+                                    won_deals_value: "center",
+                                },
+                            }}
                         />
                     </SectionWrapper>
                 </SectionWrapper>
@@ -354,6 +410,5 @@ export default SalesExecutiveDashboardContent;
 
 SalesExecutiveDashboardContent.propTypes = {
     isLoading: PropTypes.bool,
-    handleLoadingCheck: PropTypes.func,
     handleModalOpen: PropTypes.func,
 };

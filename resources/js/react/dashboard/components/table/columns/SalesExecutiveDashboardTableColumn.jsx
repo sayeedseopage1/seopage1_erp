@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Popover } from "antd";
 import Switch from "../../../../global/Switch";
 import PopoverLink from "../../shared/PopoverLink";
 
@@ -24,56 +25,16 @@ const SalesExecutiveDashboardBiddingBreakdown = [
         id: "country",
         header: "Country",
         accessorKey: "country",
-        cell: ({ row }) => {
-            const data = row.original;
-            return (
-                <span className="singleline-ellipsis">
-                    {dayjs(data?.created_at).format("DD-MM-YYYY h:mm:ss A") ??
-                        "Not started yet"}
-                </span>
-            );
-        },
-    },
-    {
-        id: "heading",
-        header: "Task Name",
-        accessorKey: "heading",
-        cell: ({ row }) => {
-            const data = row.original;
-            return (
-                <PopoverLink
-                    url={`/account/tasks/${data?.id}`}
-                    label={data?.heading}
-                />
-            );
-        },
     },
     {
         id: "total_leads",
         header: "Total Leads",
-        accessorKey: "total_leads",
+        accessorKey: "lead_count",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis">
-                    <Switch>
-                        <Switch.Case
-                            condition={[2, 1, 3].includes(
-                                data?.board_column_id
-                            )}
-                        >
-                            N/A
-                        </Switch.Case>
-                        <Switch.Case
-                            condition={
-                                ![2, 1, 3].includes(data?.board_column_id)
-                            }
-                        >
-                            {dayjs(data?.submission_date).format(
-                                "DD-MM-YYYY h:mm:ss A"
-                            ) ?? "Not started yet"}
-                        </Switch.Case>
-                    </Switch>
+                <span className="singleline-ellipsis task-status text-center">
+                    {data?.lead_count}
                 </span>
             );
         },
@@ -81,12 +42,12 @@ const SalesExecutiveDashboardBiddingBreakdown = [
     {
         id: "average_bidding_amount",
         header: "Avg. Bidding Amount",
-        accessorKey: "average_bidding_amount",
+        accessorKey: "avg_lead_value",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis task-status">
-                    {data?.average_bidding_amount}
+                <span className="singleline-ellipsis task-status text-center">
+                    {data?.avg_lead_value}
                 </span>
             );
         },
@@ -94,12 +55,12 @@ const SalesExecutiveDashboardBiddingBreakdown = [
     {
         id: "percentage",
         header: "Percentage",
-        accessorKey: "percentage",
+        accessorKey: "percentage_lead_value",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis task-status">
-                    {data?.percentage}
+                <span className="singleline-ellipsis task-status text-center">
+                    {data?.percentage_lead_value} %
                 </span>
             );
         },
@@ -125,29 +86,6 @@ const SalesExecutiveDashboardWonDeals = [
         id: "country",
         header: "Country",
         accessorKey: "country",
-        cell: ({ row }) => {
-            const data = row.original;
-            return (
-                <span className="singleline-ellipsis">
-                    {dayjs(data?.created_at).format("DD-MM-YYYY h:mm:ss A") ??
-                        "Not started yet"}
-                </span>
-            );
-        },
-    },
-    {
-        id: "heading",
-        header: "Task Name",
-        accessorKey: "heading",
-        cell: ({ row }) => {
-            const data = row.original;
-            return (
-                <PopoverLink
-                    url={`/account/tasks/${data?.id}`}
-                    label={data?.heading}
-                />
-            );
-        },
     },
     {
         id: "won_deals_count",
@@ -156,25 +94,8 @@ const SalesExecutiveDashboardWonDeals = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis">
-                    <Switch>
-                        <Switch.Case
-                            condition={[2, 1, 3].includes(
-                                data?.board_column_id
-                            )}
-                        >
-                            N/A
-                        </Switch.Case>
-                        <Switch.Case
-                            condition={
-                                ![2, 1, 3].includes(data?.board_column_id)
-                            }
-                        >
-                            {dayjs(data?.submission_date).format(
-                                "DD-MM-YYYY h:mm:ss A"
-                            ) ?? "Not started yet"}
-                        </Switch.Case>
-                    </Switch>
+                <span className="singleline-ellipsis task-status text-center">
+                    {data?.won_deals_count} %
                 </span>
             );
         },
@@ -186,7 +107,7 @@ const SalesExecutiveDashboardWonDeals = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis task-status">
+                <span className="singleline-ellipsis task-status text-center">
                     {data?.won_deals_value}
                 </span>
             );
@@ -199,21 +120,21 @@ const SalesExecutiveDashboardWonDeals = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis task-status">
+                <span className="singleline-ellipsis task-status text-center">
                     {data?.avg_won_deals_value}
                 </span>
             );
         },
     },
     {
-        id: "percentage",
+        id: "percentage_won_deals_value",
         header: "Percentage",
-        accessorKey: "percentage",
+        accessorKey: "percentage_won_deals_value",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis task-status">
-                    {data?.percentage}
+                <span className="singleline-ellipsis task-status text-center">
+                    {data?.percentage_won_deals_value} %
                 </span>
             );
         },
@@ -242,9 +163,11 @@ const SalesExecutiveDashboardModalTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis">
-                    {data?.project_name ?? "N/A"}
-                </span>
+                <Popover content={data?.project_name}>
+                    <span className="singleline-ellipsis">
+                        {data?.project_name ?? "N/A"}
+                    </span>
+                </Popover>
             );
         },
     },
@@ -254,7 +177,6 @@ const SalesExecutiveDashboardModalTableColumns = [
         accessorKey: "project_budget",
         cell: ({ row }) => {
             const data = row.original;
-            // TODO: Add currency symbol
             return (
                 <span className="singleline-ellipsis">
                     {data?.project_budget ?? "N/A"}
@@ -269,7 +191,7 @@ const SalesExecutiveDashboardModalTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="singleline-ellipsis">
+                <span>
                     {dayjs(data?.created_at).format("DD-MM-YYYY h:mm:ss A") ??
                         "Not started yet"}
                 </span>
@@ -282,11 +204,7 @@ const SalesExecutiveDashboardModalTableColumns = [
         accessorKey: "bidding_minutes",
         cell: ({ row }) => {
             const data = row.original;
-            return (
-                <span className="singleline-ellipsis">
-                    {`${data?.bidding_minutes} min ${data?.bidding_seconds} sec`}
-                </span>
-            );
+            return <span className="">{`${data?.bidding_time}`}</span>;
         },
     },
     {
@@ -294,12 +212,22 @@ const SalesExecutiveDashboardModalTableColumns = [
         header: "Created By",
         accessorKey: "created_by",
         cell: ({ row }) => {
-            const data = row.original;
+            const data = row?.original;
+            const createdBy = data?.created_by;
             return (
-                <PopoverLink
-                    url={`/account/employees/${data?.id}`}
-                    label={data?.heading}
-                />
+                <Switch>
+                    <Switch.Case condition={data.isAdmin}>
+                        <PopoverLink
+                            url={`/account/employees/${createdBy?.id}`}
+                            label={createdBy?.name}
+                        />
+                    </Switch.Case>
+                    <Switch.Case condition={!data.isAdmin}>
+                        <Popover content={createdBy?.name}>
+                            <span>{createdBy?.name}</span>
+                        </Popover>
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -314,12 +242,11 @@ const SalesExecutiveDashboardModalTableColumns = [
                     style={{ color: data?.label_color }}
                     className="singleline-ellipsis task-status"
                 >
-                    {data?.column_name}
+                    {data?.deal_status === 0 ? "Not Applicable" : "Won"}
                 </span>
             );
         },
     },
-    
 ];
 
 SalesExecutiveDashboardTableColumn.CountryWiseBiddingBreakdown =

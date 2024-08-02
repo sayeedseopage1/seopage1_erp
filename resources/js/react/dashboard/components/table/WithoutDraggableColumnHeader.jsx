@@ -30,10 +30,12 @@ const WithoutDraggableColumnHeader = ({
     // Define column justify content
     const columnJustifyContent = {
         default: "flex-start",
-        ...props?.columnJustifyContent,
+        ...props?.justifyStyleColumn,
     };
 
+    // Define column style
     const columnStyle = columnStyles[column.id] || {};
+    // Define justify content
     const justifyContent =
         columnJustifyContent[column.id] || columnJustifyContent.default;
 
@@ -50,13 +52,6 @@ const WithoutDraggableColumnHeader = ({
             <div
                 style={{
                     justifyContent,
-                    paddingRight:
-                        column.id === "applicable_points" ? "10px" : "0",
-                    paddingLeft:
-                        column.id === "policy_name" ||
-                        (column.id === "policy_rules" && isNewRuleModal)
-                            ? "10px"
-                            : "0",
                 }}
                 className={`d-flex align-items-start`}
             >
@@ -82,5 +77,8 @@ WithoutDraggableColumnHeader.propTypes = {
     table: PropTypes.object.isRequired,
     className: PropTypes.string,
     isNewRuleModal: PropTypes.bool,
-    props: PropTypes.object,
+    props: PropTypes.shape({
+        columnStyles: PropTypes.object,
+        justifyStyleColumn: PropTypes.object
+    }),
 };

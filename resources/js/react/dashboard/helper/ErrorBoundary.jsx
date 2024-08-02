@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-
-
+import PropTypes from "prop-types";
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -29,10 +28,9 @@ class ErrorBoundary extends Component {
                         <h1>Something went wrong.</h1>
                         <details>
                             <summary>Error Details</summary>
-                            {this.state.error && this.state.error.toString()}
+                            {this.state.error?.toString()}
                             <br />
-                            {this.state.errorInfo &&
-                                this.state.errorInfo.componentStack}
+                            {this.state.errorInfo?.componentStack}
                         </details>
                     </div>
                 </div>
@@ -42,5 +40,9 @@ class ErrorBoundary extends Component {
         return this.props.children;
     }
 }
+
+ErrorBoundary.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 export default ErrorBoundary;

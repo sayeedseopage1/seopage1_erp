@@ -8,7 +8,7 @@ import { Placeholder } from "../../../global/Placeholder";
 import "../table/style/dashboardDataTable.css";
 
 const LeadDashboardTableLoader = ({ prevItemLength = 10, tableCol }) => {
-    const updateItemLength = prevItemLength === 0 ? 10 : prevItemLength;
+    const updateItemLength = prevItemLength
     return _.times(updateItemLength, (item) => (
         <tr key={item} className={`sp1_dashboard_data_table_tr`}>
             <td className={`sp1_dashboard_data_table_td pl-1`}>
