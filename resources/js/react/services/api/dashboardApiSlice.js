@@ -39,13 +39,13 @@ const DashboardApiSlice = apiSlice.injectEndpoints({
     }),
     getCountryWiseBiddingBreakdownForAdmin: build.query({
       query: (payload) => ({
-        url: `account/dashboard-sales-performance/admin-sale-dashboard-details/country-wise-won-deal/${payload.sale_id}?${payload.query
+        url: `account/dashboard-sales-performance/admin-sale-dashboard-details/country-wise-bidding-breakdown/${payload.sale_id}?${payload.query
           }`
       }),
     }),
     getCountryWiseWonDealForAdmin: build.query({
       query: (payload) => ({
-        url: `account/dashboard-sales-performance/admin-sale-dashboard-details/country-wise-bidding-breakdown/${payload.sale_id}?${payload.query
+        url: `account/dashboard-sales-performance/admin-sale-dashboard-details/country-wise-won-deal/${payload.sale_id}?${payload.query
           }`
       }),
     }),
