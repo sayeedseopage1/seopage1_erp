@@ -17,7 +17,6 @@ const DashboardApiSlice = apiSlice.injectEndpoints({
     }),
 
     // Start -----  Sale executive dashboard ----- Start //
-
     getSaleExecutiveDashboardData: build.query({
       query: (payload) => ({
         url: `account/dashboard/details?${payload}`
@@ -46,7 +45,7 @@ const DashboardApiSlice = apiSlice.injectEndpoints({
     }),
     getCountryWiseWonDealForAdmin: build.query({
       query: (payload) => ({
-        url: `account/dashboard-sales-performance/admin-sale-dashboard-details/country-wise-won-deal/${payload.sale_id}?${payload.query
+        url: `account/dashboard-sales-performance/admin-sale-dashboard-details/country-wise-bidding-breakdown/${payload.sale_id}?${payload.query
           }`
       }),
     }),
