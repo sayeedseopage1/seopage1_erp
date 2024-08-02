@@ -15,6 +15,7 @@ use App\Models\ProjectMilestone;
 use App\Models\PmReassignHistory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\PendingAction;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProjectDeadlineExtension;
 use Illuminate\Support\Facades\Validator;
@@ -184,6 +185,10 @@ class ProjectInsightController extends Controller
                 'reassigned_to' => $validated['pm_id'],
                 'reassigned_by' => Auth::user()->id
             ]);
+            
+            $pending_action = PendingAction::where([['code', 'PWDA'],['project_id', $project->id],['authorization_for', $deal->pm_id]])->first();
+            $pending_action->authorization_for = $validated['pm_id'];
+            $pending_action->save();
 
             $deal->pm_id = $validated['pm_id'];
             $deal->save();
