@@ -1,21 +1,19 @@
-a<?php
+<?php
 
 namespace App\Notifications;
 
-use App\Models\Project;
-use App\Models\ProjectMilestone;
 use App\Models\StickyNote;
-use App\Models\Task;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class StickyNoteReminderNotification extends Notification
+class StickyNoteReminderNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
     protected $sticky_note;
+
     /**
      * Create a new notification instance.
      *
@@ -24,7 +22,6 @@ class StickyNoteReminderNotification extends Notification
     public function __construct($sticky_note)
     {
         $this->sticky_note = $sticky_note;
-        dd($this->sticky_note);
     }
 
     /**
@@ -46,44 +43,39 @@ class StickyNoteReminderNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $note = StickyNote::where('id',$this->sticky_note->id)->first();
-        $project = Project::where('id',$note->project_id)->first();
-        $milestone = ProjectMilestone::where('id',$note->milestone_id)->first();
-        $task = Task::where('id',$note->task_id)->first();
-        $client = User::where('id',$note->client_id)->first();
+        $note = StickyNote::with(['project', 'milestone', 'task', 'client'])->find($this->sticky_note->id);
+        $project = $note->project;
+        $milestone = $note->milestone;
+        $task = $note->task;
+        $client = $note->client;
         $url1 = route('sticky-notes.index');
         $url2 = route('sticky-notes.edit', $note->id);
 
-        $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
+        $greet = '<p><b style="color: black">Hi ' . $notifiable->name . ',</b></p>';
+        $header = '<strong>Take action on your note!!</strong>';
+        $body = '<p>Take action on your note for project <b>' . $project->project_name . '</b> from client <b>' . $client->name . '</b>.</p>';
+        
+        $content = 
+            '<p><b style="color: black">Project name: </b><a href="' . route('projects.show', $project->id) . '">' . $project->project_name . '</a></p>' .
+            '<p><b style="color: black">Client name: </b><a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a></p>' .
+            '<p><b style="color: black">Milestone name: </b><a href="' . route('milestones.show', $milestone->id) . '">' . $milestone->milestone_title . '</a></p>' .
+            '<p><b style="color: black">Task: </b><a href="' . route('tasks.show', $task->id) . '">' . $task->heading . '</a></p>' .
+            '<h3 style="color: black"><b><u>Reminder Note</u></b></h3>' .
+            '<p>' . $note->note_text . '</p>';
 
-        $header= '<strong>' . __('Take action on your note!!') .'</strong>';
-
-        $body= '<p>'.'Take action on your note for project <b>'.$project->project_name.'</b> from client <b>'.$client->name.'</b>.</p>';
-        $content =
-        '<p>
-            <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
-        </p>'.
-        '<p>
-            <b style="color: black">' . __('Client name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
-        </p>'
-        .
-        '<p>
-            <b style="color: black">' . __('Milestone name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$milestone->milestone_title .'</a>'. '
-        </p>'
-        .
-        '<p>
-            <b style="color: black">' . __('Task') . ': '.'</b>' . '<a href="'.route('tasks.show',$task->id).'">'.$task->heading .'</a>'. '
-        </p>'
-        .
-        'h3 style="color: black"><b><u>Reminder Note</u></b></h3>'
-        .
-        '<p>'.$note->note_text.'</p>';
-
+        
         return (new MailMessage)
-        ->subject(__('Take action on your note!!') )
-
-        ->greeting(__('email.Hi') . ' ' . mb_ucwords($notifiable->name) . ',')
-        ->markdown('mail.sticky-note.note', ['url1' => $url1, 'url2' => $url2, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+            ->subject('Take action on your note!!')
+            ->greeting('Hi ' . mb_ucwords($notifiable->name) . ',')
+            ->markdown('mail.sticky-note.note', [
+                'url1' => $url1,
+                'url2' => $url2,
+                'greet' => $greet,
+                'content' => $content,
+                'body' => $body,
+                'header' => $header,
+                'name' => mb_ucwords($notifiable->name)
+            ]);
     }
 
     /**

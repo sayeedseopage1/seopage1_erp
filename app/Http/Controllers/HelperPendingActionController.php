@@ -23,6 +23,7 @@ use App\Models\ProjectMember;
 use App\Models\ProjectPortfolio;
 use App\Models\ProjectSubmission;
 use App\Models\StickyNote;
+use App\Models\SubTask;
 use App\Models\TaskComment;
 use DB;
 
@@ -2470,13 +2471,21 @@ class HelperPendingActionController extends AccountBaseController
             $note = StickyNote::where('user_id',$userId)->first(); 
             $project = Project::where('id',$note->project_id)->first(); 
             $task = Task::where('id',$note->task_id)->first();
+            $subTask = Task::where('subtask_id',$note->sub_task_id)->first();
             $client = User::where('id',$note->client_id)->first();
             $action = new PendingAction();
             $action->code = 'SNR';
-            $action->serial = 'SNR';
+            $action->serial = 'SNR'.'x0';
             $action->item_name= 'Take action on your note!';
             $action->heading= 'Take action on your note!';
             $action->message = 'Take action on your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            // if($project != null){
+            //     $action->message = 'Take action on your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            // }elseif($task != null){
+            //     $action->message = 'Take action on your note for task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            // }elseif($subTask != null){
+            //     $action->message = 'Take action on your note for subtask <a href="'.route('tasks.show',$subTask->id).'">'.$subTask->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            // }
             $action->timeframe= 24;
             $action->client_id = $client->id;
             $action->task_id = $task->id;
