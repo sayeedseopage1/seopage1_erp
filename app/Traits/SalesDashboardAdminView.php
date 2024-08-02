@@ -877,24 +877,27 @@ trait SalesDashboardAdminView
                 ->toArray();
 
             $leads_country = [];
-
             foreach ($leads_country_data as $key => $leads) {
-                $country_data = ['country' => $key];
+
                 $lead_count = count($leads);
 
                 $won_deals_count = 0;
                 $won_deals_value = 0;
 
+                $thisLeadDeal = false;
                 foreach ($leads as $lead) {
-                    if ($lead['lead_deal']['added_by'] == $salesId && isset($lead['lead_deal'])) {
-                        //closing the deal
-                        $won_deals_count += .125;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 * $lead['lead_deal']['amount'] : .125 * $lead['lead_deal']['hourly_rate'];
-                    }
-                    if ($lead['added_by'] == $salesId && isset($lead['lead_deal'])) {
-                        //The bidder
-                        $won_deals_count += .25;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
+                    if (isset($lead['lead_deal'])) {
+                        $thisLeadDeal = true;
+                        if ($lead['lead_deal']['added_by'] == $salesId) {
+                            //closing the deal
+                            $won_deals_count += .125;
+                            $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 * $lead['lead_deal']['amount'] : .125 * $lead['lead_deal']['hourly_rate'];
+                        }
+                        if ($lead['added_by'] == $salesId) {
+                            //The bidder
+                            $won_deals_count += .25;
+                            $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
+                        }
                     }
 
                     $qualify_contribution = 0;
@@ -949,12 +952,15 @@ trait SalesDashboardAdminView
                         $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .15 / $milestone_contribution * $lead['lead_deal']['amount'] : .15 / $milestone_contribution * $lead['lead_deal']['hourly_rate'];
                     }
                 }
-                $country_data += [
-                    'won_deals_count'     => round($won_deals_count, 2),
-                    'won_deals_value'     => round($won_deals_value, 2),
-                    'avg_won_deals_value' => round($won_deals_value, 2) ? round($won_deals_value / $lead_count, 2) : 0,
-                ];
-                $leads_country[] = $country_data;
+                if ($thisLeadDeal) {
+                    $country_data = ['country' => $key];
+                    $country_data += [
+                        'won_deals_count'     => round($won_deals_count, 2),
+                        'won_deals_value'     => round($won_deals_value, 2),
+                        'avg_won_deals_value' => round($won_deals_value, 2) ? round($won_deals_value / $lead_count, 2) : 0,
+                    ];
+                    $leads_country[] = $country_data;
+                }
             }
 
             $totalCount = array_sum(array_column($leads_country, 'won_deals_count'));
