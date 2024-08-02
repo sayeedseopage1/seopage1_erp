@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styles from "./taskAuthorization.module.css";
 import Button from "../../global/Button";
 import { useCreatePendingTaskAuthorizationConversationMutation } from "../../services/api/projectApiSlice";
@@ -43,9 +44,10 @@ const QuestionAnswer = ({ data, conversations, setConversations }) => {
     return (
         <div>
             <div className={styles.comment_field}>
-                <label className="task_info__label">Question:</label>
+                <label htmlFor="question" className="task_info__label">Question:</label>
                 <textarea
                     rows={3}
+                    id="question"
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     placeholder="Write your question here."
@@ -81,3 +83,10 @@ const QuestionAnswer = ({ data, conversations, setConversations }) => {
 };
 
 export default QuestionAnswer;
+
+
+QuestionAnswer.propTypes = {
+    data: PropTypes.object,
+    conversations: PropTypes.array,
+    setConversations: PropTypes.func
+}
