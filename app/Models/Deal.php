@@ -69,4 +69,8 @@ class Deal extends Model
     // {
     //     return $this->hasMany(DealStageChange::class, 'deal_id', 'deal_id')->where('deal_stage_id', 1);
     // }
+    public function dealStage()
+    {
+        return $this->hasOne(DealStage::class, 'short_code', 'deal_id');
+    }
 }

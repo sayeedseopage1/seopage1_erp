@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1716783292647" clover="3.2.0">
+  <project timestamp="1716783292648" name="All files">
+    <metrics statements="131" coveredstatements="100" conditionals="98" coveredconditionals="51" methods="47" coveredmethods="28" elements="276" coveredelements="179" complexity="0" loc="131" ncloc="131" packages="11" files="15" classes="15"/>
+    <package name="global">
+      <metrics statements="10" coveredstatements="9" conditionals="13" coveredconditionals="6" methods="4" coveredmethods="3"/>
+      <file name="Loader.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\global\Loader.jsx">
+        <metrics statements="2" coveredstatements="2" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+      </file>
+      <file name="Placeholder.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\global\Placeholder.jsx">
+        <metrics statements="2" coveredstatements="1" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+      </file>
+      <file name="Switch.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\global\Switch.jsx">
+        <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="102" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="204" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="102" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects">
+      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="constants.js" path="C:\laragon\www\projectDashboard\resources\js\react\projects\constants.js">
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="483" count="1" type="stmt"/>
+        <line num="650" count="1" type="stmt"/>
+        <line num="727" count="1" type="stmt"/>
+        <line num="760" count="1" type="stmt"/>
+        <line num="820" count="1" type="stmt"/>
+        <line num="839" count="1" type="stmt"/>
+        <line num="922" count="1" type="stmt"/>
+        <line num="1004" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components">
+      <metrics statements="11" coveredstatements="6" conditionals="10" coveredconditionals="7" methods="4" coveredmethods="1"/>
+      <file name="ColorItem.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\ColorItem.jsx">
+        <metrics statements="11" coveredstatements="6" conditionals="10" coveredconditionals="7" methods="4" coveredmethods="1"/>
+        <line num="5" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="16" type="stmt"/>
+        <line num="7" count="16" type="stmt"/>
+        <line num="9" count="16" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="17" count="16" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components.modal">
+      <metrics statements="41" coveredstatements="39" conditionals="24" coveredconditionals="20" methods="13" coveredmethods="13"/>
+      <file name="PMTaskGuidelineModal.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\modal\PMTaskGuidelineModal.jsx">
+        <metrics statements="6" coveredstatements="6" conditionals="12" coveredconditionals="8" methods="4" coveredmethods="4"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="249" count="6" type="stmt"/>
+        <line num="298" count="6" type="stmt"/>
+        <line num="406" count="4" type="stmt"/>
+        <line num="651" count="1" type="stmt"/>
+      </file>
+      <file name="ProjectDeadlineExtensionModal.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\modal\ProjectDeadlineExtensionModal.jsx">
+        <metrics statements="32" coveredstatements="30" conditionals="12" coveredconditionals="12" methods="8" coveredmethods="8"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="35" count="76" type="stmt"/>
+        <line num="43" count="76" type="stmt"/>
+        <line num="49" count="76" type="stmt"/>
+        <line num="51" count="76" type="stmt"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
+        <line num="54" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="64" count="2" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="68" count="2" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="80" count="76" type="stmt"/>
+        <line num="81" count="73" type="cond" truecount="2" falsecount="0"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="90" count="76" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="96" count="2" type="stmt"/>
+        <line num="104" count="76" type="stmt"/>
+        <line num="145" count="2" type="stmt"/>
+        <line num="171" count="2" type="stmt"/>
+        <line num="202" count="62" type="stmt"/>
+        <line num="234" count="1" type="stmt"/>
+      </file>
+      <file name="WorkingEnvironmentModal.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\modal\WorkingEnvironmentModal.jsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components.ui.CustomAntModal">
+      <metrics statements="3" coveredstatements="3" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+      <file name="CustomAntModal.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\ui\CustomAntModal\CustomAntModal.jsx">
+        <metrics statements="3" coveredstatements="3" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="21" count="80" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components.ui.CustomButton">
+      <metrics statements="8" coveredstatements="6" conditionals="5" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <file name="SingleButton.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\ui\CustomButton\SingleButton.jsx">
+        <metrics statements="8" coveredstatements="6" conditionals="5" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="13" count="76" type="stmt"/>
+        <line num="14" count="76" type="cond" truecount="1" falsecount="2"/>
+        <line num="16" count="76" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="76" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components.ui.CustomModalHeader">
+      <metrics statements="3" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="CustomModalHeader.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\ui\CustomModalHeader\CustomModalHeader.jsx">
+        <metrics statements="3" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="8" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="9" count="78" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components.ui.CustomTextArea">
+      <metrics statements="3" coveredstatements="3" conditionals="13" coveredconditionals="6" methods="1" coveredmethods="1"/>
+      <file name="CustomTextArea.jsx" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\ui\CustomTextArea\CustomTextArea.jsx">
+        <metrics statements="3" coveredstatements="3" conditionals="13" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="27" count="76" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.components.ui.styledComponents">
+      <metrics statements="17" coveredstatements="6" conditionals="16" coveredconditionals="0" methods="11" coveredmethods="0"/>
+      <file name="index.js" path="C:\laragon\www\projectDashboard\resources\js\react\projects\components\ui\styledComponents\index.js">
+        <metrics statements="17" coveredstatements="6" conditionals="16" coveredconditionals="0" methods="11" coveredmethods="0"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="145" count="2" type="stmt"/>
+        <line num="148" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="151" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="230" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="256" count="2" type="stmt"/>
+        <line num="263" count="0" type="stmt"/>
+        <line num="288" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="projects.helper">
+      <metrics statements="11" coveredstatements="7" conditionals="4" coveredconditionals="1" methods="3" coveredmethods="2"/>
+      <file name="index.js" path="C:\laragon\www\projectDashboard\resources\js\react\projects\helper\index.js">
+        <metrics statements="11" coveredstatements="7" conditionals="4" coveredconditionals="1" methods="3" coveredmethods="2"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="4" count="76" type="stmt"/>
+        <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="76" type="stmt"/>
+        <line num="15" count="3" type="stmt"/>
+        <line num="16" count="44" type="cond" truecount="1" falsecount="1"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="44" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="utils">
+      <metrics statements="14" coveredstatements="8" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="4"/>
+      <file name="stateValidation.js" path="C:\laragon\www\projectDashboard\resources\js\react\utils\stateValidation.js">
+        <metrics statements="14" coveredstatements="8" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

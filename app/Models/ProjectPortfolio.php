@@ -2,14 +2,43 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProjectCms;
+use App\Models\ProjectNiche;
+use App\Models\ProjectWebsiteType;
+use App\Models\ProjectWebsiteTheme;
+use App\Models\ProjectWebsitePlugin;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class ProjectPortfolio extends Model
 {
     use HasFactory;
+    protected $appends = ['plugins'];
+
     public function theme()
     {
-//        dd($this->theme_name);
+       return $this->hasOne(ProjectWebsiteTheme::class, 'id', 'theme_id');
     }
 
+    public function projectNiche()
+    {
+        return $this->hasOne(ProjectNiche::class, 'id', 'niche');
+    }
+
+    public function cmsCategory()
+    {
+        return $this->hasOne(ProjectCms::class, 'id', 'cms_category');
+    }
+
+    public function getPluginsAttribute()
+    {
+        if(!$this->plugin_list) return null;
+        $pluginIds = json_decode($this->plugin_list, true);
+        return ProjectWebsitePlugin::whereIn('id', $pluginIds)->get(['id', 'plugin_name', 'plugin_url']) ?? null;
+    }
+
+    public function projectWebsiteType()
+    {
+        return $this->hasOne(ProjectWebsiteType::class, 'id', 'website_type');
+    }
 }

@@ -38,6 +38,7 @@ __TODO__
 package-lock.json
 
 #test
+coverage
 .scannerwork
 reload_pages.sh
 .devdbrc

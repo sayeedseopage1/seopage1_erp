@@ -852,7 +852,8 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
-
+      
+      @if(auth()->user()->role_id != 4 || $contract->project_details->project_status != 'pending')
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->
           <div class="col-md-12">
@@ -904,6 +905,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+      @endif
     <!-- CARD FOOTER START -->
 
     <!-- CARD FOOTER END -->
