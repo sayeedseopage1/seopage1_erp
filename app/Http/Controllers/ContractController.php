@@ -2049,6 +2049,8 @@ class ContractController extends AccountBaseController
             'discussion.user',
         ])->findOrFail($id);
 
+        $this->contract->project_details = Project::select(['id','deal_id','status','project_status'])->where('deal_id', $this->contract->deal_id)->first();
+
         abort_403(
             !($viewPermission == 'all' ||
                 ($viewPermission == 'added' && user()->id == $this->contract->added_by) ||

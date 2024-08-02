@@ -10514,6 +10514,26 @@ a.text-dark:hover, a.text-dark:focus {
   float: left;
   position: relative;
 }
+@media screen and (max-width: 450px) {
+  .page-header-right .user_image {
+    display: none;
+  }
+}
+@media screen and (max-width: 450px) {
+  .page-header-right .user_name {
+    font-size: 12px !important;
+  }
+}
+@media screen and (max-width: 450px) {
+  .page-header-right .user_name span {
+    font-size: 12px !important;
+  }
+}
+@media screen and (max-width: 450px) {
+  .page-header-right {
+    float: none !important;
+  }
+}
 
 .header-icon-box {
   display: flex;

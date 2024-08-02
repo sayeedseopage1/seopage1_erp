@@ -60,12 +60,12 @@ export const PercentageofGMTableColumn = [
     {
         id: "description",
         header: "Description",
-        accessorKey: "description",
+        accessorKey: "expired_meet_description",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span title={data?.description} className="multine-ellipsis">
-                    {data?.description ?? "--"}
+                <span title={data?.expired_meet_description} className="multine-ellipsis">
+                    {data?.expired_meet_description ?? "--"}
                 </span>
             );
         },

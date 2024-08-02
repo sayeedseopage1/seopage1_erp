@@ -289,20 +289,9 @@ export const PmGoalsTableColumns = [
                             </button>
                         </Switch.Case>
                     </Switch>
-                    <Switch>
-                        <Switch.Case
-                            condition={
-                                user?.roleId === 1 &&
-                                data?.extension_status === 0 &&
-                                data.reason_status === 0 &&
-                                data?.expired_status === 0
-                            }
-                        >
-                            <span>--</span>
-                        </Switch.Case>
-                    </Switch>
-                </div>
-            );
-        },
-    },
-];
+               </div>
+            
+            )
+        }
+    }
+]

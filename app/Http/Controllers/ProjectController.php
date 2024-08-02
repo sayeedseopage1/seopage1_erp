@@ -194,6 +194,20 @@ class ProjectController extends AccountBaseController
 
         }
 
+        /** PROJECT MANAGER GOAL FUNCTION START */
+        if (Auth::user()->role_id == 4) {
+            $pm_goal = ProjectPmGoal::all();
+            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
+                foreach ($pm_goal as $item) {
+                    $current_date = now();
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+                        return view('projects.ajax.goale_alert', $this->data);
+                    }
+                }
+            }
+        }
+        /** PROJECT MANAGER GOAL FUNCTION END */
         return $dataTable->render('projects.index', $this->data);
     }
     public function ProjectOverviewFilter(Request $request)
@@ -921,7 +935,11 @@ class ProjectController extends AccountBaseController
     $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
     $this->logProjectActivity($project->id, $link);
 
-        return response()->json(['status' => 400]);
+        // return response()->json(['status'=>400]);
+        return response()->json([
+            'status' => 200,
+            'data' => 'Project Dispute authorization completed successfully'
+        ]);
     }
 
 
@@ -2179,10 +2197,6 @@ class ProjectController extends AccountBaseController
                     abort(403);
                 }
                 break;
-
-            // case 'dashboard-temp':
-            //     $this->view = 'projects.ajax.dashboard-temp';
-            //     break;
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;
@@ -2245,7 +2259,8 @@ class ProjectController extends AccountBaseController
 
                 $this->hoursLogged = intdiv($hoursLogged - $breakMinutes, 60);
                 $this->expenses = Expense::where(['project_id' => $id, 'status' => 'approved'])->sum('price');
-                $this->view = 'projects.ajax.overview';
+                // $this->view = 'projects.ajax.overview';
+                $this->view = 'projects.ajax.dashboard';
                 break;
         }
 
@@ -2259,6 +2274,18 @@ class ProjectController extends AccountBaseController
 
         // abort_403(user()->permission('view_projects') == 'added' && $this->project->added_by != user()->id);
 
+        if (Auth::user()->role_id == 4) {
+            $pm_goal = ProjectPmGoal::all();
+            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
+                foreach ($pm_goal as $item) {
+                    $current_date = now();
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+                        return view('projects.ajax.goale_alert', $this->data);
+                    }
+                }
+            }
+        }
 
         return view('projects.show', $this->data);
     }
@@ -3458,7 +3485,9 @@ class ProjectController extends AccountBaseController
             //  dd($request->all());
         $validated = $request->validate([
             'qc_protocol' => 'required',
+            'login_yes' => 'required',
             'login_information' => 'required',
+            'drive_yes' => 'required',
             'drive_information' => 'required',
             'rating' => 'required',
             'requirements' => 'required',
@@ -3470,8 +3499,10 @@ class ProjectController extends AccountBaseController
             'main_page_number' => 'required',
             'secondary_page_number' => 'required',
             'backup_email_address' => 'required',
-            // 'theme_name' => 'required',
-            // 'theme_url' => 'required',
+            'cms_id' => $request->has('cms_id') ? 'required' : '',
+            'website_type' => 'required',
+            'niche' => 'required',
+            'sub_niche' => 'required',
             'theme_id' => 'required',
             'day_interval' => 'required',
             'notify' => 'required',
@@ -3488,11 +3519,13 @@ class ProjectController extends AccountBaseController
             'actual_link' => 'required_if:actual_information,1',
         ], [
             'qc_protocol.required' => 'This field is required. Please select Yes or No!!',
+            'login_yes.required' => 'This field is required!!',
             'login_information.required' => 'This field is required. You have mark this checkbox!!',
             'login_url' => 'This field is required. Please input the login URL here!!',
             'login' => 'This field is required. Please input the user id or email here!!',
             'password' => 'This field is required. Please input the password here!!',
             'screenshot' => 'This field is required. Please take a screenshot when you are logged in and input the screenshot link here!!',
+            'drive_yes.required' => 'This field is required!!',
             'drive_information.required' => 'This field is required. Please confirm that you have uploaded the backup in Google Drive!!',
             'google_link' => 'This field is required. Please input the Google Drive link here!!',
             'rating.required' => 'This field is required. Please give rating to the technical team!!',
@@ -3511,8 +3544,10 @@ class ProjectController extends AccountBaseController
             'secondary_page_number.required' => 'This field is required!!',
             'backup_email_address.required' => 'This field is required!!',
             'day_interval.required' => 'This field is required!!',
-            // 'theme_name.required' => 'This field is required!!',
-            // 'theme_url.required' => 'This field is required!!',
+            'cms_id.required' => 'This field is required!!',
+            'website_type.required' => 'This field is required!!',
+            'niche.required' => 'This field is required!!',
+            'sub_niche.required' => 'This field is required!!',
             'theme_id.required' => 'This field is required!!',
             'website_plugin_box_information.required' => 'This field is required. Please select Yes or No!!',
         ]);
@@ -3570,7 +3605,7 @@ class ProjectController extends AccountBaseController
         $project_cms = ProjectCms::where('cms_name', $request->cms_category)->first();
 
         $project_portfolio = new ProjectPortfolio();
-
+        $project_portfolio->id = ProjectPortfolio::max('id')+1;
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
             $project_portfolio->cms_category = $project_cms->id;
@@ -5370,8 +5405,12 @@ class ProjectController extends AccountBaseController
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
-        Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return back();
+        // Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        // return back();
+        return response()->json([
+            'status' => 200,
+            'data' => 'Project submission authorization completed successfully'
+        ]);
     }
     public function ProjectSubmissionQC(Request $request)
     {
@@ -5561,8 +5600,12 @@ class ProjectController extends AccountBaseController
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
-        Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return back();
+        // Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        // return back();
+        return response()->json([
+            'status' => 200,
+            'data' => 'Project QC authorization completed successfully'
+        ]);
     }
 
     public function DeliverableAuthorizationRequest(Request $request)
@@ -6224,9 +6267,7 @@ class ProjectController extends AccountBaseController
         $this->project_managers = User::where('role_id', 4)->get();
         return $datatable->render('projects.ajax.project_deadline_extension', $this->data);
     }
-    public function storeProjectDeadline(Request $request)
-    {
-        // dd($request->all());
+    public function storeProjectDeadline(Request $request){
         $validator = $request->validate([
             'new_deadline' => 'required',
             'extension' => 'required',
@@ -6257,6 +6298,9 @@ class ProjectController extends AccountBaseController
         $project_F->deadline_auth_status = 1;
         $project_F->save();
 
+        $helper = new HelperPendingActionController();
+        $helper->projectDeadlineExtForAdmin($pd_ext->project_id);
+
         return response()->json([
             'status' => 200
         ]);
@@ -6267,9 +6311,8 @@ class ProjectController extends AccountBaseController
         return view('projects.modals.project_deadline_extension_auth_modal', $this->data);
     }
 
-    public function storeAuthorization(Request $request)
-    {
-        // dd($request->all());
+    public function storeAuthorization(Request $request){
+        // DB::beginTransaction();
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
@@ -6307,6 +6350,53 @@ class ProjectController extends AccountBaseController
             $project = Project::where('id', $request->project_id)->first();
             $project->deadline_auth_status = 0;
             $project->save();
+        }
+        $actions = PendingAction::where('code','PDER')->where('project_id',$request->project_id)->where('past_status',0)->get();
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) {
+            $action->authorized_by= Auth::id();
+            $action->authorized_at= Carbon::now();
+            $action->past_status = 1;
+            $action->save();
+            $authorize_by= User::where('id',$action->authorized_by)->first();
+            $project = Project::where('id',$pde->project_id)->first();
+            $pm = User::where('id',$project->pm_id)->first();
+            $client = User::where('id',$project->client_id)->first();
+                
+            $past_action= new PendingActionPast();
+            $past_action->item_name = $action->item_name;
+            $past_action->code = $action->code;
+            $past_action->serial = $action->serial;
+            $past_action->action_id = $action->id;
+            if($pde->status == 2){
+                $past_action->heading= 'Project Deadline Extension Request Accepted!';
+                $past_action->message = 'Deadline extension request by project manager <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+            }else{
+                $past_action->heading= 'Project Deadline Extension Request Denied';
+                $past_action->message = 'Deadline extension request by project manager <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was denied by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+            }
+            
+            $past_action->timeframe = $action->timeframe;
+            $past_action->authorization_for = $action->authorization_for;
+            $past_action->authorized_by = $action->authorized_by;
+            $past_action->authorized_at = $action->authorized_at;
+            $past_action->expired_status = $action->expired_status;
+            $past_action->past_status = $action->past_status;
+            $past_action->task_id = $action->task_id;
+            $past_action->developer_id = $action->developer_id;
+            $past_action->client_id = $action->client_id;
+            $button = [
+                [
+                    'button_name' => 'View details',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('pde-request')
+                ],
+            ];
+            $past_action->button = json_encode($button);
+            $past_action->save();
+            }
         }
 
         return response()->json([

@@ -672,8 +672,10 @@ class ProjectStatusController extends AccountBaseController
             if ($request->client_id != null) {
                 $pmGoalsQuery->where('project_pm_goals.client_id', $request->client_id);
             }
-            if (auth()->user()->role_id == 1 && $request->pm_id != null) {
-                $pmGoalsQuery->where('project_pm_goals.pm_id', $request->pm_id);
+            if (auth()->user()->role_id == 1) {
+                if ($request->pm_id != null) {
+                    $pmGoalsQuery->where('project_pm_goals.pm_id', $request->pm_id);
+                }
             }
             else{
                 $pmGoalsQuery->where('project_pm_goals.pm_id', auth()->user()->id);

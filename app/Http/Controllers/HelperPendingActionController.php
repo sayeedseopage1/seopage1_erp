@@ -2013,27 +2013,29 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $pm = User::where('id',$pm_goal->pm_id)->first();
             $authorizers= User::where('role_id',1)->get();
-            $goal_count = '';
-            if($pm_goal->duration ==3){
-                $goal_count = '1st';
-            }elseif($pm_goal->duration ==7){
-                $goal_count = '2nd';
-            }elseif($pm_goal->duration ==12){
-                $goal_count = '3rd';
-            }elseif($pm_goal->duration ==15){
-                $goal_count = '4th';
-            }elseif($pm_goal->duration ==22){
-                $goal_count = '5th';
-            }else{
-                $goal_count = '6th';
-            }
+
+            // calculating ordinal suffix 
+            $nthGoal = 1;
+            ProjectPmGoal::where('project_id', $goal->project_id)->orderBy('id', 'ASC')->each(function ($item) use ($goal, &$nthGoal) {
+                if ($goal->id == $item->id)
+                    return false;
+                $nthGoal++;
+            });
+
+            $ends = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
+            if (($nthGoal % 100) >= 11 && ($nthGoal % 100) <= 13)
+            $nthGoal = $nthGoal . 'th';
+            else
+                $nthGoal = $nthGoal . $ends[$nthGoal % 10];
+            // end calculation
+
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'PMER';
                 $action->serial = 'PMER'.'x'.$key;
                 $action->item_name= 'Goal deadline extension request by PM '.$pm->name.'';
                 $action->heading= 'Goal deadline extension request by PM '.$pm->name.'!';
-                $action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request has been submitted by PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>)!';
+                $action->message = 'Goal ('. $nthGoal .') (Name: '. $pm_goal->goal_name .') extension request has been submitted by PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>)!';
                 $action->timeframe= 24;
                 $action->goal_id = $pm_goal->id;
                 $action->project_id = $project->id;
@@ -2332,6 +2334,39 @@ class HelperPendingActionController extends AccountBaseController
 
             }
         }
+
+        public function projectDeadlineExtForAdmin($projectId)
+        {
+            $project = Project::where('id',$projectId)->first();
+            $pm = User::where('id',$project->pm_id)->first();
+            $client = User::where('id',$project->client_id)->first();
+            $authorizers = User::where('role_id', 1)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'PDER';
+                $action->serial = 'PDER'.'x'.$key;
+                $action->item_name= 'Project Deadline Extension Request!';
+                $action->heading= 'Project Deadline Extension Request!';
+                $action->message = 'Review the deadline extension request by project manager <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+                $action->timeframe= 12;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', $project->id),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            }
+        }
+
         public function portfolioRating($projectId)
         {
             $project = Project::where('id',$projectId)->first();

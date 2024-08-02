@@ -11,6 +11,7 @@
 # public/js/app.js
 # public/js/vendor.js.map
 # public/js/vendor.js
+/public/report.html
 
 .phpunit.result.cache
 Homestead.json
@@ -37,7 +38,9 @@ __TODO__
 package-lock.json
 
 #test
+coverage
 .scannerwork
 reload_pages.sh
-public/report.html
+deadcode.json
+webpack.plugins.config.js
 .devdbrc
