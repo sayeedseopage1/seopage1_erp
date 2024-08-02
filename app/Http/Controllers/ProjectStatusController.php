@@ -107,6 +107,13 @@ class ProjectStatusController extends AccountBaseController
         ]);
     }
 
+    public function getPmGoalDeadlineExtReqDetails($goal_id)
+    {
+        $expHistory = PmGoalDeadlineExtHistory::select('extended_day', 'extended_pm_reason')->where('goal_id', $goal_id)->orderBy('id', 'desc')->first();
+        return response()->json(['data' => $expHistory]);
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      *

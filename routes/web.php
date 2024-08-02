@@ -1183,6 +1183,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-project-status-date', [ProjectStatusController::class, 'allProjectStatus']);
     Route::get('export-project-status-data', [ProjectStatusController::class, 'exportProjectStatus']);
     Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
+    Route::get('get-goal-deadline-details/{goal_id}', [ProjectStatusController::class, 'getPmGoalDeadlineExtReqDetails'])->name('pm-goal-deadline-history');
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
     Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
     Route::post('project-status-reason-submit', [ProjectStatusController::class, 'projectStatusReason']);
