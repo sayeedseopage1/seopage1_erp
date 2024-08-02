@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Currency;
-use App\Models\DealStage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Deal extends Model
@@ -19,6 +20,10 @@ class Deal extends Model
     public function original_currency()
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
     public function user()
     {
@@ -46,10 +51,24 @@ class Deal extends Model
         return $this->belongsTo(AwardTimeIncress::class, 'id', 'deal_id');
     }
 
-    public function pm_project(){
+    public function pm_project(): HasOne
+    {
         return $this->hasOne(PMProject::class, 'deal_id');
     }
 
+    public function project(): HasOne
+    {
+        return $this->hasOne(Project::class, 'deal_id');
+    }
+
+    public function dealStageChanges()
+    {
+        return $this->hasMany(DealStageChange::class, 'deal_id', 'deal_id');
+    }
+    // public function dealStageChangesQualifying()
+    // {
+    //     return $this->hasMany(DealStageChange::class, 'deal_id', 'deal_id')->where('deal_stage_id', 1);
+    // }
     public function dealStage()
     {
         return $this->hasOne(DealStage::class, 'short_code', 'deal_id');

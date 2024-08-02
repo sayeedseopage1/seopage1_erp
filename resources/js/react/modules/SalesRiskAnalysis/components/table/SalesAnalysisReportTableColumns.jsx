@@ -500,6 +500,8 @@ export const SalesAnalysisReportTableColumns = [
                             );
                         }
                     }}
+
+                    
                     target="_blank"
                 >
                     <GrView />

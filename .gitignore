@@ -39,8 +39,9 @@ package-lock.json
 
 #test
 coverage
+.devdbrc
+coverage
 .scannerwork
 reload_pages.sh
 deadcode.json
 webpack.plugins.config.js
-.devdbrc

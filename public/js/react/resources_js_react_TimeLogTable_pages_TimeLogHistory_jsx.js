@@ -1094,6 +1094,7 @@ var TimeLogHistory = function TimeLogHistory() {
               }));
               setCurrentPage(1);
             })["catch"](function (err) {
+<<<<<<< HEAD
               var _console;
 <<<<<<< HEAD
               return (/* eslint-disable */(_console = console).log.apply(_console, _toConsumableArray(oo_oo("3915291789_65_28_65_44_4", err)))
@@ -1101,6 +1102,9 @@ var TimeLogHistory = function TimeLogHistory() {
               return (/* eslint-disable */(_console = console).log.apply(_console, _toConsumableArray(oo_oo("884100442_66_28_66_44_4", err)))
 >>>>>>> 9bc18fedc05949672032c125569ff81bb4b06b9b
               );
+=======
+              return console.log(err);
+>>>>>>> react_sales_ex_dashboard_api_integration
             });
           case 3:
           case "end":
@@ -1188,6 +1192,7 @@ var TimeLogHistory = function TimeLogHistory() {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimeLogHistory);
+<<<<<<< HEAD
 /* istanbul ignore next */ /* c8 ignore start */ /* eslint-disable */
 ;
 function oo_cm() {
@@ -1238,6 +1243,8 @@ function oo_te(v, i) {
   return v;
 }
 ; /*eslint unicorn/no-abusive-eslint-disable:,eslint-comments/disable-enable-pair:,eslint-comments/no-unlimited-disable:,eslint-comments/no-aggregating-enable:,eslint-comments/no-duplicate-disable:,eslint-comments/no-unused-disable:,eslint-comments/no-unused-enable:,*/
+=======
+>>>>>>> react_sales_ex_dashboard_api_integration
 
 /***/ }),
 

@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\LeadStatus;
 use App\Observers\LeadObserver;
 use App\Traits\CustomFieldsTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
-use App\Models\LeadStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use App\Models\Scopes\OrderByDesc;
 
 /**
@@ -95,9 +97,10 @@ use App\Models\LeadStatus;
  * @property-read \App\Models\LeadCategory|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereHash($value)
  */
-class Lead extends BaseModel 
+class Lead extends BaseModel
 {
-    use Notifiable, HasFactory;
+    use Notifiable;
+    use HasFactory;
     use CustomFieldsTrait;
 
     protected $table = 'leads';
@@ -110,13 +113,12 @@ class Lead extends BaseModel
     {
         // static::addGlobalScope(new OrderByDesc); // assign the Scope here
     }
-    
+
     public function getImageUrlAttribute()
     {
         $gravatarHash = md5(strtolower(trim($this->client_email)));
         return 'https://www.gravatar.com/avatar/' . $gravatarHash . '.png?s=200&d=mp';
     }
-
 
     /**
      * Route notifications for the mail channel.
@@ -147,6 +149,10 @@ class Lead extends BaseModel
     public function deal(): BelongsTo
     {
         return $this->belongsTo(DealStage::class, 'lead_id');
+    }
+    public function dealStage(): HasOne
+    {
+        return $this->hasOne(DealStage::class, 'lead_id');
     }
 
     public function leadStatus(): BelongsTo
@@ -216,6 +222,10 @@ class Lead extends BaseModel
 
         return $addedBy ?: null;
     }
+    public function addedByUser()
+    {
+        return $this->belongsTo(User::class, 'added_by');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'added_by');
@@ -227,6 +237,11 @@ class Lead extends BaseModel
     public function original_currency()
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function leadDeal()
+    {
+        return $this->hasOne(Deal::class, 'lead_id');
     }
 
 }

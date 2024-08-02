@@ -65,11 +65,13 @@ const DeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -111,11 +113,15 @@ const DeveloperDashboardContent = ({
                                         cardData={{
                                             subTitle: data?.subTitle,
                                             value: data?.value,
-                                            valueType: data?.valueType,
+                                            valueTypeBefore:
+                                                data?.valueTypeBefore,
+                                            valueTypeAfter:
+                                                data?.valueTypeAfter,
                                             hasPermissionForModal:
                                                 data?.hasPermissionForModal,
                                             onClick: () => {
-                                                handleModalOpen(data);
+                                                data?.value !== 0 &&
+                                                    handleModalOpen(data);
                                             },
                                             loadingValueWidth: "20%",
                                             info: data?.info,
@@ -152,11 +158,15 @@ const DeveloperDashboardContent = ({
                                         cardData={{
                                             subTitle: data?.subTitle,
                                             value: data?.value,
-                                            valueType: data?.valueType,
+                                            valueTypeBefore:
+                                                data?.valueTypeBefore,
+                                            valueTypeAfter:
+                                                data?.valueTypeAfter,
                                             hasPermissionForModal:
                                                 data?.hasPermissionForModal,
                                             onClick: () => {
-                                                handleModalOpen(data);
+                                                data?.value !== 0 &&
+                                                    handleModalOpen(data);
                                             },
                                             loadingValueWidth: "20%",
                                             info: data?.info,
@@ -199,11 +209,13 @@ const DeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -244,11 +256,15 @@ const DeveloperDashboardContent = ({
                                         cardData={{
                                             subTitle: data?.subTitle,
                                             value: data?.value,
-                                            valueType: data?.valueType,
+                                            valueTypeBefore:
+                                                data?.valueTypeBefore,
+                                            valueTypeAfter:
+                                                data?.valueTypeAfter,
                                             hasPermissionForModal:
                                                 data?.hasPermissionForModal,
                                             onClick: () => {
-                                                handleModalOpen(data);
+                                                data?.value !== 0 &&
+                                                    handleModalOpen(data);
                                             },
                                             loadingValueWidth: "20%",
                                             info: data?.info,
@@ -280,11 +296,13 @@ const DeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -333,11 +351,15 @@ const DeveloperDashboardContent = ({
                                         cardData={{
                                             subTitle: data?.subTitle,
                                             value: data?.value,
-                                            valueType: data?.valueType,
+                                            valueTypeBefore:
+                                                data?.valueTypeBefore,
+                                            valueTypeAfter:
+                                                data?.valueTypeAfter,
                                             hasPermissionForModal:
                                                 data?.hasPermissionForModal,
                                             onClick: () => {
-                                                handleModalOpen(data);
+                                                data?.value !== 0 &&
+                                                    handleModalOpen(data);
                                             },
                                             loadingValueWidth: "20%",
                                             info: data?.info,
@@ -369,11 +391,13 @@ const DeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -408,11 +432,13 @@ const DeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -455,11 +481,13 @@ const DeveloperDashboardContent = ({
                                     cardData={{
                                         subTitle: data?.subTitle,
                                         value: data?.value,
-                                        valueType: data?.valueType,
+                                        valueTypeBefore: data?.valueTypeBefore,
+                                        valueTypeAfter: data?.valueTypeAfter,
                                         hasPermissionForModal:
                                             data?.hasPermissionForModal,
                                         onClick: () => {
-                                            handleModalOpen(data);
+                                            data?.value !== 0 &&
+                                                handleModalOpen(data);
                                         },
                                         loadingValueWidth: "20%",
                                         info: data?.info,
@@ -503,11 +531,15 @@ const DeveloperDashboardContent = ({
                                                 title: data?.title,
                                                 subTitle: data?.subTitle,
                                                 value: data?.value,
-                                                valueType: data?.valueType,
+                                                valueTypeBefore:
+                                                    data?.valueTypeBefore,
+                                                valueTypeAfter:
+                                                    data?.valueTypeAfter,
                                                 hasPermissionForModal:
                                                     data?.hasPermissionForModal,
                                                 onClick: () => {
-                                                    handleModalOpen(data);
+                                                    data?.value !== 0 &&
+                                                        handleModalOpen(data);
                                                 },
                                                 loadingValueWidth: "20%",
                                                 info: data?.info,
@@ -552,11 +584,15 @@ const DeveloperDashboardContent = ({
                                                 title: data?.title,
                                                 subTitle: data?.subTitle,
                                                 value: data?.value,
-                                                valueType: data?.valueType,
+                                                valueTypeBefore:
+                                                    data?.valueTypeBefore,
+                                                valueTypeAfter:
+                                                    data?.valueTypeAfter,
                                                 hasPermissionForModal:
                                                     data?.hasPermissionForModal,
                                                 onClick: () => {
-                                                    handleModalOpen(data);
+                                                    data?.value !== 0 &&
+                                                        handleModalOpen(data);
                                                 },
                                                 loadingValueWidth: "20%",
                                                 info: data?.info,
