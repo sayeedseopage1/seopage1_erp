@@ -111,7 +111,7 @@ class EmployeesDataTable extends BaseDataTable
                         <form action="'.route('project-assign').'" method="POST">
                         <input type="hidden" name="_token" value="'.csrf_token() .'" />
                         <input type="hidden" name="id" value="'.$row->id .'" />
-                        <select name="pm_status" class="form-control height-35 f-14 pm_enable_disable" data-user-id="' . $row->id . '">
+                        <select name="pm_status" class="form-control height-35 f-14 pm_enable_disable '.($pmassign->status == 0 ? "bg-warning" : ($pmassign->status == 1 ? "bg-success" : "bg-danger")).' text-white" data-user-id="' . $row->id . '">
                             <option value="1" '.($pmassign->status == 1 ? "selected" : "").'>On</option>
                             <option value="0" '.($pmassign->status == 0 ? "selected" : "").'>Off</option>
                             <option value="2" '.($pmassign->status == 2 ? "selected" : "").'>Permanently Disabled</option>
