@@ -19,15 +19,22 @@ import RefreshButton from "../shared/RefreshButton";
 import LeadDashboardTableLoader from "../loader/LeadDashboardTableLoader";
 
 // context
-import { LeadDeveloperContext } from "../../context/LeadDeveloperContext";
+import { LeadDeveloperDashboardContext } from "../../context/LeadDeveloperDashboardContext";
+import { LeadDeveloperAdminDashboardContext } from "../../context/LeadDeveloperAdminDashboardContext";
 
 const LeadDeveloperDashboardContent = ({
     isLoading,
     handleLoadingCheck,
     handleModalOpen,
 }) => {
+    const auth = useAuth();
+    // Get the context based on the user role ID to access the user data
+    const DashboardContext =
+        auth.getRoleId() === 1
+            ? LeadDeveloperAdminDashboardContext
+            : LeadDeveloperDashboardContext
     const { leadDeveloperDashboardData } =
-        React.useContext(LeadDeveloperContext);
+        React.useContext(DashboardContext);
 
     return (
         <SectionWrapper

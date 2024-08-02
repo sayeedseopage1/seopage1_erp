@@ -24,12 +24,14 @@ import Toaster from "../global/Toaster";
 import ErrorBoundary from "./helper/ErrorBoundary.jsx";
 
 // Context for user
-import { LeadDeveloperProvider } from "./context/LeadDeveloperContext.jsx";
 import { DeveloperDashboardProvider } from "./context/DeveloperDashboardContext.jsx";
+import { LeadDeveloperDashboardProvider } from "./context/LeadDeveloperDashboardContext.jsx";
 import { SaleExecutiveDashboardProvider } from "./context/SalesExecutiveDashboardContext.jsx";
 
 // Context for admin
 import { SaleExecutiveAdminDashboardProvider } from "./context/SalesExecutiveAdminDashboardContext.jsx";
+import { LeadDeveloperAdminDashboardProvider } from "./context/LeadDeveloperAdminDashboardContext.jsx";
+
 
 // Context for admin
 
@@ -88,7 +90,7 @@ const dashboardComponents = {
 // Mapping roles to their respective context providers for user
 const dashboardContextProviders = {
     5: DeveloperDashboardProvider,
-    6: LeadDeveloperProvider,
+    6: LeadDeveloperDashboardProvider,
     7: SaleExecutiveDashboardProvider,
 };
 
@@ -119,7 +121,7 @@ const routes = [
         id: 3,
         containerId: "leadAdminDashboard",
         baseUrl: "/account/dashboard-lead-dev-performance",
-        contextProvider: LeadDeveloperProvider,
+        contextProvider: LeadDeveloperAdminDashboardProvider,
         pageComponent: <LeadDeveloperDashboard />,
     },
     {
