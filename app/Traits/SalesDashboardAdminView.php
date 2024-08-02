@@ -158,11 +158,11 @@ trait SalesDashboardAdminView
             $delay_minute = $leadsWithDateAndId->sum('bidding_minutes');
             $delay_second = $leadsWithDateAndId->sum('bidding_seconds');
 
-            $this->average_bidding_delay_time = $number_of_leads_create ? round((($delay_minute * 60 + $delay_second) / $number_of_leads_create) / 60, 2) : 0;
+            $this->average_bidding_delay_time = $number_of_leads_create ? round((($delay_minute * 60 + $delay_second) / $number_of_leads_create), 2) : 0;
 
             $saleExecutive += [
                 'average_number_of_leads_amount' => $this->average_number_of_leads_amount,
-                'average_bidding_delay_time'     => $this->average_bidding_delay_time,
+                'average_bidding_delay_time'     => gmdate('H:i:s', $this->average_bidding_delay_time),
             ];
 
             //---------------bidding frequency--------------------------------------
