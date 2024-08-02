@@ -14,6 +14,9 @@
         <x-forms.link-primary :link="route('sticky-notes.create')" class="mr-3 float-left" icon="plus">
             @lang('modules.sticky.addNote')
         </x-forms.link-primary>
+        <a href="{{ route('sticky-notes.predefined') }}" class="btn-secondary rounded f-14 p-2 mr-3 float-left">
+            <i class="fa fa-plus mr-1"></i>Add Predefined Notes
+        </a>
     </div>
 </div>
 

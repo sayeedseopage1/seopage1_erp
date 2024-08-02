@@ -1475,6 +1475,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('task-subtask', [StickyNoteController::class, 'taskSubtask'])->name('sticky_notes.subtask');
     Route::post('sticky-note-clients', [StickyNoteController::class, 'noteClients'])->name('sticky_notes.clients');
     Route::get('sticky-notes-complete/{id}', [StickyNoteController::class, 'noteComplete'])->name('sticky-notes.mark-as-complete');
+    Route::get('predefined-notes', [StickyNoteController::class, 'predefinedNote'])->name('sticky-notes.predefined');
+    Route::post('predefined-notes-store', [StickyNoteController::class, 'storePredefinedNote'])->name('predefined-notes.store');
+    Route::get('predefined-notes-edit', [StickyNoteController::class, 'editPredefinedNote'])->name('predefined-notes.edit');
+    Route::post('predefined-notes-update', [StickyNoteController::class, 'updatePredefinedNote'])->name('predefined-notes.update');
+    Route::get('predefined-notes-destroy/{id}', [StickyNoteController::class, 'destroyPredefinedNote'])->name('predefined-notes.destroy');
 
     Route::post('show-notifications', [NotificationController::class, 'showNotifications'])->name('show_notifications');
 

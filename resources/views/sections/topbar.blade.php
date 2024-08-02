@@ -87,7 +87,7 @@
             <!-- Sticky Note START -->
             <li>
                 <div class="d-flex align-items-center">
-                    <a href="{{ route('sticky-notes.index') }}" class="d-block header-icon-box openRightModal">
+                    <a href="{{ route('sticky-notes.index') }}" class="d-block header-icon-box">
                         <i class="fa fa-sticky-note f-16 text-dark-grey"></i>
                     </a>
                 </div>

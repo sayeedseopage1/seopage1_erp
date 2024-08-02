@@ -9,6 +9,7 @@ use App\Models\Deal;
 use App\Models\DealStage;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
+use App\Models\PredefinedNote;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\RoleUser;
@@ -36,11 +37,12 @@ class StickyNoteController extends AccountBaseController
     {
         $this->stickyNotes = StickyNote::where('user_id', user()->id)->orderBy('updated_at', 'desc')->get();
 
-        if (request()->ajax()) {
-            $this->pageTitle = __('app.menu.stickyNotes');
-            $html = view('sticky-notes.ajax.notes', $this->data)->render();
-            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
-        }
+        // if (request()->ajax()) {
+        //     dd(request()->ajax());
+        //     $this->pageTitle = __('app.menu.stickyNotes');
+        //     $html = view('sticky-notes.ajax.notes', $this->data)->render();
+        //     return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        // }
 
         $this->view = 'sticky-notes.ajax.notes';
 
@@ -393,6 +395,53 @@ class StickyNoteController extends AccountBaseController
         }
 
         return Reply::successWithData(__('Mark as Completed'), ['redirectUrl' => route('sticky-notes.index')]);
+    }
+
+    public function predefinedNote()
+    {
+        $this->pageTitle = __('predefined Notes');
+        $this->predefinedNotes = PredefinedNote::orderBy('id', 'DESC')->get();
+        return view('sticky-notes.predefined-notes.index', $this->data);
+    }
+
+    public function storePredefinedNote(Request $request)
+    {
+        $validated = $request->validate([
+            'note_text' => 'required',
+        ]);
+
+        $predefinedNote = new PredefinedNote();
+        $predefinedNote->note_text = $request->note_text;
+        $predefinedNote->save();
+
+        return response()->json(['status' => 200]);
+    }
+
+    public function editPredefinedNote(Request $request)
+    {
+        $this->id = $request->id;
+        return view('sticky-notes.predefined-notes.edit', $this->data);
+    }
+
+    public function updatePredefinedNote(Request $request)
+    {
+        $validated = $request->validate([
+            'note_text' => 'required',
+        ]);
+
+        $predefinedNote = PredefinedNote::find($request->id);
+        $predefinedNote->note_text = $request->note_text;
+        $predefinedNote->save();
+
+        return response()->json(['status' => 200]);
+    }   
+
+    public function destroyPredefinedNote($id)
+    {
+        $predefinedNote = PredefinedNote::find($id);
+        $predefinedNote->delete();
+
+        return Reply::successWithData(__('messages.deleteSuccess'), ['redirectUrl' => route('sticky-notes.predefined')]);
     }
 
 }
