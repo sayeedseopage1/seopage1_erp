@@ -51,9 +51,12 @@
                                 <td>
                                     {{ $row?->project?->pm?->name }}
                                 </td>
-                                <td>{{ $row->firstTaskSubmission->created_at }}</td>
-                                <td title="@foreach ($row->revisions as $revision) ({{++$loop->index}}): {{ $revision->created_at }}&#xA; @endforeach">
-                                    ({{ $row->revisions->count() }})
+                                <td>
+                                    {{ $row->firstTaskSubmission->created_at }}
+                                </td>
+                                <td
+                                    title="@foreach ($row->historyForReviews as $history)({{ ++$loop->index }}): {{ $history->created_at }}&#xA; @endforeach">
+                                    ({{ $row->history_for_reviews_count }})
                                 </td>
                             </tr>
                         @endforeach
