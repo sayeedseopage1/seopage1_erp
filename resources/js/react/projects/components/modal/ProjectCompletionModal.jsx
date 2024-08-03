@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import isURL from "validator/lib/isURL";
 
 // Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
@@ -14,7 +15,11 @@ import {
 } from "../ui/styledComponents";
 
 // Helper
-import { handleLoadingComponent, htmlTagRegex } from "../../helper";
+import {
+    addDefaultProtocol,
+    handleLoadingComponent,
+    htmlTagRegex,
+} from "../../helper";
 
 // Components - Global
 import { Placeholder } from "../../../global/Placeholder";
@@ -131,6 +136,8 @@ const ProjectCompletionModal = ({
         }
     }, [adminComment, adminCommentDataValidation?.isSubmitting]);
 
+    console.log(projectCompletionData?.project_submission?.screenshot);
+
     return (
         <CustomAntModal
             isModalOpen={isModalOpen}
@@ -147,7 +154,7 @@ const ProjectCompletionModal = ({
             <ModalContentContainer className="projectModalContent">
                 {/* Actual Site Links */}
                 <div className="modalContentHeader">
-                    <p>
+                    <p className="text-nowrap">
                         Actual Site Link:
                         {handleLoadingComponent(
                             isLoading,
@@ -164,11 +171,11 @@ const ProjectCompletionModal = ({
                                     }
                                 >
                                     <a
-                                        href={
+                                        href={addDefaultProtocol(
                                             projectCompletionData
                                                 ?.project_submission
                                                 ?.actual_link
-                                        }
+                                        )}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="singleline-ellipsis ml-1"
@@ -189,10 +196,10 @@ const ProjectCompletionModal = ({
                                     }
                                 >
                                     <a
-                                        href={
+                                        href={addDefaultProtocol(
                                             projectCompletionData
                                                 ?.project_submission?.dummy_link
-                                        }
+                                        )}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="singleline-ellipsis ml-1"
@@ -211,7 +218,7 @@ const ProjectCompletionModal = ({
                                             ?.project_submission?.dummy_link
                                     }
                                 >
-                                    <p>Not Provided</p>
+                                    <p>{" "}Not Provided</p>
                                 </Switch.Case>
                             </Switch>
                         )}
@@ -334,11 +341,11 @@ const ProjectCompletionModal = ({
                                                                     Login Url:
                                                                 </strong>{" "}
                                                                 <a
-                                                                    href={
+                                                                    href={addDefaultProtocol(
                                                                         projectCompletionData
                                                                             ?.project_submission
                                                                             ?.login_url
-                                                                    }
+                                                                    )}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className="singleline-ellipsis w-50 ml-1"
@@ -377,22 +384,80 @@ const ProjectCompletionModal = ({
                                                             <strong>
                                                                 Screenshot:
                                                             </strong>{" "}
-                                                            <a
-                                                                href={
-                                                                    projectCompletionData
-                                                                        ?.project_submission
-                                                                        ?.screenshot
-                                                                }
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="singleline-ellipsis w-50 ml-1"
-                                                            >
-                                                                {
-                                                                    projectCompletionData
-                                                                        ?.project_submission
-                                                                        ?.screenshot
-                                                                }
-                                                            </a>
+                                                            <Switch>
+                                                                <Switch.Case
+                                                                    condition={
+                                                                        projectCompletionData
+                                                                            ?.project_submission
+                                                                            ?.screenshot !==
+                                                                        null
+                                                                    }
+                                                                >
+                                                                    <Switch.Case
+                                                                        condition={
+                                                                            projectCompletionData
+                                                                                ?.project_submission
+                                                                                ?.screenshot !==
+                                                                                null &&
+                                                                            isURL(
+                                                                                projectCompletionData
+                                                                                    ?.project_submission
+                                                                                    ?.screenshot
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <a
+                                                                            href={
+                                                                                projectCompletionData
+                                                                                    ?.project_submission
+                                                                                    ?.screenshot
+                                                                            }
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="singleline-ellipsis w-50 ml-1"
+                                                                        >
+                                                                            {
+                                                                                projectCompletionData
+                                                                                    ?.project_submission
+                                                                                    ?.screenshot
+                                                                            }
+                                                                        </a>
+                                                                    </Switch.Case>
+                                                                    <Switch.Case
+                                                                        condition={
+                                                                            projectCompletionData
+                                                                                ?.project_submission
+                                                                                ?.screenshot !==
+                                                                                null &&
+                                                                            !isURL(
+                                                                                projectCompletionData
+                                                                                    ?.project_submission
+                                                                                    ?.screenshot
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <p>
+                                                                            {" "}
+                                                                            {
+                                                                                projectCompletionData
+                                                                                    ?.project_submission
+                                                                                    ?.screenshot
+                                                                            }
+                                                                        </p>
+                                                                    </Switch.Case>
+                                                                </Switch.Case>
+                                                                <Switch.Case
+                                                                    condition={
+                                                                        projectCompletionData
+                                                                            ?.project_submission
+                                                                            ?.screenshot ===
+                                                                        null
+                                                                    }
+                                                                >
+                                                                    {" "}
+                                                                    <p>--</p>
+                                                                </Switch.Case>
+                                                            </Switch>
                                                         </p>
                                                     </Switch.Case>
                                                     <Switch.Case
@@ -486,11 +551,11 @@ const ProjectCompletionModal = ({
                                                                 Link :
                                                             </strong>{" "}
                                                             <a
-                                                                href={
+                                                                href={addDefaultProtocol(
                                                                     projectCompletionData
                                                                         ?.project_submission
                                                                         ?.google_link
-                                                                }
+                                                                )}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="singleline-ellipsis w-50 ml-1"
@@ -1107,16 +1172,23 @@ const ProjectCompletionModal = ({
                                                             projectCompletionData
                                                                 ?.project_portfolio
                                                                 ?.theme
-                                                                ?.theme_url
-                                                        }
-                                                    >
-                                                        <a
-                                                            href={
+                                                                ?.theme_url !==
+                                                                null &&
+                                                            isURL(
                                                                 projectCompletionData
                                                                     ?.project_portfolio
                                                                     ?.theme
                                                                     ?.theme_url
-                                                            }
+                                                            )
+                                                        }
+                                                    >
+                                                        <a
+                                                            href={addDefaultProtocol(
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme
+                                                                    ?.theme_url
+                                                            )}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis"
@@ -1128,6 +1200,30 @@ const ProjectCompletionModal = ({
                                                                     ?.theme_url
                                                             }
                                                         </a>
+                                                    </Switch.Case>
+                                                    <Switch.Case
+                                                        condition={
+                                                            projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.theme
+                                                                ?.theme_url !==
+                                                                null &&
+                                                            !isURL(
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme
+                                                                    ?.theme_url
+                                                            )
+                                                        }
+                                                    >
+                                                        <p>
+                                                            {
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme
+                                                                    ?.theme_url
+                                                            }{" "}
+                                                        </p>
                                                     </Switch.Case>
                                                 </Switch.Case>
                                                 <Switch.Case
@@ -1152,11 +1248,11 @@ const ProjectCompletionModal = ({
                                                         }
                                                     >
                                                         <a
-                                                            href={
+                                                            href={addDefaultProtocol(
                                                                 projectCompletionData
                                                                     ?.project_portfolio
                                                                     ?.theme_url
-                                                            }
+                                                            )}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis"
@@ -1311,11 +1407,11 @@ const ProjectCompletionModal = ({
                                                             link:
                                                         </strong>{" "}
                                                         <a
-                                                            href={
+                                                            href={addDefaultProtocol(
                                                                 projectCompletionData
                                                                     ?.project_submission
                                                                     ?.dummy_link
-                                                            }
+                                                            )}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis w-50 ml-1"
@@ -1456,11 +1552,11 @@ const ProjectCompletionModal = ({
                                                             Actual Site link:
                                                         </strong>{" "}
                                                         <a
-                                                            href={
+                                                            href={addDefaultProtocol(
                                                                 projectCompletionData
                                                                     ?.project_submission
                                                                     ?.actual_link
-                                                            }
+                                                            )}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis w-50 ml-1"

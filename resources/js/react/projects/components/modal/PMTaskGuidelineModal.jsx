@@ -13,7 +13,7 @@ import { Placeholder } from "../../../global/Placeholder";
 import Switch from "../../../global/Switch";
 
 // Helper
-import { handleLoadingComponent } from "../../helper";
+import { addDefaultProtocol, handleLoadingComponent } from "../../helper";
 
 // Components - Styled Components
 import { ModalContentContainer } from "../ui/styledComponents";
@@ -140,7 +140,9 @@ const PMTaskGuidelineModal = ({
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    href={modalData?.theme_url}
+                                                    href={addDefaultProtocol(
+                                                        modalData?.theme_url
+                                                    )}
                                                 >
                                                     View On New Tab
                                                 </a>
@@ -442,9 +444,9 @@ const PMTaskGuidelineModal = ({
                                                                     <a
                                                                         target="_blank"
                                                                         rel="noreferrer"
-                                                                        href={
+                                                                        href={addDefaultProtocol(
                                                                             link
-                                                                        }
+                                                                        )}
                                                                         key={
                                                                             link
                                                                         }
@@ -471,8 +473,9 @@ const PMTaskGuidelineModal = ({
                                                         <a
                                                             target="_blank"
                                                             rel="noreferrer"
-                                                            href={modalData?.drive_url}
-                                                           
+                                                            href={
+                                                                addDefaultProtocol(modalData?.drive_url)
+                                                            }
                                                         >
                                                             View On New Tab
                                                         </a>
@@ -492,8 +495,9 @@ const PMTaskGuidelineModal = ({
                                                         <a
                                                             target="_blank"
                                                             rel="noreferrer"
-                                                            href={modalData?.xd_url}
-                                                           
+                                                            href={
+                                                                addDefaultProtocol(modalData?.xd_url)
+                                                            }
                                                         >
                                                             View On New Tab
                                                         </a>
@@ -504,7 +508,9 @@ const PMTaskGuidelineModal = ({
                                                 condition={
                                                     convertedReferenceLink?.length ===
                                                         0 &&
-                                                    !modalData?.reference_link && !modalData?.drive_url && !modalData?.xd_url
+                                                    !modalData?.reference_link &&
+                                                    !modalData?.drive_url &&
+                                                    !modalData?.xd_url
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -625,7 +631,7 @@ const PMTaskGuidelineModal = ({
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    href={modalData?.plugin_url}
+                                                    href={addDefaultProtocol(modalData?.plugin_url)}
                                                 >
                                                     View On New Tab
                                                 </a>

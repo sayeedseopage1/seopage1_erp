@@ -1,16 +1,4 @@
 import linkifyHtml from 'linkify-html';
-// const urlPattern = /(?:https?:\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?)(?![^<]*<\/a>)/g;
-
-// export function formatHttp(text) {
-//   const formattedText = text?.replace(urlPattern, (url) => {
-//     const displayText = url.length > 50 ? 'View Link' : url;
-//     if (!/<a\s+href\s*=\s*(?:(['"])(?:.*?)\1|([^\s>]+))(?=[^>]*?>)/i.test(url)) {
-//       return `<a href="${url}" target="_blank">${displayText}</a>`;
-//     }
-//     return <a href={url || '#'} target="_blank">{displayText}</a>;
-//   });
-//   return formattedText;
-// }
 
 function cleanUpMalformedAnchors(text) {
   return text.replace(/<a\s+href="([^"]+)"[^>]*>([^<]*<a\s+href="[^"]+"[^>]*>[^<]*<\/a>[^<]*)<\/a>/gi, (match, p1, p2) => {
@@ -20,34 +8,54 @@ function cleanUpMalformedAnchors(text) {
 
 export function formatHttp(text) {
   if (!text) return text;
-
-  // Clean up malformed anchor tags
   let cleanedText = cleanUpMalformedAnchors(text);
 
-  // Convert only plain text URLs to anchor tags
   const options = {
-    defaultProtocol: 'https',
+    defaultProtocol: 'http', 
     target: '_blank',
     validate: {
       url: (value) => {
-        // Skip URLs already wrapped in anchor tags
-        const urlPattern = new RegExp(`href="${value}"`, 'i');
+        const urlPattern = new RegExp(`href="[^"]*"`, 'i');
         return !urlPattern.test(cleanedText);
       },
     },
+    formatHref: (href) => {
+      if (!href.startsWith('http://') && !href.startsWith('https://')) {
+        return `http://${href}`;
+      }
+      return href;
+    },
   };
 
-  // Convert plain text URLs to anchor tags
   let formattedText = linkifyHtml(cleanedText, options);
-
-  // Replace inner text of anchor tags if it exceeds 50 characters
-  // this characters limit remove for as requested by the Top Management 
-  formattedText = formattedText.replace(/<a\s+href="([^"]+)"[^>]*>([^<]{51,})<\/a>/gi, (match, p1) => {
-    return `<a href="${p1}" target="_blank">${p1}</a>`;
-  });
-
   return formattedText;
 }
+
+export function addDefaultProtocol(url) {
+  if (!/^https?:\/\//i.test(url) && !/^www\./i.test(url)) {
+    return `http://${url}`;
+  }
+  return url;
+}
+
+
+
+export const isLink = (str) => {
+  if (!/^https?:\/\//i.test(str) && !/^www\./i.test(str)) {
+    str = `http://${str}`;
+  }
+  if (/^www\./i.test(str)) {
+    str = `http://${str}`;
+  }
+  try {
+    new URL(str);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
+
 
 
 /**

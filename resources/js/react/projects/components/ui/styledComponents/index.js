@@ -676,6 +676,7 @@ export const ModalContentContainer = styled.div`
           }
           th:nth-child(2){
             width: 45%;
+            min-width: 300px;
           }
           th:nth-child(3){
             width: 50%;

@@ -9,10 +9,11 @@ import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
 import { Placeholder } from "../../../global/Placeholder";
 
 // helper
-import { handleLoadingComponent } from "../../helper";
+import { addDefaultProtocol, handleLoadingComponent } from "../../helper";
 
 // Components - Logic
 import Switch from "../../../global/Switch";
+import isURL from "validator/lib/isURL";
 
 /**
  *  Working Environment Modal
@@ -40,7 +41,6 @@ const WorkingEnvironmentModal = ({
         >
             <Switch>
                 <div className="dashboardModalTableContainer mt-4">
-
                     {/* Here is the part where the data is available or loading */}
                     <Switch.Case
                         condition={isLoading || workingEnvironmentData}
@@ -52,7 +52,9 @@ const WorkingEnvironmentModal = ({
                                     isLoading,
                                     <Placeholder width="80%" height="16px" />,
                                     <a
-                                        href={workingEnvironmentData?.site_url}
+                                        href={addDefaultProtocol(
+                                            workingEnvironmentData?.site_url
+                                        )}
                                         target="_blank"
                                         rel="noreferrer"
                                     >
@@ -67,13 +69,36 @@ const WorkingEnvironmentModal = ({
                                 {handleLoadingComponent(
                                     isLoading,
                                     <Placeholder width="80%" height="16px" />,
-                                    <a
-                                        href={workingEnvironmentData?.login_url}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {workingEnvironmentData?.login_url}
-                                    </a>
+                                    <Switch>
+                                        <Switch.Case
+                                            condition={
+                                                workingEnvironmentData?.login_url !==
+                                                    null &&
+                                                isURL(
+                                                    workingEnvironmentData?.login_url
+                                                )
+                                            }
+                                        >
+                                            <a
+                                                href={addDefaultProtocol(
+                                                    workingEnvironmentData?.login_url
+                                                )}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                {
+                                                    workingEnvironmentData?.login_url
+                                                }
+                                            </a>
+                                        </Switch.Case>
+                                        <Switch.Default>
+                                            <span className="singleline-ellipses">
+                                                {
+                                                    workingEnvironmentData?.login_url
+                                                }
+                                            </span>
+                                        </Switch.Default>
+                                    </Switch>
                                 )}
                             </div>
                         </div>
