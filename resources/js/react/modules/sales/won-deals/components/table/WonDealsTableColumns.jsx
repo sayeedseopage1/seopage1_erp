@@ -226,6 +226,8 @@ export const WonDealsTableColumns = [
     {
         id: "action",
         header: "Action",
-        cell: (props) => <ActionDropdown {...props} />,
+        cell: (props) => {
+            return <ActionDropdown {...props} />;
+        },
     },
 ];

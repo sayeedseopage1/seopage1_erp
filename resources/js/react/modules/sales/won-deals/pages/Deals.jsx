@@ -56,7 +56,7 @@ const WonDeals = () => {
     );
     const extensionRequest = data?.total_request;
 
-    console.log("wondeals", wonDeals);
+    
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
@@ -117,6 +117,7 @@ const WonDeals = () => {
                         data={wonDeals}
                         columns={[...WonDealsTableColumns]}
                         isLoading={isFetching}
+                        refetch={refetch}
                         onPageChange={onPageChange}
                         sorting={sorting}
                         tableName="WonDealsTable"

@@ -973,18 +973,13 @@ class EmployeeController extends AccountBaseController
 
     public function ProjectEnable(Request $request)
     {
-        $pm_id= PMAssign::where('pm_id',$request->id)->first();
-       $assign= PMAssign::find($pm_id->id);
-       if($request->project_enable == 'enable')
-       {
-        $assign->status = 1;
+        $pmAssign = PMAssign::where('pm_id', $request->id)->first();
+        $pmAssign->status = $request->status;
+        $pmAssign->save();
+    //    Toastr::success('Status changed successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+    //             return back();
 
-       }else{
-        $assign->status = 0;
-       }
-       $assign->save();
-       Toastr::success('Status changed successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-                return back();
+        return Reply::success(__('Status changed successfully'));
       
     }
 

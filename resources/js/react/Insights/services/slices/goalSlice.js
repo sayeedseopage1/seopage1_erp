@@ -5,7 +5,11 @@ const initialState = {
     goals: [],
     recurring: [],
     status: 'idle',
-    error: null
+    error: null,
+    allGoals: {
+        goals: [],
+        recurring: [],
+    }
 };
 
 
@@ -54,10 +58,14 @@ const goalSlice = createSlice({
 
         setError: (state, action) => {
             state.error = action.payload.error;
+        },
+        updateInsightGoals: (state, action) => {
+            state.allGoals = action.payload
+          
         }
     },
 });
 
 
-export const { addGoal, setGoals, setRecurring, addRecurring, updateGoal, updateRecurring, setStatus, setError } = goalSlice.actions;
+export const { addGoal, setGoals, setRecurring, addRecurring, updateGoal, updateRecurring, setStatus, setError ,updateInsightGoals} = goalSlice.actions;
 export default goalSlice.reducer;
