@@ -275,10 +275,10 @@ trait DeveloperDashboard
             $devId = auth()->id();
             // $devId = 224;
 
-            // $startDate = Carbon::now()->startOfMonth();
-            // $endDate = Carbon::now()->endOfMonth()->addDays(1);
-            $startDate = Carbon::parse('2024-01-01')->startOfMonth();
-            $endDate = Carbon::parse('2024-05-31')->endOfMonth();
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth()->addDays(1);
+            // $startDate = Carbon::parse('2024-01-01')->startOfMonth();
+            // $endDate = Carbon::parse('2024-05-31')->endOfMonth();
 
             $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
                 ->whereRelation('taskUsers', 'user_id', $devId);
@@ -799,7 +799,7 @@ trait DeveloperDashboard
 
         $total_attempt_count = $avg_no_of_submission_needed_for_app_by_lead_dev->sum('history_for_reviews_count') ?? 0;
 
-        
+
         if ($avg_no_of_submission_needed_for_app_by_lead_dev->count()) {
             $average_number_of_attempts_needed = round($total_attempt_count / $avg_no_of_submission_needed_for_app_by_lead_dev->count(), 2);
         }
@@ -988,7 +988,7 @@ trait DeveloperDashboard
         $test_id_where_deadline_missed = [];
 
         foreach ($all_completed_task as $task) {
-            if (!Carbon::parse($task->due_date)->greaterThanOrEqualTo(Carbon::parse($task->firstHistoryForDevReview->created_at)->toDateString())) {
+            if (!Carbon::parse($task->due_date)->greaterThanOrEqualTo(Carbon::parse($task?->firstHistoryForDevReview?->created_at)->toDateString())) {
                 array_push($test_id_where_deadline_missed, $task->id);
             }
         }
