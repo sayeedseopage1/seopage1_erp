@@ -11,6 +11,7 @@ import SearchBox from "../Searchbox";
 import Switch from "../Switch";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
+    const auth = useAuth();
     const [isOpen, setIsOpen] = React.useState(false);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
@@ -18,7 +19,14 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [developer, setDeveloper] = React.useState(null);
     const [client, setClient] = React.useState(null);
     const [leadDeveloper, setLeadDeveloper] = React.useState(null);
-    const [pm, setPm] = React.useState(null);
+    const [pm, setPm] = React.useState(
+        auth.getRoleId() === 1
+            ? {
+                  id: 209,
+                  name: "Dinar M Islam",
+              }
+            : null // this is default value for PM , this default value will be not work on pm end
+    );
     const [status, setStatus] = React.useState({
         id: 10,
         column_name: "Hide completed task",
@@ -28,8 +36,11 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const { width } = useWindowSize();
 
     const isDev = _.includes([5], Number(window?.Laravel?.user?.role_id));
-    const isHigherRole = _.includes([1,8], Number(window?.Laravel?.user?.role_id));
-    const auth = useAuth();
+    const isHigherRole = _.includes(
+        [1, 8],
+        Number(window?.Laravel?.user?.role_id)
+    );
+    
 
     // MEMORIZE VALUES
     const start_date = React.useMemo(() => startDate, [startDate]);
