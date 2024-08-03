@@ -48,7 +48,7 @@ const ActionsButton = ({ data }) => {
                 if (btn.button_type === "redirect_url") {
                     return (
                         <button
-                            disabled={handleBtnDisable(5)}
+                            disabled={handleBtnDisable(10)}
                             key={i}
                             onClick={() =>
                                 window.open(btn.button_url, "_blank")
@@ -65,7 +65,7 @@ const ActionsButton = ({ data }) => {
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
-                                    disabled={handleBtnDisable(5)}
+                                    disabled={handleBtnDisable(10)}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
                                         dispatch(setPendingActionId(data?.id));
@@ -78,7 +78,7 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
-                                    disabled={handleBtnDisable(5)}
+                                    disabled={handleBtnDisable(10)}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
 
@@ -91,7 +91,7 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
-                                    disabled={handleBtnDisable(5)}
+                                    disabled={handleBtnDisable(10)}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
                                     }

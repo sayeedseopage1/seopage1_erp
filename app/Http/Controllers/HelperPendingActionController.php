@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
+use App\Models\DealStage;
 use App\Models\EmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingAction;
@@ -2468,28 +2469,41 @@ class HelperPendingActionController extends AccountBaseController
 
         public function StickyNoteReminder($userId)
         {
-            $note = StickyNote::where('user_id',$userId)->first(); 
+            $note = StickyNote::where('user_id',$userId)->orderBy('id','desc')->first(); 
+            $client = User::where('id',$note->client_id)->first();
             $project = Project::where('id',$note->project_id)->first(); 
             $task = Task::where('id',$note->task_id)->first();
-            $subTask = Task::where('subtask_id',$note->sub_task_id)->first();
-            $client = User::where('id',$note->client_id)->first();
+            $subTask = Task::where('subtask_id',$note->sub_task_id)->whereNotNull('subtask_id')->first();
+            $deal = DealStage::where('id',$note->deal_id)->first();
+            $won_deal = Deal::where('id',$note->won_deal_id)->first();
+            $user = User::where('id',$note->user_id)->first();
+
             $action = new PendingAction();
             $action->code = 'SNR';
             $action->serial = 'SNR'.'x0';
             $action->item_name= 'Take action on your note!';
             $action->heading= 'Take action on your note!';
-            $action->message = 'Take action on your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
-            // if($project != null){
-            //     $action->message = 'Take action on your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
-            // }elseif($task != null){
-            //     $action->message = 'Take action on your note for task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
-            // }elseif($subTask != null){
-            //     $action->message = 'Take action on your note for subtask <a href="'.route('tasks.show',$subTask->id).'">'.$subTask->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
-            // }
+
+
+            if(in_array($user->role_id, [1, 4, 8]) && $project != null){
+                $action->message = 'Take action on your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if($user->role_id == 6 && $task != null){
+                $action->message = 'Take action on your note for task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [5, 9, 10, 13]) && $subTask != null){
+                $action->message = 'Take action on your note for subtask <a href="'.route('tasks.show',$subTask->id).'">'.$subTask->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [1, 7, 8]) && $deal != null){
+                $action->message = 'Take action on your note for deal <a href="'.route('deals.show',$deal->id).'">'.$deal->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [1, 7, 8]) && $won_deal != null){
+                $action->message = 'Take action on your note for won deal <a href="'.route('deals.show',$won_deal->id).'">'.$won_deal->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
             $action->timeframe= 24;
             $action->client_id = $client->id;
-            $action->task_id = $task->id;
-            $action->note_id = $note->id;
+            $action->task_id = $task->id ?? null;
+            $action->sticky_note_id = $note->id;
             $action->authorization_for= $note->user_id;
             $button = [
                 [
