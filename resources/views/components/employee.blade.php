@@ -25,7 +25,7 @@ if (isset($user->session)) {
                     title="@lang('modules.client.online')"><i class="fa fa-circle"></i></span>
             @endif
             <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle"
-                alt="{{ ucfirst($user->name) }}" title="{{ mb_ucwords($user->name) }}">
+                alt="{{ ucfirst($user->name) }}" title="{{ mb_ucwords($user->name) }}" onerror="this.onerror=null;this.src='{{URL::asset('user-uploads/avatar/avatar_blank.png')}}';">
         </a>
         <div class="media-body">
             <h5 class="mb-0 f-12">

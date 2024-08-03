@@ -3502,7 +3502,7 @@ class ProjectController extends AccountBaseController
             'cms_id' => $request->has('cms_id') ? 'required' : '',
             'website_type' => 'required',
             'niche' => 'required',
-            'sub_niche' => 'required',
+            'sub_niche' => 'nullable',
             'theme_id' => 'required',
             'day_interval' => 'required',
             'notify' => 'required',
@@ -3547,7 +3547,6 @@ class ProjectController extends AccountBaseController
             'cms_id.required' => 'This field is required!!',
             'website_type.required' => 'This field is required!!',
             'niche.required' => 'This field is required!!',
-            'sub_niche.required' => 'This field is required!!',
             'theme_id.required' => 'This field is required!!',
             'website_plugin_box_information.required' => 'This field is required. Please select Yes or No!!',
         ]);

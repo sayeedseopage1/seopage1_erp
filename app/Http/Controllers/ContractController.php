@@ -747,7 +747,7 @@ class ContractController extends AccountBaseController
             //  dd("true");
 
             $find_pm_id = Project::where('client_id', $existing_client->id)->orderBy('id', 'desc')->where('id', '!=', $project->id)->where('pm_id', '!=', null)->first();
-            if ($find_pm_id != null) {
+            if ($find_pm_id != null && in_array(PMAssign::where('pm_id', $find_pm_id->pm_id)->first()->status, [0, 1])) {
 
                 $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 

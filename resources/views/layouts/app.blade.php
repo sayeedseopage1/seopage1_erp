@@ -42,7 +42,7 @@
 
     <link rel="stylesheet" href="{{ asset('moving-countdown/style.css') }}" type="text/css" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
     <!-- sp1 editor css -->
     <link rel="stylesheet" href="{{ asset('css/ck-editor.css') }}">
     <link rel="stylesheet" href="{{ asset('css/seopage1.css') }}">
@@ -907,7 +907,7 @@
         @endif
     </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{{ asset('toastr/toastr.min.js') }}"></script>
     {!! Toastr::message() !!}
 
     <script src="{{ URL::asset('easy-notification/easyNotify.js') }}"></script>

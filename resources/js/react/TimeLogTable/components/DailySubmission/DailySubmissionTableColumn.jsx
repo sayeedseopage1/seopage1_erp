@@ -3,6 +3,7 @@ import { convertTime } from "../../../utils/converTime";
 import Popover from "../../../../react-latest/ui/Popover";
 import "../data-table.css";
 import UserRender from "../UserRender";
+import FileList from "../../../global/fileLists/FileList";
 
 export const DailySubmissionTableColumn = [
     {
@@ -328,16 +329,35 @@ export const DailySubmissionTableColumn = [
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
+            const links = row?.attachments;
+            const screenshotLink = row?.screenshot_screenrecord_link;
             return (
                 <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.attachments ? (
-                        <a
-                            className="text-primary font-weight-bold"
-                            href={row?.attachments}
-                            target="_blank"
-                        >
-                            View Link
-                        </a>
+                    {Array.isArray(links) || screenshotLink ? (
+                        <>
+                            <Popover>
+                                <Popover.Button>
+                                    <span className="singleline-ellipsis link_color hover-underline">
+                                        See Attachments
+                                    </span>
+                                </Popover.Button>
+
+                                <Popover.Panel>
+                                    <div className="revision_popover_panel">
+                                        <h6>screenshot/screen record link:</h6>
+                                        <a
+                                            href={screenshotLink}
+                                            target="_blank"
+                                        >
+                                            {screenshotLink}
+                                        </a>
+                                        {Array.isArray(links) && (
+                                            <FileList links={links} />
+                                        )}
+                                    </div>
+                                </Popover.Panel>
+                            </Popover>
+                        </>
                     ) : (
                         <span className="text-danger font-weight-bold">
                             No Attachments
