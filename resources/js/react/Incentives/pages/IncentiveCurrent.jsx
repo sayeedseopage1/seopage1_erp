@@ -82,7 +82,7 @@ const IncentiveCurrent = () => {
                                                     <Dropdown.Menu className="p-3">
                                                         <ol className='sp1-order-list'>
                                                             {
-                                                                data?.minimum_goals_of_your_shift?.map(d => (
+                                                                data?.minimum_goals_of_your_shift?.filter(item => item?.is_private !== 1)?.map(d => (
                                                                     <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
                                                                         {d.title} - <a href={`/account/insights/goals/${d.id}`}> View</a>
                                                                     </li>
@@ -111,7 +111,7 @@ const IncentiveCurrent = () => {
                                                     <Dropdown.Menu className="px-3 py-1">
                                                     <ol className='sp1-order-list'>
                                                         {
-                                                            data?.minimum_goals_of_your_shift_achieve
+                                                            data?.minimum_goals_of_your_shift_achieve?.filter((item) => item.is_private !== 1)
                                                             ?.map(d => (
                                                                 <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
                                                                     {d.title} {d.goal_status ? <span className='badge badge-success'> Achieved </span>: <span className='badge badge-danger'> Not Achieved </span>} - <a href={`/account/insights/goals/${d.id}`}>  View</a>
@@ -146,7 +146,7 @@ const IncentiveCurrent = () => {
                                                         <Dropdown.Menu className="px-3 py-1">
                                                             <ol className='sp1-order-list'>
                                                                 {
-                                                                    data?.minimum_team_goal_get
+                                                                    data?.minimum_team_goal_get?.filter((item) => item.is_private !== 1)
                                                                     ?.map(d => (
                                                                         <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
                                                                             {d.title} - <a href={`/account/insights/goals/${d.id}`}> View</a>
@@ -177,7 +177,7 @@ const IncentiveCurrent = () => {
                                                 <Dropdown.Menu className="px-3 py-1">
                                                     <ol className='sp1-order-list'>
                                                     {
-                                                        data?.minimum_team_goal_get_achieved
+                                                        data?.minimum_team_goal_get_achieved?.filter((item) => item.is_private !== 1)
                                                         ?.map(d => (
                                                             <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
                                                                 {d.title} {d.goal_status ? <span className='badge badge-success'> Achieved </span>: <span className='badge badge-danger'> Not Achieved </span>} - <a href={`/account/insights/goals/${d.id}`}> View</a>

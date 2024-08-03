@@ -8,26 +8,32 @@ function cleanUpMalformedAnchors(text) {
 
 export function formatHttp(text) {
   if (!text) return text;
+
+  // Clean up malformed anchor tags
   let cleanedText = cleanUpMalformedAnchors(text);
 
+  // Convert only plain text URLs to anchor tags
   const options = {
-    defaultProtocol: 'http', 
+    defaultProtocol: 'https',
     target: '_blank',
     validate: {
       url: (value) => {
-        const urlPattern = new RegExp(`href="[^"]*"`, 'i');
+        // Skip URLs already wrapped in anchor tags
+        const urlPattern = new RegExp(`href="${value}"`, 'i');
         return !urlPattern.test(cleanedText);
       },
     },
-    formatHref: (href) => {
-      if (!href.startsWith('http://') && !href.startsWith('https://')) {
-        return `http://${href}`;
-      }
-      return href;
-    },
   };
 
+  // Convert plain text URLs to anchor tags
   let formattedText = linkifyHtml(cleanedText, options);
+
+  // Replace inner text of anchor tags if it exceeds 50 characters
+  // this characters limit remove for as requested by the Top Management 
+  formattedText = formattedText.replace(/<a\s+href="([^"]+)"[^>]*>([^<]{51,})<\/a>/gi, (match, p1) => {
+    return `<a href="${p1}" target="_blank">${p1}</a>`;
+  });
+
   return formattedText;
 }
 
