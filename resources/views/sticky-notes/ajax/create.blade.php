@@ -3,7 +3,13 @@
         <x-form id="save-notice-data-form">
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    @lang('app.note') @lang('app.details')</h4>
+                    @lang('app.note') @lang('app.details')
+
+                    <a href="javascript:void(0)" class="btn-secondary rounded f-14 p-2 mr-3 float-right" data-toggle="modal" data-target="#noteCopy">
+                        <i class="fa fa-clone mr-1"></i>Copy from predefined notes
+                    </a>
+                    @include('sticky-notes.predefined-notes.copy-note')
+                </h4>
 
                 <div class="row p-20">
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">

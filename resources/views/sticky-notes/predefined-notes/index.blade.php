@@ -10,6 +10,7 @@
                         <a href="javascript:void(0)" class="btn-primary rounded f-14 p-2 mr-3 float-left mb-3" data-toggle="modal" data-target="#noteAdd">
                             <i class="fa fa-plus mr-1"></i>Add Note
                         </a>
+
                         <table id="PredefinedNoteTable" class="display" style="width:100%">
                             <thead>
                                 <tr>

@@ -72,7 +72,7 @@
                     <x-cards.data-row :label="__('Won Deal')" :value="$stickyNotes->won_deal->project_name" html="true" />
                     @endif
                     @endif
-                    <x-cards.data-row :label="__('You will receive a reminder at')" :value="\Carbon\Carbon::parse($stickyNotes->reminder_at)->format('d-m-Y H:i A')" html="true" />
+                    <x-cards.data-row :label="__('You will receive a reminder at')" :value="\Carbon\Carbon::parse($stickyNotes->reminder_time)->format('d-m-Y H:i A')" html="true" />
                     <x-cards.data-row :label="__('app.note')" :value="$stickyNotes->note_text" html="true" />
                 </div>
             </div>

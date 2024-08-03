@@ -400,7 +400,7 @@ class StickyNoteController extends AccountBaseController
     public function predefinedNote()
     {
         $this->pageTitle = __('predefined Notes');
-        $this->predefinedNotes = PredefinedNote::orderBy('id', 'DESC')->get();
+        $this->predefinedNotes = PredefinedNote::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
         return view('sticky-notes.predefined-notes.index', $this->data);
     }
 
@@ -411,6 +411,7 @@ class StickyNoteController extends AccountBaseController
         ]);
 
         $predefinedNote = new PredefinedNote();
+        $predefinedNote->user_id = Auth::user()->id;
         $predefinedNote->note_text = $request->note_text;
         $predefinedNote->save();
 
@@ -430,6 +431,7 @@ class StickyNoteController extends AccountBaseController
         ]);
 
         $predefinedNote = PredefinedNote::find($request->id);
+        $predefinedNote->user_id = Auth::user()->id;
         $predefinedNote->note_text = $request->note_text;
         $predefinedNote->save();
 
