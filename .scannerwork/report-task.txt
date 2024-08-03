@@ -1,0 +1,6 @@
+projectKey=seopageone
+serverUrl=http://localhost:9000
+serverVersion=10.6.0.92116
+dashboardUrl=http://localhost:9000/dashboard?id=seopageone
+ceTaskId=8955c957-c6c5-4d07-9bee-529664d65537
+ceTaskUrl=http://localhost:9000/api/ce/task?id=8955c957-c6c5-4d07-9bee-529664d65537
