@@ -71,7 +71,7 @@
                             <sup class="f-14 mr-1">*</sup>
                         </label>
                         @php
-                            $reminderTimeDiff = \Carbon\Carbon::parse($stickyNote->reminder_time)->diffInHours(\Carbon\Carbon::parse($stickyNote->created_at));
+                            $reminderTimeDiff = \Carbon\Carbon::parse($stickyNote->reminder_time)->diffInHours(\Carbon\Carbon::parse($stickyNote->updated_at));
                             $stickyNote->reminder_time = $reminderTimeDiff;
                         @endphp
                         <div class="dropdown bootstrap-select form-control select-picker">

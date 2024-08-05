@@ -224,8 +224,13 @@ class StickyNoteController extends AccountBaseController
             $action->past_status = 1;
             $action->save();
 
-            $project = Project::where('id',$sticky->project_id)->first();
             $client = User::where('id',$sticky->client_id)->first();
+            $project = Project::where('id',$sticky->project_id)->first();
+            $task = Task::where('id',$sticky->task_id)->first();
+            $subTask = Task::where('subtask_id',$sticky->sub_task_id)->whereNotNull('subtask_id')->first();
+            $deal = DealStage::where('id',$sticky->deal_id)->first();
+            $won_deal = Deal::where('id',$sticky->won_deal_id)->first();
+            $user = User::where('id',$sticky->user_id)->first();
             
             $past_action= new PendingActionPast();
             $past_action->item_name = $action->item_name;
@@ -233,7 +238,21 @@ class StickyNoteController extends AccountBaseController
             $past_action->serial = $action->serial;
             $past_action->action_id = $action->id;
             $past_action->heading= 'Actions taken on your note!';
-            $past_action->message = 'You set a new expiry time for your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            if(in_array($user->role_id, [1, 4, 8]) && $project != null){
+                $past_action->message = 'You set a new expiry time for your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if($user->role_id == 6 && $task != null){
+                $past_action->message = 'You set a new expiry time for your note for task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [5, 9, 10, 13]) && $subTask != null){
+                $past_action->message = 'You set a new expiry time for your note for subtask <a href="'.route('tasks.show',$subTask->id).'">'.$subTask->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [1, 7, 8]) && $deal != null){
+                $past_action->message = 'You set a new expiry time for your note for deal <a href="'.route('deals.show',$deal->id).'">'.$deal->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [1, 7, 8]) && $won_deal != null){
+                $past_action->message = 'You set a new expiry time for your note for won deal <a href="'.route('deals.show',$won_deal->id).'">'.$won_deal->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
             $past_action->timeframe = $action->timeframe;
             $past_action->authorization_for = $action->authorization_for;
             $past_action->authorized_by = $action->authorized_by;
@@ -365,16 +384,35 @@ class StickyNoteController extends AccountBaseController
             $action->past_status = 1;
             $action->save();
 
-            $project = Project::where('id',$note->project_id)->first();
             $client = User::where('id',$note->client_id)->first();
+            $project = Project::where('id',$note->project_id)->first();
+            $task = Task::where('id',$note->task_id)->first();
+            $subTask = Task::where('subtask_id',$note->sub_task_id)->whereNotNull('subtask_id')->first();
+            $deal = DealStage::where('id',$note->deal_id)->first();
+            $won_deal = Deal::where('id',$note->won_deal_id)->first();
+            $user = User::where('id',$note->user_id)->first();
             
             $past_action= new PendingActionPast();
             $past_action->item_name = $action->item_name;
             $past_action->code = $action->code;
             $past_action->serial = $action->serial;
             $past_action->action_id = $action->id;
-            $past_action->heading= 'Actions taken on your note!';
-            $past_action->message = 'You completed your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            $past_action->heading = 'Actions taken on your note!';
+            if(in_array($user->role_id, [1, 4, 8]) && $project != null){
+                $past_action->message = 'You completed your note for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if($user->role_id == 6 && $task != null){
+                $past_action->message = 'You completed your note for task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [5, 9, 10, 13]) && $subTask != null){
+                $past_action->message = 'You completed your note for subtask <a href="'.route('tasks.show',$subTask->id).'">'.$subTask->heading.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [1, 7, 8]) && $deal != null){
+                $past_action->message = 'You completed your note for deal <a href="'.route('deals.show',$deal->id).'">'.$deal->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
+            if(in_array($user->role_id, [1, 7, 8]) && $won_deal != null){
+                $past_action->message = 'You completed your note for won deal <a href="'.route('deals.show',$won_deal->id).'">'.$won_deal->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+            }
             $past_action->timeframe = $action->timeframe;
             $past_action->authorization_for = $action->authorization_for;
             $past_action->authorized_by = $action->authorized_by;
