@@ -49,8 +49,8 @@ class StickyNoteReminder extends Command
                 $helper->StickyNoteReminder($note->user_id);
 
                 // send notification
-                // $user = User::where('id', $note->user_id)->first();
-                // Notification::send($user, new StickyNoteReminderNotification($sticky_note));
+                $user = User::where('id', $note->user_id)->first();
+                Notification::send($user, new StickyNoteReminderNotification($sticky_note));
             }
         }
         $this->info('Sticky note reminder check successfully');
