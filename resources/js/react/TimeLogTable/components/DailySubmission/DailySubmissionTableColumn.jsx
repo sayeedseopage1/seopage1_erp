@@ -3,6 +3,8 @@ import { convertTime } from "../../../utils/converTime";
 import Popover from "../../../../react-latest/ui/Popover";
 import "../data-table.css";
 import UserRender from "../UserRender";
+import Person from "../../../tasks/components/Person";
+import DailySubmissionType from "./table_components/DailySubmissionType";
 
 export const DailySubmissionTableColumn = [
     {
@@ -22,14 +24,19 @@ export const DailySubmissionTableColumn = [
                     }`}
                     rowSpan={rowSpan}
                 >
-                    <UserRender
+                    <Person
+                        url={`/account/employees/${row?.employee_id}`}
+                        name={row?.employee_name}
+                        avatar={row?.employee_image}
+                    />
+                    {/* <UserRender
                         name={row?.employee_name}
                         profileUrl={`/account/employees/${row?.employee_id}`}
                         image={row?.employee_image}
                         role=""
                         roleLink={""}
                         id={row?.employee_id}
-                    />
+                    /> */}
                 </td>
             );
         },
@@ -53,10 +60,11 @@ export const DailySubmissionTableColumn = [
                 >
                     {row?.report_date
                         ? dayjs(row?.report_date).format(
-                              "DD-MMM-YYYY h:mm:ss A"
+                              "DD-MMM-YYYY"
+                              //   "DD-MMM-YYYY h:mm:ss A"
                           )
                         : dayjs(row?.report_submission_date).format(
-                              "DD-MMM-YYYY h:mm:ss A"
+                              "DD-MMM-YYYY"
                           )}
                 </td>
             );
@@ -72,14 +80,19 @@ export const DailySubmissionTableColumn = [
         cell: ({ row, col, rowSpan, className }) => {
             return (
                 <td className={`${className} sp1_tlr_td_border`}>
-                    <UserRender
+                    <Person
+                        avatar={row?.client_image}
+                        url={`/account/clients/${row?.client_id}`}
+                        name={row?.client_name}
+                    />
+                    {/* <UserRender
                         name={row?.client_name}
                         profileUrl={`/account/clients/${row?.client_id}`}
                         image={row?.client_image}
                         role="Client"
                         roleLink={""}
                         id={row?.client_id}
-                    />
+                    /> */}
                 </td>
             );
         },
@@ -95,15 +108,20 @@ export const DailySubmissionTableColumn = [
             return (
                 <td className={`${className} sp1_tlr_td_border`}>
                     {row?.pm_name ? (
-                        <UserRender
+                        <Person
+                            avatar={row?.pm_image}
+                            url={`/account/employees/${row?.pm_id}`}
                             name={row?.pm_name}
-                            profileUrl={`/account/employees/${row?.pm_id}`}
-                            image={row?.pm_image}
-                            role="Project Manager"
-                            roleLink={""}
-                            id={row?.pm_id}
                         />
                     ) : (
+                        // <UserRender
+                        //     name={row?.pm_name}
+                        //     profileUrl={`/account/employees/${row?.pm_id}`}
+                        //     image={row?.pm_image}
+                        //     role="Project Manager"
+                        //     roleLink={""}
+                        //     id={row?.pm_id}
+                        // />
                         "--"
                     )}
                 </td>
@@ -118,43 +136,29 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return (
-                <td className={`${className} sp1_tlr_td_border`}>
+                <td className={`${className} sp1_tlr_td_ld_border`}>
                     {row?.ld_name ? (
-                        <UserRender
+                        <Person
+                            avatar={row?.ld_image}
+                            url={`/account/employees/${row?.ld_id}`}
                             name={row?.ld_name}
-                            profileUrl={`/account/employees/${row?.ld_id}`}
-                            image={row?.ld_image}
-                            role="Lead Developer"
-                            roleLink={""}
-                            id={row?.ld_id}
                         />
                     ) : (
+                        // <UserRender
+                        //     name={row?.ld_name}
+                        //     profileUrl={`/account/employees/${row?.ld_id}`}
+                        //     image={row?.ld_image}
+                        //     role="Lead Developer"
+                        //     roleLink={""}
+                        //     id={row?.ld_id}
+                        // />
                         "--"
                     )}
                 </td>
             );
         },
     },
-    {
-        id: "project_name",
-        header: "Project",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, col, className, rowSpan }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    <a
-                        className="text-primary font-weight-bold"
-                        href={`/account/projects/${row?.project_id}`}
-                        target="_blank"
-                    >
-                        {row?.project_name}
-                    </a>
-                </td>
-            );
-        },
-    },
+
     {
         id: "task_name",
         header: "Task",
@@ -163,7 +167,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return (
-                <td className={`${className} sp1_tlr_td_border`}>
+                <td className={`${className} sp1_tlr_td_task_border`}>
                     <a
                         className="text-primary font-weight-bold"
                         href={`/account/tasks/${row?.task_id}`}
@@ -176,199 +180,45 @@ export const DailySubmissionTableColumn = [
         },
     },
     {
-        id: "status_name",
-        header: "Status",
+        id: "page_url",
+        header: "Page URL",
         className: "",
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    <span
-                        className="badge"
-                        style={{
-                            backgroundColor: row?.status_color,
-                            color: "white",
-                        }}
-                    >
-                        {row?.status_name}
-                    </span>
-                </td>
-            );
+            return <td className={`${className} sp1_tlr_td_border`}>N/A</td>;
         },
     },
-    {
-        id: "task_type",
-        header: "Task Type",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.task_type ? (
-                        <span>{row?.task_type} </span>
-                    ) : (
-                        <span style={{ color: "gray", color: "red" }}>
-                            Not Applicable
-                        </span>
-                    )}
-                </td>
-            );
-        },
-    },
-    {
-        id: "page_type",
-        header: "Page Type",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.page_type ? (
-                        <span>{row?.page_type} </span>
-                    ) : (
-                        <span style={{ color: "red" }}>Not Applicable</span>
-                    )}
-                </td>
-            );
-        },
-    },
-    {
-        id: "page_link",
-        header: "Page Link",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.page_link ? (
-                        <a
-                            className="text-primary font-weight-bold"
-                            href={row?.page_link}
-                            target="_blank"
-                        >
-                            View Link
-                        </a>
-                    ) : (
-                        <span className="text-danger font-weight-bold">
-                            N/A
-                        </span>
-                    )}
-                </td>
-            );
-        },
-    },
-    {
-        id: "section",
-        header: "Sections",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.section}
-                </td>
-            );
-        },
-    },
-    {
-        id: "comment",
-        header: "Comment",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    <Popover>
-                        <Popover.Button>
-                            <span
-                                className="font-weight-bold singleline-ellipsis"
-                                dangerouslySetInnerHTML={{
-                                    __html: row?.comment,
-                                }}
-                            />
-                        </Popover.Button>
 
-                        <Popover.Panel>
-                            <div
-                                className="revision_popover_panel"
-                                dangerouslySetInnerHTML={{
-                                    __html: row?.comment,
-                                }}
-                            />
-                        </Popover.Panel>
-                    </Popover>
+    {
+        id: "daily_submission_type",
+        header: "Daily Submission Type",
+        className: "",
+        sorted: false,
+        group: false,
+        cell: ({ row, className }) => {
+            const data = row.original;
+            return (
+                <td className={`${className} sp1_tlr_td_border`}>
+                    <DailySubmissionType
+                        data={data}
+                        sectionName={"section building"}
+                    />
                 </td>
             );
         },
     },
+
     {
-        id: "total_time_spent",
-        header: "Total Time Spent",
+        id: "total_time_spend",
+        header: "Total time spend",
         className: "",
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
             return (
                 <td className={`${className} sp1_tlr_td_border`}>
-                    {convertTime(row?.total_time_spent)}
-                </td>
-            );
-        },
-    },
-    {
-        id: "attachments",
-        header: "Screenshots/Screen records of the sections",
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.attachments ? (
-                        <a
-                            className="text-primary font-weight-bold"
-                            href={row?.attachments}
-                            target="_blank"
-                        >
-                            View Link
-                        </a>
-                    ) : (
-                        <span className="text-danger font-weight-bold">
-                            No Attachments
-                        </span>
-                    )}
-                </td>
-            );
-        },
-    },
-    {
-        id: "site_url",
-        header: `Working/Staging Site's URL`,
-        className: "",
-        sorted: false,
-        group: false,
-        cell: ({ row, className }) => {
-            return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.site_url ? (
-                        <a
-                            className="text-primary font-weight-bold"
-                            href={row?.site_url}
-                            target="_blank"
-                        >
-                            View Link
-                        </a>
-                    ) : (
-                        <span className="text-danger font-weight-bold">
-                            N/A
-                        </span>
-                    )}
+                    3 Hours 30 Minutes
                 </td>
             );
         },
@@ -381,16 +231,11 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.frontend_password || (
-                        <span className="text-danger font-weight-bold">
-                            Not Provided
-                        </span>
-                    )}
-                </td>
+                <td className={`${className} sp1_tlr_td_border`}>12345678</td>
             );
         },
     },
+
     {
         id: "report_submission_date",
         header: "Report Submission Date",
@@ -399,12 +244,233 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {dayjs(row?.report_submission_date).format(
-                        "DD-MMM-YYYY h:mm:ss A"
-                    )}
-                </td>
+                <td className={`${className} sp1_tlr_td_border`}>01-01-2024</td>
             );
         },
     },
+    {
+        id: "task_status",
+        header: "Task Status",
+        className: "",
+        sorted: false,
+        group: false,
+        cell: ({ row, className }) => {
+            return <td className={`${className} sp1_tlr_td_border`}>To Do</td>;
+        },
+    },
 ];
+
+// {
+//     id: "page_link",
+//     header: "Page Link",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {row?.page_link ? (
+//                     <a
+//                         className="text-primary font-weight-bold"
+//                         href={row?.page_link}
+//                         target="_blank"
+//                     >
+//                         View Link
+//                     </a>
+//                 ) : (
+//                     <span className="text-danger font-weight-bold">
+//                         N/A
+//                     </span>
+//                 )}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "section",
+//     header: "Sections",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {row?.section}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "comment",
+//     header: "Comment",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 <Popover>
+//                     <Popover.Button>
+//                         <span
+//                             className="font-weight-bold singleline-ellipsis"
+//                             dangerouslySetInnerHTML={{
+//                                 __html: row?.comment,
+//                             }}
+//                         />
+//                     </Popover.Button>
+
+//                     <Popover.Panel>
+//                         <div
+//                             className="revision_popover_panel"
+//                             dangerouslySetInnerHTML={{
+//                                 __html: row?.comment,
+//                             }}
+//                         />
+//                     </Popover.Panel>
+//                 </Popover>
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "total_time_spent",
+//     header: "Total Time Spent",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {convertTime(row?.total_time_spent)}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "attachments",
+//     header: "Screenshots/Screen records of the sections",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {row?.attachments ? (
+//                     <a
+//                         className="text-primary font-weight-bold"
+//                         href={row?.attachments}
+//                         target="_blank"
+//                     >
+//                         View Link
+//                     </a>
+//                 ) : (
+//                     <span className="text-danger font-weight-bold">
+//                         No Attachments
+//                     </span>
+//                 )}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "site_url",
+//     header: `Working/Staging Site's URL`,
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {row?.site_url ? (
+//                     <a
+//                         className="text-primary font-weight-bold"
+//                         href={row?.site_url}
+//                         target="_blank"
+//                     >
+//                         View Link
+//                     </a>
+//                 ) : (
+//                     <span className="text-danger font-weight-bold">
+//                         N/A
+//                     </span>
+//                 )}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "frontend_password",
+//     header: "Frontend Password",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {row?.frontend_password || (
+//                     <span className="text-danger font-weight-bold">
+//                         Not Provided
+//                     </span>
+//                 )}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "report_submission_date",
+//     header: "Report Submission Date",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 {dayjs(row?.report_submission_date).format(
+//                     "DD-MMM-YYYY h:mm:ss A"
+//                 )}
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "project_name",
+//     header: "Project",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, col, className, rowSpan }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 <a
+//                     className="text-primary font-weight-bold"
+//                     href={`/account/projects/${row?.project_id}`}
+//                     target="_blank"
+//                 >
+//                     {row?.project_name}
+//                 </a>
+//             </td>
+//         );
+//     },
+// },
+// {
+//     id: "status_name",
+//     header: "Status",
+//     className: "",
+//     sorted: false,
+//     group: false,
+//     cell: ({ row, className }) => {
+//         return (
+//             <td className={`${className} sp1_tlr_td_border`}>
+//                 <span
+//                     className="badge"
+//                     style={{
+//                         backgroundColor: row?.status_color,
+//                         color: "white",
+//                     }}
+//                 >
+//                     {row?.status_name}
+//                 </span>
+//             </td>
+//         );
+//     },
+// },

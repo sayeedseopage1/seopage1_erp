@@ -14,7 +14,7 @@ import "../components/data-table.css";
 import "../styles/time-log-history.css";
 import "../styles/time-log-table.css";
 import { ExportToExcel } from "../components/ExportToExcel";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from "../../hooks/useAuth";
 import Switch from "../../global/Switch";
 import DailySubmissionTableExportToExcel from "../export/excel/DailySubmissionTableExporttoExcel";
 
@@ -41,6 +41,8 @@ const DailySubmission_Page = () => {
         );
         setRenderData([...sorted]);
     };
+
+    console.log("renderData", renderData);
 
     // handle fetch data
     const handleFetchData = async (filter) => {
@@ -98,9 +100,6 @@ const DailySubmission_Page = () => {
         handleFetchData(filter);
     };
 
-    console.log({data})
- 
-
     return (
         <div className="sp1_tlr_container">
             <DailySubmissionTableFilter onFilter={handleFetchData} />
@@ -152,7 +151,7 @@ const DailySubmission_Page = () => {
                     columns={DailySubmissionTableColumn}
                     tableName="daily_submission_wise_table"
                     onSort={handleSorting}
-                    height="calc(100vh - 370px)"
+                    height="calc(100vh - 300px)"
                     onPaginate={handlePagination}
                     perpageData={perPageData}
                     handlePerPageData={handlePerPageData}

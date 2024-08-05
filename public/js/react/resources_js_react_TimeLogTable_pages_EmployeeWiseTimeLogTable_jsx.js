@@ -1571,7 +1571,7 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
   // handle data
   var handleData = function handleData(data, currentPage, perPageData) {
     var paginated = (0,_utils_paginate__WEBPACK_IMPORTED_MODULE_5__.paginate)(data, currentPage, perPageData);
-    var grouped = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.groupBy)(paginated, 'employee_id');
+    var grouped = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.groupBy)(paginated, "employee_id");
     var sorted = Object.entries(grouped).sort(function (_ref, _ref2) {
       var _ref3 = _slicedToArray(_ref, 1),
         keyA = _ref3[0];
@@ -1648,7 +1648,7 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_9__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
           className: "d-flex align-items-center",
           style: {
-            gap: '10px'
+            gap: "10px"
           },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_components_RefreshButton__WEBPACK_IMPORTED_MODULE_8__.RefreshButton, {
             onClick: handleRefresh,
@@ -1656,7 +1656,7 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
             children: isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Loader__WEBPACK_IMPORTED_MODULE_2__["default"], {
               title: "Refreshing...",
               borderRightColor: "white"
-            }) : 'Refresh'
+            }) : "Refresh"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_15__["default"], {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_15__["default"].Case, {
               condition: auth.getRoleId() === 1,
@@ -1676,7 +1676,7 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
         className: " w-100 d-flex flex-wrap justify-center align-items-center",
         style: {
-          gap: '10px'
+          gap: "10px"
         },
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("span", {
           className: "mx-auto",
@@ -1688,7 +1688,7 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
             className: "mx-2",
             children: "||"
           }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("span", {
-            children: ["Total Tracked Time: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
+            children: ["Total Tracked Time:", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
               children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_4__.convertTime)(trackedTime)
             })]
           })]
