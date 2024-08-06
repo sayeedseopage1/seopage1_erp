@@ -36,7 +36,6 @@ class StickyNoteReminder extends Command
     {
         // DB::beginTransaction();
         $notes = StickyNote::whereNotNull('reminder_time')->where('pending_action_status', '0')->where('status', 'Live')->get();
-        // dd($notes);
         foreach ($notes as $note) {
             $currect_time = Carbon::now();
             if($note->reminder_time <= $currect_time) {
