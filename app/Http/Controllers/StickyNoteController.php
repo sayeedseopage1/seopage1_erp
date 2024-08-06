@@ -42,6 +42,8 @@ class StickyNoteController extends AccountBaseController
                                     ->orderBy('updated_at', 'desc')
                                     ->get();
 
+        $this->view = 'sticky-notes.ajax.notes';
+
         return view('sticky-notes.index', $this->data);
     }
 
