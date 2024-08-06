@@ -185,35 +185,47 @@ class EmployeeController extends AccountBaseController
 
         /**EVALUATION START */
         if($request->role == 14){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->save();
+            }
         }
         if($request->role == 15){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->user_status = 'PM';
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->user_status = 'PM';
+                $employee_evaluation->save();
+            }
         }
         if($request->role == 16){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->user_status = 'LD';
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->user_status = 'LD';
+                $employee_evaluation->save();
+            }
         }
         if($request->role == 17){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->user_status = 'SE';
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->user_status = 'SE';
+                $employee_evaluation->save();
+            }
         }
         /**EVALUATION END */
 

@@ -42,8 +42,10 @@ const IndependentTaskId = ({ data }) => {
     const auth = _.includes([1, 8], user.getRoleId());
 
     const HAS_QUESTION = !auth && _.size(notAnswered);
-    console.log({data: conversationData?.data})
-    const HAS_UPDATE = _.size(_.filter(conversationData?.data, c => c.has_update));
+    console.log({ data: conversationData?.data });
+    const HAS_UPDATE = _.size(
+        _.filter(conversationData?.data, (c) => c.has_update)
+    );
 
     return (
         <React.Fragment>
@@ -53,32 +55,29 @@ const IndependentTaskId = ({ data }) => {
                 style={{ gap: "10px", width: "fit-content" }}
             >
                 <a
-                    href={`/account/tasks/${data?.u_id}`}
+                    href={`/account/tasks/${data?.task_id}`}
                     className="hover-underline multine-ellipsis"
                 >
                     {data?.u_id}
                 </a>
             </div>
 
-
             {/* popper ref */}
-            {
-               (HAS_QUESTION || HAS_UPDATE) ?
-               <PopperElement
+            {HAS_QUESTION || HAS_UPDATE ? (
+                <PopperElement
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
                 >
                     <ToolTip>
-                        {HAS_QUESTION ? `${HAS_QUESTION} Questions`: ''}
-                        {HAS_UPDATE ? `Has Update`: ''}
+                        {HAS_QUESTION ? `${HAS_QUESTION} Questions` : ""}
+                        {HAS_UPDATE ? `Has Update` : ""}
                     </ToolTip>
 
                     <Arrow ref={setArrowRef} style={styles.arrow} />
                 </PopperElement>
-                : null
-            }
-       </React.Fragment>
+            ) : null}
+        </React.Fragment>
     );
 };
 

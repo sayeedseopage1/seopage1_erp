@@ -881,7 +881,9 @@ const SingleIndependentTask = () => {
                                                 }}
                                             >
                                                 {_.map(
-                                                    task?.revisions,
+                                                    _.reverse([
+                                                        ...task?.revisions,
+                                                    ]),
                                                     (revision, index) => (
                                                         <RevisionText
                                                             key={revision?.id}

@@ -7,12 +7,17 @@ import {
 } from "../../../../../../../../global/styled-component/Form";
 import DurationTime from "./DurationTimer";
 import TaskList from "./TaskList";
-
+import extractTime from "../../../../../../../../utils/extractTime";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import Swal from "sweetalert2";
 const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [task, setTask] = React.useState(null);
     const [durations, setDurations] = React.useState([
-        { start: "00:00 AM", end: "00:00 AM", id: "de2sew" },
+        { start: "", end: "", id: "de2sew" },
     ]);
+
     const [error, setError] = React.useState(null);
     const uniqueId = Math.random().toString(6).slice(2);
 
@@ -22,7 +27,7 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         let filtered = durations.filter((d) => d.id !== id);
         setDurations([...filtered]);
     };
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
 
     // add duration
     const addDurationForm = () => {
@@ -30,8 +35,8 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             ...prev,
             {
                 id: uniqueId,
-                start: "00:00 AM",
-                end: "00:00 AM",
+                start: "",
+                end: "",
             },
         ]);
     };
@@ -40,14 +45,14 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         let errCount = 0;
         let err = new Object();
 
-        if(!task){
+        if (!task) {
             err.task = "Select the task you forgot to track hours!";
             errCount++;
         }
 
         setError(err);
         return !errCount;
-    }
+    };
 
     // handle form submit
     const handleSubmission = (e, submissionType) => {
@@ -59,18 +64,18 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             durations: JSON.stringify(durations),
         };
 
-        setSType(submissionType)
-        if (isValid()){
-            onSubmit(data, submissionType, onBack);
-        }else{
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
                 title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
 
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack, durations, setDurations);
     };
 
     return (
@@ -101,7 +106,7 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 </Label>
                                 <TaskList task={task} onSelect={setTask} />
                                 <Switch.Case condition={error?.task}>
-                                    <div style={{color: 'red'}}>
+                                    <div style={{ color: "red" }}>
                                         {error?.task}
                                     </div>
                                 </Switch.Case>
@@ -156,26 +161,41 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) => {
+                                        handleSubmission(e, "CONTINUE");
+                                    }}
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

@@ -14,9 +14,7 @@ export const authorizationColumns = (refreshing) => {
             accessorFn: (row) => `${row.u_id}}`,
             cell: ({ row }) => {
                 const data = row?.original;
-                return (
-                   <IndependentTaskId data={data} />
-                );
+                return <IndependentTaskId data={data} />;
             },
         },
 
@@ -36,10 +34,12 @@ export const authorizationColumns = (refreshing) => {
                             style={{ gap: "10px" }}
                         >
                             <a
-                                href="#"
+                                href={`/account/tasks/${data?.task_id}`}
                                 className="hover-underline multine-ellipsis"
                             >
-                                {data?.heading}
+                                <span style={{ color: "#3366CC" }}>
+                                    {data?.heading} {data?.id}
+                                </span>
                             </a>
                         </div>
                     </abbr>
@@ -166,4 +166,3 @@ export const authorizationColumns = (refreshing) => {
         },
     ];
 };
-

@@ -8,7 +8,7 @@
     $createPublicProjectPermission = user()->permission('create_public_project');
 
 @endphp
-<style media="screen">
+<style>
     .rating {
         float:left;
         display:flex;
@@ -17,9 +17,6 @@
         margin-right:auto;
     }
 
-    /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
-      follow these rules. Every browser that supports :checked also supports :not(), so
-      it doesn’t make the test unnecessarily selective */
     .rating:not(:checked) > input {
         position:absolute;
         top:-9999px;
@@ -29,29 +26,24 @@
     .rating:not(:checked) > label {
         float:left;
         width:1em;
-        /* padding:0 .1em; */
         overflow:hidden;
         white-space:nowrap;
         cursor:pointer;
         font-size:300%;
-        /* line-height:1.2; */
         color:#ddd;
     }
 
     .rating:not(:checked) > label:before{
         content: '★ ';
-
     }
 
     .rating > input:checked ~ label {
         color: orange;
-
     }
 
     .rating:not(:checked) > label:hover,
     .rating:not(:checked) > label:hover ~ label{
         color: orange;
-
     }
 
     .rating > input:checked + label:hover,
@@ -59,10 +51,8 @@
     .rating > input:checked ~ label:hover,
     .rating > input:checked ~ label:hover ~ label,
     .rating > label:hover ~ input:checked ~ label
-
     {
         color: orange;
-
     }
 
     .rating > label:active {
@@ -70,21 +60,10 @@
         top:2px;
         left:2px;
     }
-    /* .rating:not(:checked) > label {
-      float: left;
-      width: 55px;
 
-      overflow: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-      font-size: 5em;
-      line-height: 1.2;
-      color: #ddd;
-  } */
     .rating:not(:checked) > label {
         float: left;
         width: 30px;
-        /* padding: 0 .1em; */
         overflow: hidden;
         white-space: nowrap;
         cursor: pointer;
@@ -92,7 +71,6 @@
         line-height: 1.2;
         color: #ddd;
     }
-
 </style>
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
@@ -1303,6 +1281,18 @@
         function changeUrl() {
             alert('sadf');
         }
+
+        document.querySelectorAll('.rating > label').forEach(label => {
+        label.addEventListener('click', function(event) {
+            event.preventDefault();
+            const input = document.getElementById(label.htmlFor);
+            if (input) {
+                input.checked = true;
+                // Trigger any change event if needed
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+    });
     </script>
 
 
