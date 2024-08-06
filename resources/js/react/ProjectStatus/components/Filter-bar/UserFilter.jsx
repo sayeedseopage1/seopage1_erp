@@ -29,8 +29,7 @@ const UserFilter = ({
     const name = _.size(state?.name) > 16 ? `${state?.name?.slice(0, 16)}...` : state?.name
 
 
-    console.log(state?.name)
-    console.log(name)
+ 
     return (
         <div className={`sp1_task_filter_item d-flex ${sidebarOpen && "flex-column"}`}>
                 <span className='mr-2 f-13 d-flex flex-nowrap'>{title} :</span>

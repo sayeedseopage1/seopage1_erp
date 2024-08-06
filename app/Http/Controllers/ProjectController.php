@@ -118,6 +118,7 @@ use App\Models\BlogArticle;
 use App\Models\DeliverableReAuthorization;
 use App\Models\PmBasicSeo;
 use App\Models\PmBlogArticle;
+use App\Models\PmGoalExpHistory;
 use App\Models\PmGoalSetting;
 use App\Models\PmProductCategory;
 use App\Models\PmProductDescription;
@@ -196,13 +197,16 @@ class ProjectController extends AccountBaseController
 
         /** PROJECT MANAGER GOAL FUNCTION START */
         if (Auth::user()->role_id == 4) {
-            $pm_goal = ProjectPmGoal::all();
+            $pm_goal = ProjectPmGoal::where('goal_status', '0')->get();
             if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
                 foreach ($pm_goal as $item) {
                     $current_date = now();
                     $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
-                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
-                        return view('projects.ajax.goale_alert', $this->data);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date)) {
+                        if(PmGoalExpHistory::where('goal_id', $item->id)->count() < 1)
+                        {
+                            return view('projects.ajax.goale_alert', $this->data);
+                        }
                     }
                 }
             }
@@ -2274,18 +2278,23 @@ class ProjectController extends AccountBaseController
 
         // abort_403(user()->permission('view_projects') == 'added' && $this->project->added_by != user()->id);
 
+        /** PROJECT MANAGER GOAL FUNCTION START */
         if (Auth::user()->role_id == 4) {
-            $pm_goal = ProjectPmGoal::all();
+            $pm_goal = ProjectPmGoal::where('goal_status', '0')->get();
             if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
                 foreach ($pm_goal as $item) {
                     $current_date = now();
                     $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
-                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
-                        return view('projects.ajax.goale_alert', $this->data);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date)) {
+                        if(PmGoalExpHistory::where('goal_id', $item->id)->count() < 1)
+                        {
+                            return view('projects.ajax.goale_alert', $this->data);
+                        }
                     }
                 }
             }
         }
+        /** PROJECT MANAGER GOAL FUNCTION END */
 
         return view('projects.show', $this->data);
     }
