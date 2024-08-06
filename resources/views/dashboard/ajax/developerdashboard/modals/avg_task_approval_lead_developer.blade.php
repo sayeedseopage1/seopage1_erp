@@ -55,8 +55,13 @@
                                     {{ $row->firstTaskSubmission->created_at }}
                                 </td>
                                 <td
-                                    title="@foreach ($row->historyForReviews as $history)({{ ++$loop->index }}): {{ $history->created_at }}&#xA; @endforeach">
-                                    ({{ $row->history_for_reviews_count }})
+                                    title="@foreach ((array_key_exists($row->id, $approved_attempted_multiple_times_task_id_wise) ? $approved_attempted_multiple_times_task_id_wise[$row->id] : []) as $history)({{ ++$loop->index }}): {{ $history }}&#xA; @endforeach">
+                                    @if (array_key_exists($row->id, $approved_attempted_multiple_times_task_id_wise))
+                                        ({{ count($approved_attempted_multiple_times_task_id_wise[$row->id]) }})
+                                    @else
+                                        (1)
+                                    @endif
+
                                 </td>
                             </tr>
                         @endforeach
