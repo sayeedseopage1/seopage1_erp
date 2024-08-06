@@ -518,7 +518,6 @@
                                             data-target="#avg_task_approval_lead_developer{{ count($avg_no_of_submission_needed_for_app_by_lead_dev) }}">
                                             {{ round($average_submission_approval_in_this_month, 2) }}
                                         </a>
-
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_lead_developer')
 

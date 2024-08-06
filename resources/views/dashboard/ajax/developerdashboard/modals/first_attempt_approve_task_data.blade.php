@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="first_attempt_approve_task{{ $first_attempt_approve_task_in_this_month_count }}" class="modal fade"
-    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="first_attempt_approve_task{{ $first_attempt_approve_task_in_this_month_count }}" class="modal fade" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
