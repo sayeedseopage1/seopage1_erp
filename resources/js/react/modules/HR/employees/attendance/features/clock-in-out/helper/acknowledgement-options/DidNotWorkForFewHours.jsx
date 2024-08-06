@@ -4,11 +4,17 @@ import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
 import { Flex } from "../../../../../../../../global/styled-component/Flex";
 import DurationTime from "./DurationTimer";
-
+import dayjs from "dayjs";
+import extractTime from "../../../../../../../../utils/extractTime";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
 /**
  * * This component responsible for rendering working report details explanation form
  */
 const DidNotWorkForFewHours = ({
+    trackedTimeHistory,
+    lastClockData,
     checked,
     index,
     onChange,
@@ -20,13 +26,13 @@ const DidNotWorkForFewHours = ({
 }) => {
     const [comment, setComment] = React.useState("");
     const [durations, setDurations] = React.useState([
-        { start: "00:00AM", end: "00:00AM", id: "dwedj" },
+        { start: "", end: "", id: "dwedj" },
     ]);
     const [error, setError] = React.useState(null);
 
     // generate random id
     const uniqueId = Math.random().toString(6).slice(2);
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
     // remove duration
     const onRemove = (e, id) => {
         e.preventDefault();
@@ -40,8 +46,8 @@ const DidNotWorkForFewHours = ({
             ...prev,
             {
                 id: uniqueId,
-                start: "00:00 AM",
-                end: "00:00 AM",
+                start: "",
+                end: "",
             },
         ]);
     };
@@ -76,17 +82,18 @@ const DidNotWorkForFewHours = ({
             comment,
         };
 
-        setSType(submissionType);
-        if (isValid()) {
-            onSubmit(data, submissionType, onBack);
-        } else {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please complete all required fields.",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack, durations, setDurations);
     };
 
     return (
@@ -167,26 +174,41 @@ const DidNotWorkForFewHours = ({
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) => {
+                                        handleSubmission(e, "CONTINUE");
+                                    }}
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

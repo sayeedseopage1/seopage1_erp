@@ -36,6 +36,7 @@ import { convertTime } from "../utils/converTime";
 import axios from "axios";
 import { useGetTaskForTotalTimeQuery } from "../services/api/tasksApiSlice";
 import SingleTaskPerson from "../tasks/components/SingleTaskPerson";
+import PersonAvatar from "../global/PersonAvatar";
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
     const { throwError } = useErrorHandler();
@@ -46,16 +47,20 @@ const SingleTaskPage = () => {
         { refetchOnMountOrArgChange: true, skip: !params?.taskId }
     );
 
-    const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId, { skip: !params?.taskId });
+    const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId, {
+        skip: !params?.taskId,
+    });
 
     const task = new SingleTask(Task); // task instance
+
+    console.log("single task revision log", task);
     const loggedUser = new User(window?.Laravel?.user); // logged users data
     const [taskForTimeLog, setTaskForTimeLog] = React.useState({});
     const [totalTime, setTotalTime] = React.useState("");
     const taskId = task?.id;
 
     const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId, {
-        skip: !taskId
+        skip: !taskId,
     });
     useEffect(() => {
         setTaskForTimeLog(taskForTime);
@@ -114,7 +119,6 @@ const SingleTaskPage = () => {
         }
     }, [taskForTimeLog]);
 
-
     useEffect(() => {
         (() => {
             if (data) {
@@ -145,7 +149,6 @@ const SingleTaskPage = () => {
     const _taskStatus = new BoardColumn(taskStatus);
 
     if (!task) return null;
-
 
     return (
         <div className="position-relative">
@@ -242,9 +245,13 @@ const SingleTaskPage = () => {
                                                 Project Manager:{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                <SingleTaskPerson
-                                                    avatar={task?.projectManagerAvatar}
-                                                    name={task?.projectManagerName}
+                                                <PersonAvatar
+                                                    avatar={
+                                                        task?.projectManagerAvatar
+                                                    }
+                                                    name={
+                                                        task?.projectManagerName
+                                                    }
                                                 />
                                                 <div className="ml-2">
                                                     <span
@@ -264,18 +271,18 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                                <sup
-                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "10px",
-                                                                        whiteSpace:
-                                                                            "nowrap",
-                                                                    }}
-                                                                >
-                                                                    It's You
-                                                                </sup>
-                                                            )}
+                                                            <sup
+                                                                className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "10px",
+                                                                    whiteSpace:
+                                                                        "nowrap",
+                                                                }}
+                                                            >
+                                                                It's You
+                                                            </sup>
+                                                        )}
                                                     </span>
 
                                                     <span
@@ -307,9 +314,13 @@ const SingleTaskPage = () => {
                                                 Assigned To :{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                <SingleTaskPerson
-                                                    avatar={task?.assigneeTo?.image}
-                                                    name={task?.assigneeTo?.name}
+                                                <PersonAvatar
+                                                    avatar={
+                                                        task?.assigneeTo?.image
+                                                    }
+                                                    name={
+                                                        task?.assigneeTo?.name
+                                                    }
                                                 />
                                                 <div className="ml-2">
                                                     <span
@@ -327,18 +338,18 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                                <sup
-                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "10px",
-                                                                        whiteSpace:
-                                                                            "nowrap",
-                                                                    }}
-                                                                >
-                                                                    It's You
-                                                                </sup>
-                                                            )}
+                                                            <sup
+                                                                className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "10px",
+                                                                    whiteSpace:
+                                                                        "nowrap",
+                                                                }}
+                                                            >
+                                                                It's You
+                                                            </sup>
+                                                        )}
                                                     </span>
 
                                                     <span
@@ -358,9 +369,13 @@ const SingleTaskPage = () => {
                                                 Assigned by:{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                <SingleTaskPerson
-                                                    avatar={task?.assigneeBy?.image}
-                                                    name={task?.assigneeBy?.name}
+                                                <PersonAvatar
+                                                    avatar={
+                                                        task?.assigneeBy?.image
+                                                    }
+                                                    name={
+                                                        task?.assigneeBy?.name
+                                                    }
                                                 />
                                                 <div className="ml-2">
                                                     <span
@@ -378,16 +393,16 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                                <sup
-                                                                    className="rounded-pill bg-dark text-white px-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "10px",
-                                                                    }}
-                                                                >
-                                                                    It's You
-                                                                </sup>
-                                                            )}
+                                                            <sup
+                                                                className="rounded-pill bg-dark text-white px-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "10px",
+                                                                }}
+                                                            >
+                                                                It's You
+                                                            </sup>
+                                                        )}
                                                     </span>
 
                                                     <span
@@ -799,9 +814,35 @@ const SingleTaskPage = () => {
                                             text={task?.guidelines}
                                             task={task}
                                             workEnv={task?.workEnvData}
-                                        // singleTask={Task}
+                                            // singleTask={Task}
                                         />
                                     </Accordion>
+
+                                    {/* {_.size(task?.revisions) > 0 && (
+                                        <Accordion
+                                            title={
+                                                _.last(task?.revisions)
+                                                    ?.revisionStatus
+                                            }
+                                            headingClass="d-flex align-items-center justify-content-between"
+                                            headingStyle={{
+                                                background: "rgba(227,62,79,1)",
+                                                color: "#fff",
+                                            }}
+                                        >
+                                           
+                                            {_.map(
+                                                task?.revisions,
+                                                (revision, index) => (
+                                                    <RevisionText
+                                                        key={revision?.id}
+                                                        index={index + 1}
+                                                        revision={revision}
+                                                    />
+                                                )
+                                            )}
+                                        </Accordion>
+                                    )} */}
 
                                     {_.size(task?.revisions) > 0 && (
                                         <Accordion
@@ -815,19 +856,8 @@ const SingleTaskPage = () => {
                                                 color: "#fff",
                                             }}
                                         >
-                                            {/* { _.map(task?.revisions, (revision, index) => (
-                                             <RevisionText
-                                                    key={revision?.id}
-                                                    index={index + 1}
-                                                    date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
-                                                    time={dayjs(revision.createdAt).format('hh:mm a')}
-                                                    text={revision?.comment || revision?.devComment || revision?.pmComment}
-                                                    revision={revision}
-                                                />
-                                            ))
-                                        } */}
                                             {_.map(
-                                                task?.revisions,
+                                                _.reverse([...task?.revisions]), // Clone and reverse the array
                                                 (revision, index) => (
                                                     <RevisionText
                                                         key={revision?.id}
@@ -844,7 +874,6 @@ const SingleTaskPage = () => {
                                         title="Task Descriptions"
                                         className="sp1_single_page_task--description"
                                     >
-
                                         <Guideline
                                             text={task?.description}
                                             task={task}
@@ -853,7 +882,9 @@ const SingleTaskPage = () => {
                                         />
                                         {_.size(task?.attachments) > 0 ? (
                                             <div className="mt-3">
-                                                <h6 className="mb-2">Task Attachments:</h6>
+                                                <h6 className="mb-2">
+                                                    Task Attachments:
+                                                </h6>
                                                 <FileUploader>
                                                     {_.map(
                                                         task?.attachments,
@@ -972,7 +1003,7 @@ const SingleTaskPage = () => {
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
-                                    {convertTime(task?.revisionLogMin)}
+                                    {`${task?.revisionLogHour} hrs ${task?.revisionLogMin} mins`}
                                 </div>
                             </div>
 
@@ -1048,7 +1079,7 @@ const ShowEditModals = ({ auth, task, singleTask }) => {
 
     if (hasAccess) {
         if (task.isSubtask) {
-            // TODO: need to work here 
+            // TODO: need to work here
             return <SubTaskEditModal task={task} singleTask={singleTask} />;
         } else {
             return <TaskEditForm task={task} singleTask={singleTask} />;

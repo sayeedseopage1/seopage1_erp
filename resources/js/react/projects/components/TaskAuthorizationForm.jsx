@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styles from "./taskAuthorization.module.css";
 import Button from "../../global/Button";
 import Modal from "../../global/Modal";
@@ -339,18 +340,20 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                     Has Question
                                                     </div>
                                                     <div className={styles.task_info__text}>
-                                                    <label>
+                                                    <label >
                                                             <input
                                                                 onChange={e => setHasQuestion(true)}
                                                                 value={true}
                                                                 type="radio"
+                                                               
                                                                 name="has_question"
                                                             /> Yes
                                                         </label>
-                                                    <label>
+                                                    <label >
                                                             <input
                                                                 onChange={e => setHasQuestion(false)}
                                                                 value={false}
+                                                                
                                                                 type="radio"
                                                                 defaultChecked={true}
                                                                 name="has_question"
@@ -371,11 +374,12 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                     :
                                                     <>
                                                     <div className={styles.comment_field}>
-                                                        <label className="task_info__label">
+                                                        <label htmlFor="comment" className="task_info__label">
                                                             Comment:
                                                         </label>
                                                         <Textarea
                                                             rows={6}
+                                                            id="comment"
                                                             value={comment}
                                                             onChange={(e) =>
                                                                 setComment(e.target.value)
@@ -434,3 +438,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
 };
 
 export default TaskAuthorizationForm;
+
+TaskAuthorizationForm.propTypes = {
+    data: PropTypes.object,
+    table: PropTypes.object,
+}

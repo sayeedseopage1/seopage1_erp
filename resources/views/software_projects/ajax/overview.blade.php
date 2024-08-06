@@ -1,7 +1,7 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery/gauge.js') }}"></script>
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+<link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
 
 @php $editProjectPermission = user()->permission('edit_projects'); $addPaymentPermission = user()->permission('add_payments'); $projectBudgetPermission = user()->permission('view_project_budget'); $memberIds =
 $project->members->pluck('user_id')->toArray(); @endphp

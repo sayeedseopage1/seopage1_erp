@@ -1,7 +1,7 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery/gauge.js') }}"></script>
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+<link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
 
 @php $editProjectPermission = user()->permission('edit_projects'); $addPaymentPermission = user()->permission('add_payments'); $projectBudgetPermission = user()->permission('view_project_budget'); $memberIds =
 $project->members->pluck('user_id')->toArray(); @endphp
@@ -218,8 +218,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
             @if($project_qc != null && $project_qc->status == 'pending')
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
-
-
                     <button class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded" id="project-qc-form"  aria-haspopup="true" aria-expanded="false">
                     @lang('Project QC Form')
                   </button>
