@@ -35,16 +35,12 @@ class StickyNoteController extends AccountBaseController
 
     public function index()
     {
-        $this->stickyNotes = StickyNote::where('user_id', user()->id)->orderBy('updated_at', 'desc')->get();
+        $status = request()->get('status', 'Live'); // Default to 'Live' if no status is provided
 
-        // if (request()->ajax()) {
-        //     dd(request()->ajax());
-        //     $this->pageTitle = __('app.menu.stickyNotes');
-        //     $html = view('sticky-notes.ajax.notes', $this->data)->render();
-        //     return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
-        // }
-
-        $this->view = 'sticky-notes.ajax.notes';
+        $this->stickyNotes = StickyNote::where('user_id', user()->id)
+                                    ->where('status', $status)
+                                    ->orderBy('updated_at', 'desc')
+                                    ->get();
 
         return view('sticky-notes.index', $this->data);
     }
