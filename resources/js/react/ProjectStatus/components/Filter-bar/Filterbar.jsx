@@ -86,6 +86,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         }
     }, []);
 
+
+    console.log(pm)
+
     return (
         <div className="sp1_task_filter_bar">
             <JqueryDateRangePicker

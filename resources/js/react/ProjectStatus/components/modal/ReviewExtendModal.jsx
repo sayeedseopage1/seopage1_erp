@@ -16,7 +16,6 @@ import {
 } from "../../../utils/stateValidation";
 
 import "../styles/reviewExtendModal.css";
-import { over } from "lodash";
 import Switch from "../Switch";
 import { Placeholder } from "../../../global/Placeholder";
 
@@ -30,7 +29,7 @@ const ReviewExtendRequestModal = ({
     projectExtendImages,
 }) => {
     const [reviewExtendState, setReviewExtendState] = useState({
-        extended_day: reviewExtendRequestData?.extended_day,
+        extended_day: goalDeadlineExtendDetails?.data?.extended_day,
         comment: "",
         goal_id: reviewExtendRequestData?.id,
         goal_extension_auth_checkbox: "",
@@ -56,6 +55,19 @@ const ReviewExtendRequestModal = ({
         skip: !reviewExtendRequestData?.goal_id,
     });
 
+    const isGoalDetailsLoading =
+        isLoadingGoalDeadlineExtendDetails ||
+        isFetchingGoalDeadlineExtendDetails;
+
+    useEffect(() => {
+        if (goalDeadlineExtendDetails?.data && !isGoalDetailsLoading) {
+            setReviewExtendState({
+                ...reviewExtendState,
+                extended_day: goalDeadlineExtendDetails?.data?.extended_day,
+            });
+        }
+    }, [goalDeadlineExtendDetails?.data, isGoalDetailsLoading]);
+
     // Get image data
     const imageData = projectExtendImages?.data;
 
@@ -73,8 +85,6 @@ const ReviewExtendRequestModal = ({
             goal_extension_auth_checkbox: false,
         });
     };
-
-    console.log(goalDeadlineExtendDetails);
 
     // Accept request
     const handleAccept = async (e) => {
@@ -195,7 +205,7 @@ const ReviewExtendRequestModal = ({
     // set review extend state
     useEffect(() => {
         setReviewExtendState({
-            extended_day: reviewExtendRequestData?.extended_day,
+            extended_day: goalDeadlineExtendDetails?.data?.extended_day,
             comment: "",
             goal_id: reviewExtendRequestData?.id,
             goal_extension_auth_checkbox: "",
@@ -304,8 +314,7 @@ const ReviewExtendRequestModal = ({
                                     <input
                                         className="p-1 rounded"
                                         defaultValue={
-                                            goalDeadlineExtendDetails?.data
-                                                ?.extended_day
+                                            reviewExtendState?.extended_day
                                         }
                                         placeholder="Enter extended days"
                                         type="number"
