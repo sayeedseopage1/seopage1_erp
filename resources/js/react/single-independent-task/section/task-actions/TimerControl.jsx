@@ -26,11 +26,18 @@ import Swal from "sweetalert2";
 
 // component
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
-    const { data: EvaluationData, isLoading } = useGetSingleEvaluationQuery(
-        auth?.id
-    );
+    
+let expireDate =""
+        if(_.includes([14,15,16,17], auth.getRoleId()) ){
+            const { data: EvaluationData, isLoading } = useGetSingleEvaluationQuery(
+                auth?.id
+            );
+            expireDate =EvaluationData?.data?.exp_date
+        }
 
-    const expireDate = EvaluationData?.data[0]?.exp_date;
+
+
+    // const expireDate = EvaluationData?.data[0]?.exp_date;
     // console.log("auth", auth?.id);
     // console.log("evaluation data", EvaluationData);
     // console.log("expire date", expireDate);
