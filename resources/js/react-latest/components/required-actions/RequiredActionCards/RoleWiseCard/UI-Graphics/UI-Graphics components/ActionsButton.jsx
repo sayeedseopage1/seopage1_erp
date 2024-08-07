@@ -16,6 +16,7 @@ import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
 import React, { useEffect } from "react";
+import { useAuth } from "../../../../../../../react/hooks/useAuth";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -42,13 +43,15 @@ const ActionsButton = ({ data }) => {
 
     //mitul work end
 
+    const auth = useAuth();
     return (
         <>
             {data?.button?.map((btn, i) => {
                 if (btn.button_type === "redirect_url") {
                     return (
                         <button
-                            disabled={handleBtnDisable(10)}
+                            // disabled={_.includes([9,10], auth.getRoleId())}
+                            disabled={!_.includes([9, 10], auth.getRoleId())}
                             key={i}
                             onClick={() =>
                                 window.open(btn.button_url, "_blank")
@@ -65,7 +68,9 @@ const ActionsButton = ({ data }) => {
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
-                                    disabled={handleBtnDisable(10)}
+                                    disabled={
+                                        !_.includes([9, 10], auth.getRoleId())
+                                    }
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
                                         dispatch(setPendingActionId(data?.id));
@@ -78,7 +83,9 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
-                                    disabled={handleBtnDisable(10)}
+                                    disabled={
+                                        !_.includes([9, 10], auth.getRoleId())
+                                    }
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
 
@@ -91,7 +98,9 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
-                                    disabled={handleBtnDisable(10)}
+                                    disabled={
+                                        !_.includes([9, 10], auth.getRoleId())
+                                    }
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
                                     }
