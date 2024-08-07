@@ -159,7 +159,17 @@ class ProjectStatusController extends AccountBaseController
                 $holidays->where('holidays.occassion', 'like', '%' . request()->searchText . '%');
             }
 
-            $pm_goals= ProjectPmGoal::get();
+            $pm_goals = ProjectPmGoal::where(function($query) use ($request){
+                if (auth()->user()->role_id == 4) 
+                    $query->where('pm_id', auth()->user()->id);
+                else if(auth()->user()->role_id == 1)
+                {
+                    if ($request->pmId) 
+                        $query->where('pm_id', $request->pmId);
+                    else 
+                        $query->where('pm_id', User::where('role_id', 4)->first()->id);
+                }
+            })->get();
 
             foreach ($pm_goals as $key => $goal) {
                 $project = Project::find($goal->project_id);
@@ -174,7 +184,7 @@ class ProjectStatusController extends AccountBaseController
             return $holidayArray;
         }
 
-
+        $this->pmIds = User::where('role_id', 4)->get();
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request)
