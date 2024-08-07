@@ -702,10 +702,10 @@ class ProjectStatusController extends AccountBaseController
             ->paginate($limit);
 
             foreach($pm_goals as $pmGoal){
-                $goal = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status','0')->first();
+                $goal = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('expired_status','0')->first();
                 $goal_count = ProjectPmGoal::where('project_id',$pmGoal->project_id)->count();
                 $goal_expire = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('expired_meet_description','!=',null)->where('goal_status','0')->count();
-                $goal_meet = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status',1)->count();
+                $goal_meet = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status','1')->count();
                 $next_goal_date = $goal->goal_end_date ?? '';
                 $currentDate = Carbon::now();
                 $upcoming_goal_day = $currentDate->diffInDays($next_goal_date);
