@@ -38,6 +38,7 @@ storage/reviewed
 
 .scannerwork
 coverage
+.sonarlint
 
 __TODO__
 package-lock.json
