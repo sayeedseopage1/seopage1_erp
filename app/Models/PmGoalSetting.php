@@ -70,7 +70,7 @@ class PmGoalSetting extends Model
         ],
         [
             'initial_value' => 51,
-            'end_value' => 1000,
+            'end_value' => 5000,
             'category' => 'criticallySensitive',
             'project_type' => 'hourly'
         ],

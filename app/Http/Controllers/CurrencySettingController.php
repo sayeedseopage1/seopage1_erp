@@ -225,4 +225,8 @@ class CurrencySettingController extends AccountBaseController
         return Reply::success(__('messages.currencyConvertKeyUpdated'));
     }
 
+    public function convertCurrencyAmount($currencyId, $amount)
+    {
+        return $amount / Currency::find($currencyId)->exchange_rate ?? 1;
+    }
 }

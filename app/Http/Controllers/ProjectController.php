@@ -1906,10 +1906,10 @@ class ProjectController extends AccountBaseController
                 } else throw new Exception("Deal budget not found.");
             }
             else {
+                $convertedAmount = (new CurrencySettingController)->convertCurrencyAmount($findDeal->original_currency_id, $findDeal->hourly_rate);
                 $pmGoalSetting = PmGoalSetting::where('project_type', 'hourly')->where('initial_value', '<=', $findDeal->hourly_rate)
-                        ->where('end_value', '>=', $findDeal->hourly_rate)
+                        ->where('end_value', '>=', $convertedAmount)
                         ->first();
-
                 if (!$pmGoalSetting)
                     throw new Exception("Pm goal settings not found.");
                 $project_status_helper = new HelperPmProjectStatusController();
