@@ -332,7 +332,7 @@ const DailyReportSubmissionForm = ({
         // );
 
         const pageDataJSON = JSON.stringify(dailySubPagesData);
-        fd.append("pageData", pageDataJSON);
+        fd.append("submittedData", pageDataJSON);
 
         dailySubPagesData?.pageData.forEach((pageArray, pageIndex) => {
             pageArray.forEach((section, index) => {
