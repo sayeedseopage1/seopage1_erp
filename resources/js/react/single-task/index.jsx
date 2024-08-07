@@ -11,43 +11,43 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import ErrorContextProvider from "../context/ErrorHandleServiceContextProvider";
 // import SingleIndependentTask from "../single-independent-task/SingleIndependentTask";
 
-const SingleIndependentTask = React.lazy(() => import("../single-independent-task/SingleIndependentTask"))
+const SingleIndependentTask = React.lazy(() =>
+    import("../single-independent-task/SingleIndependentTask")
+);
 const SingleTask = React.lazy(() => import("./SingleTask"));
 const container = document.getElementById("sp1SingleTaskPage");
 
+const TaskChecker = () => {
+    const [taskStatus, setTaskStatus] = useState("not-setted");
+    const { taskId } = useParams();
 
-const TaskChecker = ()=>{
-    const [taskStatus, setTaskStatus] = useState('not-setted');
-    const {taskId} = useParams();
+    useEffect(() => {
+        //   console.log({taskId});
+        fetch(`/account/check-independent-task/${taskId}`)
+            .then((res) => res.json())
+            .then(({ is_independent }) => {
+                // console.log({is_independent});
+                setTaskStatus(is_independent);
+            });
+    }, [taskId]);
 
-    useEffect(()=>{
-    //   console.log({taskId});
-      fetch(`/account/check-independent-task/${taskId}`)
-          .then(res=> res.json())
-          .then(({is_independent})=> {
-            // console.log({is_independent});
-            setTaskStatus(is_independent);
-        })
-    },[taskId])
-
-
-    if (taskStatus === 'not-setted') {
-      return <Loading />;
+    if (taskStatus === "not-setted") {
+        return <Loading />;
     }
 
-
-    return(
+    return (
         <>
-        {/* <Toaster /> */}
-        <React.Suspense fallback={<Loading />}>
-            {
-                taskStatus===true?<SingleIndependentTask /> : <SingleTask />
-            }
-        </React.Suspense>
-      </>
-    )
-  }
-
+            {/* <Toaster /> */}
+            <React.Suspense fallback={<Loading />}>
+                {taskStatus === true ? (
+                    <SingleIndependentTask />
+                ) : (
+                    <SingleTask />
+                )}
+            </React.Suspense>
+        </>
+    );
+};
 
 if (container) {
     ReactDOM.createRoot(container).render(

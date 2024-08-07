@@ -47,6 +47,7 @@ export const apiSlice = createApi({
         "PROJECT_PENDING_EXTENSION_HISTORY",
         "ALL_PORTFOLIO",
         "PORTFOLIO_BY_ID",
+        "ALL_DAILY_SUBMISSION_CATEGORIES",
     ],
     endpoints: () => ({}),
 });

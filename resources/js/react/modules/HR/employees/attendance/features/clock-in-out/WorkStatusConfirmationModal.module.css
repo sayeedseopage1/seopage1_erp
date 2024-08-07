@@ -193,3 +193,24 @@
     margin-bottom: 2rem;
     color: #27AE60;
 }
+
+.daily_submission_add_new_button {
+    display: flex;
+  width: 100px;
+height: 50px;
+    padding: 10px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  
+    border-radius: 9px;
+    background: #1D82F5;
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background 0.3s; /* Smooth transition for hover effect */
+}
+
+.daily_submission_add_new_button:hover {
+    background: #0b79c1; /* Darker shade for hover effect */
+}

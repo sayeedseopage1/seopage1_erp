@@ -130,6 +130,7 @@
     width: 180px;
     overflow-y: auto;
     position: relative;
+    z-index: 100000000;
 }
 
 

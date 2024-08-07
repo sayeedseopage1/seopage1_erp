@@ -6739,8 +6739,9 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
+        dd($request->all());
         $daily_submission = new DailySubmission();
-        
+
         $file_name = [];
         if ($request->hasFile('file')) {
             $files = $request->file('file');
