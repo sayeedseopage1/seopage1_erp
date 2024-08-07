@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext,useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 // Components - UI - Shared
 import ProfileAvatar from "../components/shared/ProfileAvatar";
@@ -25,7 +26,7 @@ import Switch from "../../global/Switch";
 // Context
 import { LeadDeveloperDashboardContext } from "../context/LeadDeveloperDashboardContext";
 import { LeadDeveloperAdminDashboardContext } from "../context/LeadDeveloperAdminDashboardContext";
-import { useEffect } from "react";
+
 
 
 const LeadDeveloperDashboard = () => {
@@ -38,7 +39,7 @@ const LeadDeveloperDashboard = () => {
             ? LeadDeveloperAdminDashboardContext
             : LeadDeveloperDashboardContext;
 
-    const { userData, setLeadDev_id , filter } = useContext(DashboardContext);
+    const { userData, setLeadDev_id , filter, setFilter } = useContext(DashboardContext);
     
     const [isLoading, setIsLoading] = useState(false);
     const [isLeadDeveloperModalOpen, setIsLeadDeveloperModalOpen] =
@@ -96,19 +97,14 @@ const LeadDeveloperDashboard = () => {
                         border="1px solid var(--primaryLightBorder)"
                     >
                         <ProfileAvatar
-                            personInfo={{
-                                name: "John Doe",
-                                avatar: "avatar1.jpg",
-                                position: "Sr. Executive",
-                                employeeId: "Seopage1/0131",
-                            }}
+                            personInfo={userData}
                             isLoading={isLoading}
                         />
                     </SectionWrapper>
 
                     <SectionWrapper
                         className={`sp1_dashboard_header_filter_section ${
-                            user?.roleId === 1
+                            userData?.isAdmin
                                 ? "justify-content-between"
                                 : "justify-content-center"
                         }`}
@@ -116,16 +112,19 @@ const LeadDeveloperDashboard = () => {
                         border="1px solid var(--primaryLightBorder)"
                         gap="10px"
                     >
-                        <Switch.Case condition={user?.roleId === 1}>
+                        <Switch.Case condition={userData?.isAdmin}>
                             <CustomDropDown
                                 data={LeadDeveloperDummyData}
                                 selected={filter?.person}
-                                setSelected={(e) =>
+                                setSelected={(e) => {
                                     setFilter({
                                         ...filter,
                                         person: e?.target?.value,
                                     })
-                                }
+                                    navigate(`/${e?.target?.value?.id}`, {
+                                        replace: true,
+                                    });
+                                }}
                                 filedName="person"
                                 isSearchBoxUse
                             />
@@ -141,7 +140,6 @@ const LeadDeveloperDashboard = () => {
             {/* Lead Developer Dashboard Content */}
             <LeadDeveloperDashboardContent
                 isLoading={isLoading}
-                handleLoadingCheck={handleLoadingCheck} // temp function to check loading
                 handleModalOpen={handleModalOpen}
             />
 

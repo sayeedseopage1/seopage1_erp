@@ -5,20 +5,27 @@ import { LeadDeveloperTableColumns } from "../components/table/columns/LeadDevel
 const auth = new User(window.Laravel.user);
 
 /**
- * Lead Developer All Dashboard Data
- * @type {Array} - Array of Objects
- * @property {number} id - Unique Identifier
- * @property {string} title - Title of the data
- * @property {string} subTitle - Subtitle of the data
- * @property {number} value - Value of the data
- * @property {string} valueType - Type of the value
- * @property {string} key - Unique key of the data
- * @property {string} info - Information of the data 
- * @property {boolean} hasPermissionForModal - has permission to open modal or has not have any modal for this data
- * @property {string} query - API URL for fetching data
- * @property {object} tableColumn - Table Column for this data
- * @property {array} isShowModalExtraInfo - Show extra information in modal
- * @property {boolean} isModalOpen - Modal is open or not
+ * @typedef {Object} LeadDevDashboardData
+ * @property {number} id - Unique identifier for the dashboard data item.
+ * @property {string} title - Title of the dashboard item.
+ * @property {string|null} subTitle - Subtitle of the dashboard item.
+ * @property {string|null} value - The value associated with the dashboard item.
+ * @property {string|null} valueTypeBefore - Any value type string to be shown before the value.
+ * @property {string|null} valueTypeAfter - Any value type string to be shown after the value.
+ * @property {string} key - The key associated with the dashboard item.
+ * @property {string|null} info - Additional information about the dashboard item.
+ * @property {boolean} hasPermissionForModal - Flag indicating if the user has permission to view the modal for this item.
+ * @property {string} query - The query key used to fetch the data.
+ * @property {string} responseKey - The key used to extract the relevant data from the response.
+ * @property {function(Object[]): Object[]} formateResponse - Function to format the response data.
+ * @property {Object[]} tableColumn - The columns to be shown in the table.
+ * @property {Object[]} isShowModalExtraInfo - Extra information to be shown in the modal.
+ * @property {boolean} isModalOpen - Flag indicating if the modal is open.
+ */
+
+/**
+ * Lead Dev Dashboard Data Constants
+ * @type {LeadDevDashboardData[]}
  */
 
 export const LeadDeveloperDataTitle = [
@@ -27,14 +34,25 @@ export const LeadDeveloperDataTitle = [
     title: "Number Of Tasks Received",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "number_of_tasks_received_lead",
     info: null,
     hasPermissionForModal: auth.getRoleId() === 1,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_tasks_received_lead_data",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Received Tasks",
+        key: "number_of_tasks_received_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -42,14 +60,25 @@ export const LeadDeveloperDataTitle = [
     title: "Number Of Submitted Tasks",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
-    key: "number_of_submitted_tasks_lead",
+    key: "submit_number_of_tasks_in_this_month_lead",
     info: null,
     hasPermissionForModal: auth.getRoleId() === 1,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "submit_number_of_tasks_in_this_month_lead_data",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -57,12 +86,14 @@ export const LeadDeveloperDataTitle = [
     title: "Number Of Approved Tasks On 1st Attempt By Project Manager",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "first_attempt_approve_task_in_this_month_lead",
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -72,14 +103,25 @@ export const LeadDeveloperDataTitle = [
     title: "Number Of Approved Tasks On 1st Attempt By Client",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
-    key: "first_attempt_approve_task_data_client_lead",
+    key: "first_attempt_approve_task_in_this_month_client_lead",
     info: null,
-    hasPermissionForModal: auth.getRoleId() === 1,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    hasPermissionForModal: true,
+    query: "leads_received",
+    responseKey: "first_attempt_approve_task_data_client_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Approved Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -87,12 +129,14 @@ export const LeadDeveloperDataTitle = [
     title: "Avg Number Of Attempts Needed For Approval By Project Manager",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "average_submission_aproval_in_this_month_lead",
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -102,14 +146,25 @@ export const LeadDeveloperDataTitle = [
     title: "Avg Number Of Attempts Needed For Approval By Client",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "average_submission_aproval_in_this_month_client_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "first_attempt_approve_task_data_client_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -117,13 +172,23 @@ export const LeadDeveloperDataTitle = [
     title: "Percentage Of Tasks With Revisions",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "percentage_of_tasks_with_revision_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "revision_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [{
+      id: "1",
+      title: "Submitted Tasks",
+      key: "revision_data_lead",
+      value: null,
+      valueTypeBefore: null,
+      valueTypeAfter: null,
+    }],
     isModalOpen: false,
   },
   {
@@ -131,14 +196,23 @@ export const LeadDeveloperDataTitle = [
     title: "Total Number Of Revisions",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
-    key: "first_attempt_approve_task_in_this_month_lead",
+    key: "number_of_total_revision_for_this_month_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "revision_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [{
+      id: "1",
+      title: "Submitted Tasks",
+      key: "submit_number_of_tasks_in_this_month_lead",
+      value: null,
+      valueTypeBefore: null,
+      valueTypeAfter: null,
+    }],
     isModalOpen: false,
   },
   {
@@ -146,13 +220,25 @@ export const LeadDeveloperDataTitle = [
     title: "Average Task Submission Time (In Days)",
     subTitle: null,
     value: 10,
-    valueType: "Days",
+    valueTypeBefore: null,
+    valueTypeAfter: "Days",
     key: "average_submission_day_in_this_month_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "average_submit_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -160,27 +246,51 @@ export const LeadDeveloperDataTitle = [
     title: "Average Number Of In-Progress Tasks",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "average_in_progress_date_range_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "total_in_progress_date_range_table_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
+    isModalOpen: false,
   },
   {
     id: 11,
     title: "Percentage Of Tasks Where Deadline Was Missed",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "percentage_of_tasks_deadline_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "estimate_missed_task_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -188,13 +298,25 @@ export const LeadDeveloperDataTitle = [
     title: "Percentage Of Tasks Where Given Estimated Time Was Missed",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: null,
     key: "percentage_number_task_cross_estimate_time_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "estimate_missed_task_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -202,11 +324,14 @@ export const LeadDeveloperDataTitle = [
     title: "Rejection Rate", // 
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: null,
     key: "rejection_rate_lead", // showing Dummy Data in main dashboard
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -216,11 +341,14 @@ export const LeadDeveloperDataTitle = [
     title: "Cancelation Rate",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: null,
     key: "cancelation_rate_lead", // showing Dummy Data in main dashboard
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -229,11 +357,14 @@ export const LeadDeveloperDataTitle = [
     title: "Rate Of Reassign",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: null,
     key: "rate_of_reassign_lead", // showing Dummy Data in main dashboard
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -243,12 +374,14 @@ export const LeadDeveloperDataTitle = [
     title: "No. of disputes filed",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "number_of_dispute_filed_own_lead",
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -258,16 +391,27 @@ export const LeadDeveloperDataTitle = [
     title: "No. of disputes",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "number_of_dispute_filed_all_lead",
     info: {
       content: "Overall"
     },
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
-    tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    query: "leads_received",
+    responseKey: "number_of_dispute_filed_all_data_lead",
+    formateResponse: () => {},
+    tableColumn: LeadDeveloperTableColumns?.Modal, 
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -275,16 +419,27 @@ export const LeadDeveloperDataTitle = [
     title: "No. of disputes lost",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
-    key: "number_of_dispute_lost_lead",
+    key: "number_of_dispute_lost_own_lead",
     info: {
       content: "Raised By Developer"
     },
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_own_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -292,16 +447,27 @@ export const LeadDeveloperDataTitle = [
     title: "No. of disputes lost",
     subTitle: null,
     value: 10,
-   valueTypeBefore: null,
+    valueTypeBefore: null,
     valueTypeAfter: null,
     key: "number_of_dispute_lost_all_lead",
     info: {
       content: "Overall"
     },
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   },
   {
@@ -309,13 +475,25 @@ export const LeadDeveloperDataTitle = [
     title: "Hours spent in revisions",
     subTitle: null,
     value: 10,
-    valueType: "Hours",
+    valueTypeBefore: null,
+    valueTypeAfter: "Hours",
     key: "spent_revision_developer_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_leads_received_list",
+    formateResponse: () => {},
     tableColumn: LeadDeveloperTableColumns?.Modal,
-    isShowModalExtraInfo: [],
+    isShowModalExtraInfo: [
+      {
+        id: "1",
+        title: "Submitted Tasks",
+        key: "submit_number_of_tasks_in_this_month_lead",
+        value: null,
+        valueTypeBefore: null,
+        valueTypeAfter: null,
+      },
+    ],
     isModalOpen: false,
   }
 ]

@@ -42,7 +42,9 @@ export const DeveloperDashboardDataConstant = [
     key: "number_of_tasks_received",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -89,7 +91,9 @@ export const DeveloperDashboardDataConstant = [
     key: "submit_number_of_tasks_in_this_month",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -137,7 +141,9 @@ export const DeveloperDashboardDataConstant = [
     key: "first_attempt_approve_task_in_this_month",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -185,7 +191,9 @@ export const DeveloperDashboardDataConstant = [
     key: "first_attempt_approve_task_in_this_month_client_data",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -232,7 +240,9 @@ export const DeveloperDashboardDataConstant = [
     key: "avg_no_of_submission_needed_for_app_by_lead_dev",
     info: null,
     hasPermissionForModal: auth.getRoleId() === 5,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -264,7 +274,9 @@ export const DeveloperDashboardDataConstant = [
     key: "average_number_of_tasks_approved_client_data",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -291,11 +303,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Percentage Of Tasks With Revisions",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "percentage_of_tasks_with_revision",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "revision_count", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -340,11 +355,13 @@ export const DeveloperDashboardDataConstant = [
     subTitle: null,
     value: 10,
     valueTypeBefore: null,
-    valueTypeAfter: null,
+    valueTypeAfter: "%",
     key: "number_of_total_revision_for_this_month",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "revision_count", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -386,11 +403,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Avg. logged time for complete tasks (In Hours)",
     subTitle: null,
     value: 10,
-    valueType: "Hours",
+    valueTypeBefore: null,
+    valueTypeAfter: "Hours",
     key: "average_submission_time_in_this_month",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -432,11 +452,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Average Task Submission Time (In Days)",
     subTitle: null,
     value: 10,
-    valueType: "Days",
+    valueTypeBefore: null,
+    valueTypeAfter: "Days",
     key: "average_submission_day_in_this_month",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -483,7 +506,9 @@ export const DeveloperDashboardDataConstant = [
     key: "average_in_progress_date_range",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date"]),
     isShowModalExtraInfo: [
       {
@@ -525,11 +550,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Percentage Of Tasks Where Deadline Was Missed",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "percentage_of_tasks_deadline",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -572,11 +600,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Percentage Of Tasks Where Given Estimated Time Was Missed",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "percentage_number_task_cross_estimate_time",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
 
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
@@ -619,11 +650,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Rejection Rate", // 
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "rejection_rate_lead", // showing Dummy Data in main dashboard
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: DeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -633,11 +667,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Cancelation Rate",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: "%",
     key: "cancelation_rate_lead", // showing Dummy Data in main dashboard
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: DeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -646,11 +683,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Rate Of Reassign",
     subTitle: null,
     value: 10,
-    valueType: "%",
+    valueTypeBefore: null,
+    valueTypeAfter: null,
     key: "rate_of_reassign_lead", // showing Dummy Data in main dashboard
     info: null,
     hasPermissionForModal: false,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: DeveloperTableColumns?.Modal,
     isShowModalExtraInfo: [],
     isModalOpen: false,
@@ -665,7 +705,9 @@ export const DeveloperDashboardDataConstant = [
     key: "number_of_dispute_filed_own",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -714,7 +756,9 @@ export const DeveloperDashboardDataConstant = [
       content: "Overall"
     },
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -763,7 +807,9 @@ export const DeveloperDashboardDataConstant = [
       content: "Raised By Developer"
     },
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -812,7 +858,9 @@ export const DeveloperDashboardDataConstant = [
       content: "Overall"
     },
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
       {
@@ -854,11 +902,14 @@ export const DeveloperDashboardDataConstant = [
     title: "Hours spent in revisions",
     subTitle: null,
     value: 10,
-    valueType: "Hours",
+    valueTypeBefore: null,
+    valueTypeAfter: "Hours",
     key: "spent_revision_developer_lead",
     info: null,
     hasPermissionForModal: true,
-    query: "start_date=2024-07-02&end_date=2024-07-09&status=10",
+    query: "leads_received",
+    responseKey: "number_of_dispute_lost_all_data_lead",
+    formateResponse: () => { },
     tableColumn: filterColumns(["revision_log_min", "task_approval_date", "revision_count"]),
     isShowModalExtraInfo: [
       {

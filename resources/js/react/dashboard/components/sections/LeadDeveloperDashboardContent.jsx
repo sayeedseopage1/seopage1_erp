@@ -22,9 +22,11 @@ import LeadDashboardTableLoader from "../loader/LeadDashboardTableLoader";
 import { LeadDeveloperDashboardContext } from "../../context/LeadDeveloperDashboardContext";
 import { LeadDeveloperAdminDashboardContext } from "../../context/LeadDeveloperAdminDashboardContext";
 
+// hooks
+import { useAuth } from "../../../hooks/useAuth";
+
 const LeadDeveloperDashboardContent = ({
     isLoading,
-    handleLoadingCheck,
     handleModalOpen,
 }) => {
     const auth = useAuth();
@@ -582,7 +584,7 @@ const LeadDeveloperDashboardContent = ({
                     >
                         <CustomCardHeader title="Number of completed tasks" />
                         <RefreshButton
-                            onClick={handleLoadingCheck}
+                            onClick={() => {}}
                             isLoading={isLoading}
                         />
                     </SectionWrapper>
@@ -607,7 +609,7 @@ const LeadDeveloperDashboardContent = ({
                     >
                         <CustomCardHeader title="Number of Pending tasks" />
                         <RefreshButton
-                            onClick={handleLoadingCheck}
+                            onClick={() => {}}
                             isLoading={isLoading}
                         />
                     </SectionWrapper>
@@ -631,6 +633,5 @@ export default LeadDeveloperDashboardContent;
 
 LeadDeveloperDashboardContent.propTypes = {
     isLoading: PropTypes.bool,
-    handleLoadingCheck: PropTypes.func,
     handleModalOpen: PropTypes.func,
 };

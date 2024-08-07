@@ -31,6 +31,7 @@ import { SaleExecutiveDashboardProvider } from "./context/SalesExecutiveDashboar
 // Context for admin
 import { SaleExecutiveAdminDashboardProvider } from "./context/SalesExecutiveAdminDashboardContext.jsx";
 import { LeadDeveloperAdminDashboardProvider } from "./context/LeadDeveloperAdminDashboardContext.jsx";
+import { DeveloperAdminDashboardProvider } from "./context/DeveloperAdminDashboardContext.jsx";
 
 
 // Context for admin
@@ -112,15 +113,15 @@ const routes = [
     },
     {
         id: 2,
-        containerId: "employeeDashboard",
+        containerId: "pmAdminDashboard",
         baseUrl: "/account/dashboard-pm-performance",
-        contextProvider: null,
+        contextProvider: DeveloperAdminDashboardProvider,
         pageComponent: <PMDashboard />,
     },
     {
         id: 3,
         containerId: "leadAdminDashboard",
-        baseUrl: "/account/dashboard-lead-dev-performance",
+        baseUrl: "account/dashboard-lead-dev-performance/",
         contextProvider: LeadDeveloperAdminDashboardProvider,
         pageComponent: <LeadDeveloperDashboard />,
     },
@@ -128,7 +129,7 @@ const routes = [
         id: 4,
         containerId: "devAdminDashboard",
         baseUrl: "/account/dashboard-developer-performance",
-        contextProvider: DeveloperDashboardProvider,
+        contextProvider: DeveloperAdminDashboardProvider,
         pageComponent: <DeveloperDashboard />,
     },
     {

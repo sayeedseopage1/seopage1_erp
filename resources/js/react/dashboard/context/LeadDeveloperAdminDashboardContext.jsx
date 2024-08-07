@@ -40,12 +40,12 @@ export const LeadDeveloperAdminDashboardProvider = ({ children }) => {
 
     // set user data to the context value
     const userData = {
-        roleId: user?.getRoleId(),
-        name: user?.name,
-        id: user?.id,
-        email: user?.email,
-        imageUrl: user?.getAvatar(),
-        countryId: user?.countryId,
+        roleId: AuthUser?.getRoleId(),
+        name: AuthUser?.name,
+        id: AuthUser?.id,
+        email: AuthUser?.email,
+        imageUrl: AuthUser?.getAvatar(),
+        countryId: AuthUser?.countryId,
     };
 
     // Set the lead developer dashboard data to the context value
