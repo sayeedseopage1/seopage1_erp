@@ -80,6 +80,8 @@ use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
 use App\Models\DailySubmissionCategory;
+use App\Models\DailySubmissionDetail;
+use App\Models\DailySubmissionSection;
 use App\Models\DailySubmissionField;
 use App\Models\EmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
@@ -6739,36 +6741,114 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
-        dd($request->all());
+        $datas = json_decode($request->input('submittedData'), true);
+        // dd($datas);
+        DB::beginTransaction();
+
         $daily_submission = new DailySubmission();
-
-        $file_name = [];
-        if ($request->hasFile('file')) {
-            $files = $request->file('file');
-
-            foreach ($files as $file) {
-                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                array_push($file_name, $filename);
-                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
-            }
-        }
-
-        $daily_submission->attachments = !empty($file_name) ? json_encode($file_name) : null;
         $daily_submission->user_id = $request->user_id;
         $daily_submission->task_id = $request->task_id;
         $daily_submission->project_id = $request->project_id;
         $daily_submission->client_id = $request->client_id;
         $daily_submission->task_heading = $request->task_heading;
         $daily_submission->client_name = $request->client_name;
-        $daily_submission->comment = $request->comment;
-        $daily_submission->link_name = $request->link_name;
-        $daily_submission->section_name = $request->section_name;
         $daily_submission->hours_spent = $request->hours_spent;
         $daily_submission->status = 1;
         $daily_submission->report_date = $request->report_date;
         $daily_submission->mark_as_complete = $request->mark_as_complete;
-
+        $daily_submission->frontend_password = isset($datas['frontendPasswordValue']) ? 'yes' : 'no';
+        $daily_submission->password = $datas['frontendPasswordValue'] ?? null;
         $daily_submission->save();
+
+        // dd('ok');
+
+        foreach ($datas['pageData'] as $data) {
+            foreach ($data as $sectionItem) {
+                $section = new DailySubmissionSection();
+                $section->daily_submission_id = $daily_submission->id;
+                $section->page_url = $sectionItem['pageUrl'];
+                $section->save();
+
+                $submission_details = new DailySubmissionDetail();
+                $submission_details->daily_submission_id = $daily_submission->id;
+                $submission_details->daily_submission_category_id = $sectionItem['categoryId'];
+                $submission_details->daily_submission_sections_id = $section->id;
+                $submission_details->section_name = $sectionItem['sectionName'] ?? null;
+                $submission_details->web_version_link = $sectionItem['webVersionUrl'] ?? null;
+                $submission_details->web_version_file = $sectionItem['webVersionFile'] ?? null;
+                $submission_details->mobile_version_link = $sectionItem['mobileVersionUrl'] ?? null;
+                $submission_details->mobile_version_file = $sectionItem['mobileVersionFile'] ?? null;
+                $submission_details->tab_version_link = $sectionItem['tabVersionUrl'] ?? null;
+                $submission_details->tab_version_file = $sectionItem['tabVersionFile'] ?? null;
+                $submission_details->section_comment = $sectionItem['comment'] ?? null;
+                $submission_details->responsiveness_title = $sectionItem['name'] ?? null;
+                $submission_details->responsiveness_link = $sectionItem['screenshotUrl'] ?? null;
+                $submission_details->responsiveness_title = $sectionItem['comment'] ?? null;
+                $submission_details->revisions_list = $sectionItem['assignedRevisions'] ?? null;
+                $submission_details->revisions_complete_today = $sectionItem['completedRevisions'] ?? null;
+                $submission_details->revisions_percentage = $sectionItem['completedPercentage'] ?? null;
+                $submission_details->revisions_comment = $sectionItem['comment'] ?? null;
+                $submission_details->bug_about = $sectionItem['bugName'] ?? null;
+                $submission_details->bug_fix_today = $sectionItem['bugFixedPercentage'] ?? null;
+                $submission_details->bug_comment = $sectionItem['comment'] ?? null;
+                $submission_details->functionality_about = $sectionItem['functionalityName'] ?? null;
+                $submission_details->functionality_fix_today = $sectionItem['totalFixedPercentage'] ?? null;
+                $submission_details->functionality_comment = $sectionItem['comment'] ?? null;
+                $submission_details->speed_before_started_today = $sectionItem['speedBeforeStarted'] ?? null;
+                $submission_details->speed_before_link = $sectionItem['screenshotUrlBeforeStarted'] ?? null;
+                $submission_details->speed_after_finished_working_today = $sectionItem['speedAfterFinished'] ?? null;
+                $submission_details->speed_after_finished_working_link = $sectionItem['screenshotUrlAfterFinished'] ?? null;
+                $submission_details->speed_comment = $sectionItem['comment'] ?? null;
+                $submission_details->domain_hosting_comment = $sectionItem['comment'] ?? null;
+                $submission_details->migration_size_of_the_website = $sectionItem['websiteSize'] ?? null;
+                $submission_details->migration_reason = $sectionItem['migrationReason'] ?? null;
+                $submission_details->migration_comment = $sectionItem['comment'] ?? null;
+                $submission_details->product_uploading_today = $sectionItem['totalProducts'] ?? null;
+                $submission_details->product_uploading_link = $sectionItem['screenshotUrl'] ?? null;
+                $submission_details->product_uploading_comment = $sectionItem['comment'] ?? null;
+                $submission_details->blog_uploading_post_today = $sectionItem['totalBlogPosts'] ?? null;
+                $submission_details->blog_uploading_link = $sectionItem['screenshotUrl'] ?? null;
+                $submission_details->blog_uploading_comment = $sectionItem['comment'] ?? null;
+                $submission_details->cloning_page_create_today = $sectionItem['totalClonedPages'] ?? null;
+                $submission_details->cloning_change_content_img_page = $sectionItem['isContentChanged'] ?? null;
+                $submission_details->cloning_page_link = $sectionItem['screenshotUrl'] ?? null;
+                $submission_details->cloning_comment = $sectionItem['comment'] ?? null;
+                $submission_details->others_title = $sectionItem['workDone'] ?? null;
+                $submission_details->others_link = $sectionItem['screenshotUrl'] ?? null;
+                $submission_details->others_comment = $sectionItem['comment'] ?? null;
+                $submission_details->save();
+            }
+        }
+
+
+        // $daily_submission = new DailySubmission();
+
+        // $file_name = [];
+        // if ($request->hasFile('file')) {
+        //     $files = $request->file('file');
+
+        //     foreach ($files as $file) {
+        //         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        //         array_push($file_name, $filename);
+        //         Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+        //     }
+        // }
+
+        // $daily_submission->attachments = !empty($file_name) ? json_encode($file_name) : null;
+        // $daily_submission->user_id = $request->user_id;
+        // $daily_submission->task_id = $request->task_id;
+        // $daily_submission->project_id = $request->project_id;
+        // $daily_submission->client_id = $request->client_id;
+        // $daily_submission->task_heading = $request->task_heading;
+        // $daily_submission->client_name = $request->client_name;
+        // $daily_submission->comment = $request->comment;
+        // $daily_submission->link_name = $request->link_name;
+        // $daily_submission->section_name = $request->section_name;
+        // $daily_submission->hours_spent = $request->hours_spent;
+        // $daily_submission->status = 1;
+        // $daily_submission->report_date = $request->report_date;
+        // $daily_submission->mark_as_complete = $request->mark_as_complete;
+        DB::commit();
         return response()->json([
             'message' => 'Daily submission submitted successfully',
             'status' => 200,
