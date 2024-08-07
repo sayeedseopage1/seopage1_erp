@@ -64,5 +64,9 @@ class TaskHistory extends BaseModel
     {
         return $this->hasOne(TaskRevision::class, 'task_id', 'task_id');
     }
+    public function revisions()
+    {
+        return $this->hasMany(TaskRevision::class, 'task_id', 'task_id');
+    }
 
 }
