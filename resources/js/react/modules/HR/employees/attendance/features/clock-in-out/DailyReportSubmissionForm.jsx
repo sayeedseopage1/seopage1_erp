@@ -502,13 +502,15 @@ const DailyReportSubmissionForm = ({
             });
         });
 
-        // fd.append("task_id", task.id);
-        // fd.append("user_id", window.Laravel.user.id);
-        // fd.append("project_id", task.projectId);
-        // fd.append("task_heading", task.task_title);
-        // fd.append("client_id", task.clientId);
-        // fd.append("client_name", task.client_name);
-        // fd.append("hours_spent", task.total_time_spent);
+        fd.append("task_id", task.id);
+        fd.append("user_id", window.Laravel.user.id);
+        fd.append("project_id", task.projectId);
+        fd.append("task_heading", task.task_title);
+        fd.append("client_id", task.clientId);
+        fd.append("client_name", task.client_name);
+        fd.append("hours_spent", task.total_time_spent);
+        fd.append("mark_as_complete", false);
+        fd.append("report_date", reportDate);
         fd.append(
             "_token",
             document
