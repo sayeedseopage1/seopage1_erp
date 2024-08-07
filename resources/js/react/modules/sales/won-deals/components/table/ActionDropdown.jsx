@@ -8,9 +8,12 @@ import { useAuth } from "../../../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
+import ReassignProjectModal from "../ReassignProjectModal";
 
 const ActionDropdown = ({ ...rest }) => {
     const auth = useAuth();
+    const [isReassignProjectModalOpen, setIsReassignProjectModalOpen] =
+        useState(false);
 
     const handleDelete = () => {
         // submit form
@@ -44,6 +47,14 @@ const ActionDropdown = ({ ...rest }) => {
     // handle redirection
     const handleRedirection = (url) => {
         window.open(url, "_blank");
+    };
+
+    // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
+    const handleModal = (setModalOpenFunc, isOpen, action) => {
+        setModalOpenFunc(isOpen);
+        if (action) {
+            action();
+        }
     };
 
     // console.log(rest?.row?.original.authorization_status === 0 && rest?.row?.original.id )
@@ -82,7 +93,7 @@ const ActionDropdown = ({ ...rest }) => {
 
                     {/* {_.includes([1, 7, 8], auth.getRoleId()) && rest?.row?.original?.status?.toLowerCase() !== "accepted" && ( */}
 
-                    {(_.includes([1], auth.getRoleId()) ||
+                    {/* {(_.includes([1], auth.getRoleId()) ||
                         (_.includes([7, 8], auth.getRoleId()) &&
                             rest?.row?.original?.status?.toLowerCase() ===
                                 "pending")) && (
@@ -99,7 +110,24 @@ const ActionDropdown = ({ ...rest }) => {
                                 ? "Draft Edit"
                                 : "Edit"}
                         </Dropdown.Item>
-                    )}
+                    )} */}
+                    {_.includes([1], auth.getRoleId()) &&
+                        rest?.row?.original?.pm_id !== null &&
+                        rest?.row?.original?.status?.toLowerCase() ===
+                            "pending" && (
+                            <Dropdown.Item
+                                onClick={() =>
+                                    handleModal(
+                                        setIsReassignProjectModalOpen,
+                                        true
+                                    )
+                                }
+                                className={styles.dropdownItem}
+                            >
+                                <i className="fa-regular fa-pen-to-square" />
+                                Reassign
+                            </Dropdown.Item>
+                        )}
 
                     {/* Authorization Need */}
                     {rest?.row?.original.authorization_status === 2 &&
@@ -138,6 +166,17 @@ const ActionDropdown = ({ ...rest }) => {
                         )}
                 </Dropdown.Menu>
             </Dropdown>
+
+            {isReassignProjectModalOpen && (
+                <ReassignProjectModal
+                    isOpen={isReassignProjectModalOpen}
+                    handleClose={() =>
+                        handleModal(setIsReassignProjectModalOpen, false)
+                    }
+                    dealDetails={rest?.row?.original}
+                    refetchData={rest?.table?.options?.meta?.refetch}
+                />
+            )}
         </React.Fragment>
     );
 };

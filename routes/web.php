@@ -201,6 +201,8 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Project\ProjectDetailsController;
+use App\Http\Controllers\Project\ProjectInsightController;
 use App\Http\Controllers\SalesRiskPolicyController;
 
 /*
@@ -725,6 +727,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //projects json route
     Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
     Route::get('get-clients/{type?}', [ProjectController::class, 'get_client_json']);
+
+    // Project Dashboard API
+    Route::get('project-details/{project_id}', ProjectDetailsController::class)->name('project.details');
+    Route::get('project-milestones/{project_id}', [ProjectInsightController::class, 'getProjectMilestones'])->name('project.milestones');
+    Route::get('project-tasks/{project_id}', [ProjectInsightController::class, 'getProjectTasks'])->name('project.tasks');
+    Route::get('project-pending-extension/{project_id}', [ProjectInsightController::class, 'getPendingExtensionRequest'])->name('project.pending.extension');
 
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');
@@ -1514,6 +1522,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/edit/{id}', [InsightsController::class, 'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
+    Route::post('goal-mark-as-public', [InsightsController::class, 'goalMarkAsPublic'])->name('insights.goal.mark.as.public');
     //basic apis for react for data checking
     Route::get('/tasks/developer-task-history/{id}', [TimelogReportController::class, 'DeveloperTaskHistory']);
     Route::get('/tasks/parent-task-subtasks/{id}', [TaskController::class, 'CHeckSubtasks'])->name('check-subtasks');
@@ -1571,6 +1580,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
+    Route::get('project-details-with-assignable-pm/{deal_id}', [ProjectInsightController::class, 'projectDetailsWithAssignablePm'])->name('project.details.with.assignable.pm');
+    Route::post('reassign-pm-to-project', [ProjectInsightController::class, 'reassignPmToProject'])->name('reassign.pm.to.project');
 });
 
 //custom route for seopage1

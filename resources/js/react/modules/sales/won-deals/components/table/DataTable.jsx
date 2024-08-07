@@ -38,6 +38,7 @@ const DataTable = ({
     sorting,
     tableName = "dataTable",
     setSorting,
+    refetch
 }) => {
     const [tableData, setTableData] = React.useState([]);
     const [tableColumns, setTableColumns] = React.useState(columns);
@@ -112,6 +113,9 @@ const DataTable = ({
         getPaginationRowModel: getPaginationRowModel(),
         // getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        meta: {
+            refetch
+        }
     });
 
     return (

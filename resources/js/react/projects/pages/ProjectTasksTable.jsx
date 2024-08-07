@@ -47,7 +47,6 @@ const ProjectTasks = () => {
         React.useState(false);
     const [showProjectGuidelineEditForm, setShowProjectGuidelineEditForm] =
         React.useState(null);
-    const [hasPMGuideline, setHasPMGuideline] = React.useState(false);
     const [getAllSubtask, { isFetching: subtaskFetching }] =
         useLazyGetAllSubtaskQuery();
     const params = useParams();
@@ -319,8 +318,8 @@ const ProjectTasks = () => {
                                         <strong>
                                             {singleTask?.pm_id_name}
                                         </strong>
-                                    </a>
-                                    ,
+                                    </a>{/*
+                                    */},
                                 </span>
                                 <span>
                                     <span style={{ color: "#5c5e60" }}>

@@ -3,7 +3,13 @@ import CKEditorComponent from "../../../../../../../../ckeditor";
 import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
 import { Label } from "../../../../../../../../global/styled-component/Form";
-
+import { TimePicker, Space } from "antd";
+import dayjs from "dayjs";
+import extractTime from "../../../../../../../../utils/extractTime";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
+import { fromAndToValidation } from "../../../../../../../../utils/fromAndToValidation";
 /**
  * this component responsible for rendering late explanation form for user
  */
@@ -21,30 +27,9 @@ const LateExplanationOption = ({
     // form data
     const [comment, setComment] = React.useState("");
     const [error, setError] = React.useState(null);
-    const [durationStart, setDurationStart] = React.useState("08:00 AM");
-    const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
-    const [sType, setSType] = React.useState(''); // submission type
-
-
-    // setup time field
-    React.useEffect(() => {
-        // start time
-        window
-            .$("#timepicker1")
-            .timepicker("setTime", durationStart)
-            .on("changeTime.timepicker", function (e) {
-                setDurationStart(e.target.value);
-            });
-
-        // end time
-        window
-            .$("#timepicker2")
-            .timepicker("setTime", durationEnd)
-            .on("changeTime.timepicker", function (e) {
-                setDurationEnd(e.target.value);
-                // console.log(e.timeStamp)
-            });
-    }, [checked]);
+    const [durationStart, setDurationStart] = React.useState("");
+    const [durationEnd, setDurationEnd] = React.useState("");
+    const [sType, setSType] = React.useState(""); // submission type
 
     // validation checking
     const isValid = () => {
@@ -78,17 +63,20 @@ const LateExplanationOption = ({
             comment,
         };
 
-        setSType(submissionType);
-        if (isValid()) {
-            onSubmit(data, submissionType, onBack);
-        } else {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please complete all required fields.",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack, [
+            { id: "de2sew", start: durationStart, end: durationEnd },
+        ]);
     };
 
     return (
@@ -101,7 +89,7 @@ const LateExplanationOption = ({
                 >
                     <input
                         type="checkbox"
-                        style={{ cursor: "pointer"}}
+                        style={{ cursor: "pointer" }}
                         checked={checked}
                         value={index.toString()}
                         onChange={onChange}
@@ -112,8 +100,10 @@ const LateExplanationOption = ({
                 <Switch>
                     <Switch.Case condition={checked}>
                         <div className="pl-3 my-3 bg-white">
-
-                            <Label className="font-weight-bold"> Select the delay time here <sup>*</sup></Label>
+                            <Label className="font-weight-bold">
+                                {" "}
+                                Select the delay time here <sup>*</sup>
+                            </Label>
 
                             {/* time selection */}
                             <div className="row">
@@ -121,66 +111,100 @@ const LateExplanationOption = ({
                                     <label htmlFor="" className="d-block">
                                         From:
                                     </label>
-                                    <input
-                                        id="timepicker1"
-                                        className="form-control w-100 py-2"
-                                        data-minute-step="1"
-                                        data-modal-backdrop="false"
-                                        type="text"
-                                    />
+                                    <Space wrap>
+                                        <TimePicker
+                                            use12Hours
+                                            needConfirm={false}
+                                            format="h:mm a"
+                                            defaultValue={durationStart}
+                                            onChange={(time) =>
+                                                setDurationStart(
+                                                    dayjs(
+                                                        time,
+                                                        "HH:mm:ss"
+                                                    ).format("HH:mm:ss")
+                                                )
+                                            }
+                                            className="w-100 py-2"
+                                        />
+                                    </Space>
                                 </div>
 
                                 <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                     <label htmlFor="" className="d-block">
                                         To
                                     </label>
-                                    <input
-                                        id="timepicker2"
-                                        className="form-control w-100 py-2"
-                                        data-minute-step="1"
-                                        data-modal-backdrop="false"
-                                        type="text"
-                                    />
+                                    <Space wrap>
+                                        <TimePicker
+                                            use12Hours
+                                            needConfirm={false}
+                                            format="h:mm a"
+                                            defaultValue={durationEnd}
+                                            onChange={(time) =>
+                                                setDurationEnd(
+                                                    dayjs(
+                                                        time,
+                                                        "HH:mm:ss"
+                                                    ).format("HH:mm:ss")
+                                                )
+                                            }
+                                            className="w-100 py-2"
+                                        />
+                                    </Space>
                                 </div>
                             </div>
-
 
                             {/* comment field */}
                             <div className="mt-3">
                                 <h6>Write your comments here: </h6>
                                 <div className="ck-editor-holder stop-timer-options">
-                                    <CKEditorComponent data={comment} onChange={handleEditorChange} />
+                                    <CKEditorComponent
+                                        data={comment}
+                                        onChange={handleEditorChange}
+                                    />
                                 </div>
                                 <Switch.Case condition={error?.comment}>
-                                    <div className='f-14 text-danger'>{error?.comment}</div>
+                                    <div className="f-14 text-danger">
+                                        {error?.comment}
+                                    </div>
                                 </Switch.Case>
                             </div>
 
                             {/* footer section */}
-                            <div className='mt-3 w-100 d-flex align-items-center'>
+                            <div className="mt-3 w-100 d-flex align-items-center">
                                 {/* back button */}
                                 <Button
-                                    variant='tertiary'
-                                    onClick={() => onBack(null)}
-                                    className='ml-auto mr-2'
+                                    variant="tertiary"
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurationStart("");
+                                        setDurationEnd("");
+                                    }}
+                                    className="ml-auto mr-2"
                                 >
                                     Back
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) =>
+                                        handleSubmission(e, "CONTINUE")
+                                    }
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

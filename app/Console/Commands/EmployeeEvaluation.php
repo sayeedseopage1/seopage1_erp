@@ -38,8 +38,9 @@ class EmployeeEvaluation extends Command
         $employee_evaluations = ModelsEmployeeEvaluation::where('employee_status',0)->get();
         foreach($employee_evaluations as $data)
         {
+            $evaluation_tsak = EmployeeEvaluationTask::where('user_id',$data->user_id)->orderBy('id','desc')->first();
             $currentTime = Carbon::now();
-            if($data->exp_date <= $currentTime)
+            if($data->exp_date <= $currentTime && $evaluation_tsak != null)
             {
                 if($data->pending_action_sending_time == null && $data->user_status == 'PM')
                 {

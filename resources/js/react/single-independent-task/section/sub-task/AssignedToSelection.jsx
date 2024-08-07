@@ -11,6 +11,7 @@ import { Placeholder } from "../../../global/Placeholder";
 import { useAuth } from "../../../hooks/useAuth";
 
 const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
+    const auth = useAuth();
     const [query, setQuery] = React.useState("");
     const [employeeId, setEmployeeId] = React.useState();
     const params = useParams();
@@ -18,6 +19,7 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
         `/${params?.taskId}/json?mode=employees`
     );
 
+    console.log("fetching empoloyees", data);
     const { DevProgressStatus, isLoading } = useDeveloperInProgressTaskQuery(
         employeeId,
         {
@@ -35,10 +37,15 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
         );
     } else if (taskCategory && taskCategory.id === 7) {
         employees = _.filter(data, (d) => Number(d.role_id) === 10);
+    } else if (auth.roleId === 15) {
+        employees = _.filter(data, (d) => Number(d.role_id) === 6);
     } else {
         employees = _.filter(
             data,
-            (d) => Number(d.role_id) === 5 || Number(d.role_id) === 14
+            (d) =>
+                Number(d.role_id) === 5 ||
+                Number(d.role_id) === 14 ||
+                Number(d.role_id) === 6
         );
     }
     // console.log("employees", employees);
@@ -50,6 +57,8 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
                       .toLowerCase()
                       .includes(query.toLowerCase());
               });
+
+    console.log("employees", employees);
 
     return (
         <Combobox value={selected} onChange={onSelect}>

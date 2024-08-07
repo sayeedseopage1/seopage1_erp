@@ -5,7 +5,7 @@ import Button from "./Button";
 import dayjs from "dayjs";
 import { useUsers } from "../../hooks/useUsers";
 import { User } from "../../utils/user-details";
-
+import { convertTime } from "../../utils/../../react-latest/utils/converTime";
 // const RevisionText = ({text, index, date, time, revision}) => {
 //     const [expend, setExpend] = React.useState(false);
 //     const ref = React.useRef();
@@ -81,7 +81,7 @@ import { User } from "../../utils/user-details";
 const RevisionText = ({ index, revision }) => {
     const [expend, setExpend] = React.useState(false);
     const ref = React.useRef();
-    console.log("revision", revision);
+
     const toggleModal = (e) => {
         e.preventDefault();
         setExpend(!expend);
@@ -111,7 +111,7 @@ const RevisionText = ({ index, revision }) => {
 
     const date = dayjs(revision?.createdAt).format("MMM DD, YYYY");
     const time = dayjs(revision?.createdAt).format("hh:mm A");
-
+    console.log("revision in subtask", revision);
     return (
         <div className="sp1_task_card--sub-card" style={{ minHeight: "110px" }}>
             <div className="sp1_tc_sc-inx">
@@ -123,6 +123,12 @@ const RevisionText = ({ index, revision }) => {
                 <span className="d-block">
                     <strong>Time</strong>: {time}
                 </span>
+                {revision?.totalMin && (
+                    <span className="d-block">
+                        <strong>Rev.Time</strong>:{" "}
+                        {`${convertTime(revision?.totalMin)}`}
+                    </span>
+                )}
             </div>
             <div className="px-3">
                 {revision?.revisionAcknowledgement ? (

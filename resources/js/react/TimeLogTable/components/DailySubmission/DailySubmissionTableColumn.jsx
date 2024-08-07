@@ -5,6 +5,7 @@ import "../data-table.css";
 import UserRender from "../UserRender";
 import Person from "../../../tasks/components/Person";
 import DailySubmissionType from "./table_components/DailySubmissionType";
+import FileList from "../../../global/fileLists/FileList";
 
 export const DailySubmissionTableColumn = [
     {

@@ -56,6 +56,22 @@ const DealApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
+        // project details for reassign pm
+        reassignProjectDetails: build.query({
+            query: (dealId) => `/account/project-details-with-assignable-pm/${dealId}`,
+        }),
+        // reassign project manager
+        reassignProjectManager: build.mutation({
+            query: (data) => ({
+                url: "/account/reassign-pm-to-project",
+                method: "POST",
+                body: {
+                    ...data,
+                    _token,
+                },
+            }),
+            invalidatesTags: ["DEALS"]
+        })
  
     }),
 });
@@ -65,5 +81,7 @@ export const {
     useDealCreateMutation,
     useDealUpdateMutation,
     useDealDeleteMutation,
-    useExportableDealsMutation
+    useExportableDealsMutation,
+    useReassignProjectDetailsQuery,
+    useReassignProjectManagerMutation
 } = DealApiSlice;

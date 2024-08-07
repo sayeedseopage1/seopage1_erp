@@ -185,35 +185,47 @@ class EmployeeController extends AccountBaseController
 
         /**EVALUATION START */
         if($request->role == 14){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->save();
+            }
         }
         if($request->role == 15){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->user_status = 'PM';
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->user_status = 'PM';
+                $employee_evaluation->save();
+            }
         }
         if($request->role == 16){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->user_status = 'LD';
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->user_status = 'LD';
+                $employee_evaluation->save();
+            }
         }
         if($request->role == 17){
-            $employee_evaluation = new EmployeeEvaluation();
-            $employee_evaluation->user_id = $user->id; 
-            $employee_evaluation->user_name = $user->name;
-            $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->user_status = 'SE';
-            $employee_evaluation->save();
+            $isExist = EmployeeEvaluation::where('user_id', $user->id)->first();
+            if (!$isExist) {
+                $employee_evaluation = new EmployeeEvaluation();
+                $employee_evaluation->user_id = $user->id; 
+                $employee_evaluation->user_name = $user->name;
+                $employee_evaluation->join_date = $user->created_at;
+                $employee_evaluation->user_status = 'SE';
+                $employee_evaluation->save();
+            }
         }
         /**EVALUATION END */
 
@@ -961,18 +973,13 @@ class EmployeeController extends AccountBaseController
 
     public function ProjectEnable(Request $request)
     {
-        $pm_id= PMAssign::where('pm_id',$request->id)->first();
-       $assign= PMAssign::find($pm_id->id);
-       if($request->project_enable == 'enable')
-       {
-        $assign->status = 1;
+        $pmAssign = PMAssign::where('pm_id', $request->id)->first();
+        $pmAssign->status = $request->status;
+        $pmAssign->save();
+    //    Toastr::success('Status changed successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+    //             return back();
 
-       }else{
-        $assign->status = 0;
-       }
-       $assign->save();
-       Toastr::success('Status changed successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-                return back();
+        return Reply::success(__('Status changed successfully'));
       
     }
 

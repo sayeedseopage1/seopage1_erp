@@ -1,0 +1,86 @@
+.dashboardDataTable {
+  scrollbar-width: thin;
+  scrollbar-color: #99BCD4 transparent;
+  scroll-behavior: smooth !important;
+  border-radius: 8px !important;
+  -webkit-border-radius: 5px;
+}
+
+.dashboardDataTable::-webkit-scrollbar {
+  width: 10px !important;
+  scroll-behavior: smooth !important;
+}
+
+.dashboardDataTable::-webkit-scrollbar-thumb {
+  background-color: #99BCD4 !important;
+  border-radius: 8px !important;
+  -webkit-border-radius: 5px;
+}
+.dashboardDataTable::-webkit-scrollbar-track {
+  background-color: transparent !important;
+  border-radius: 10px !important;
+} 
+
+
+.dashboardDataTable .sp1_tasks_td:not(:first-child) {
+  padding: 10px 0 !important;
+  text-align: center !important;
+  color: #595959;
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.dashboardDataTable .sp1_tasks_tr:nth-child(odd) {
+  background-color: #F2F9FE;
+}
+
+.dashboardDataTable .sp1_tasks_tr:nth-child(even) {
+  background-color: #D8EDFC;
+}
+
+.dashboardDataTable .sp1_tasks_tr:hover>td {
+  background-color: #D8EDFC;
+  border-bottom: 1px solid #e2e2e2;
+  border-top: 1px solid #e2e2e2;
+  color: #222;
+}
+.dashboardDataTable .sp1_tasks_th {
+  color: #000000 !important;
+  font-size: 14px !important;
+  font-family: Poppins, sans-serif !important;
+  font-weight: 500 !important;
+}
+
+
+
+
+
+.dashboardDataTable .dashboardTaskTableStatus {
+  width: 75%;
+  margin: 0 auto;
+  
+}
+.dashboardDataTable .dashboardMilestoneTableStatus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.dashboardDataTable .dashboardMilestoneTableStatus p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  color: #fff;
+  font-family: Poppins, sans-serif; 
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-radius: 56px;
+  width: 50%;
+}
