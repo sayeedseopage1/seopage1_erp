@@ -6742,9 +6742,7 @@ class TaskController extends AccountBaseController
     public function storeDailySubmission(Request $request)
     {
         $datas = json_decode($request->input('submittedData'), true);
-        // dd($datas);
         DB::beginTransaction();
-
         $daily_submission = new DailySubmission();
         $daily_submission->user_id = $request->user_id;
         $daily_submission->task_id = $request->task_id;
@@ -6760,8 +6758,6 @@ class TaskController extends AccountBaseController
         $daily_submission->password = $datas['frontendPasswordValue'] ?? null;
         $daily_submission->save();
 
-        // dd('ok');
-
         foreach ($datas['pageData'] as $data) {
             foreach ($data as $sectionItem) {
                 $section = new DailySubmissionSection();
@@ -6773,49 +6769,63 @@ class TaskController extends AccountBaseController
                 $submission_details->daily_submission_id = $daily_submission->id;
                 $submission_details->daily_submission_category_id = $sectionItem['categoryId'];
                 $submission_details->daily_submission_sections_id = $section->id;
-                $submission_details->section_name = $sectionItem['sectionName'] ?? null;
-                $submission_details->web_version_link = $sectionItem['webVersionUrl'] ?? null;
-                $submission_details->web_version_file = $sectionItem['webVersionFile'] ?? null;
-                $submission_details->mobile_version_link = $sectionItem['mobileVersionUrl'] ?? null;
-                $submission_details->mobile_version_file = $sectionItem['mobileVersionFile'] ?? null;
-                $submission_details->tab_version_link = $sectionItem['tabVersionUrl'] ?? null;
-                $submission_details->tab_version_file = $sectionItem['tabVersionFile'] ?? null;
-                $submission_details->section_comment = $sectionItem['comment'] ?? null;
-                $submission_details->responsiveness_title = $sectionItem['name'] ?? null;
-                $submission_details->responsiveness_link = $sectionItem['screenshotUrl'] ?? null;
-                $submission_details->responsiveness_title = $sectionItem['comment'] ?? null;
-                $submission_details->revisions_list = $sectionItem['assignedRevisions'] ?? null;
-                $submission_details->revisions_complete_today = $sectionItem['completedRevisions'] ?? null;
-                $submission_details->revisions_percentage = $sectionItem['completedPercentage'] ?? null;
-                $submission_details->revisions_comment = $sectionItem['comment'] ?? null;
-                $submission_details->bug_about = $sectionItem['bugName'] ?? null;
-                $submission_details->bug_fix_today = $sectionItem['bugFixedPercentage'] ?? null;
-                $submission_details->bug_comment = $sectionItem['comment'] ?? null;
-                $submission_details->functionality_about = $sectionItem['functionalityName'] ?? null;
-                $submission_details->functionality_fix_today = $sectionItem['totalFixedPercentage'] ?? null;
-                $submission_details->functionality_comment = $sectionItem['comment'] ?? null;
-                $submission_details->speed_before_started_today = $sectionItem['speedBeforeStarted'] ?? null;
-                $submission_details->speed_before_link = $sectionItem['screenshotUrlBeforeStarted'] ?? null;
-                $submission_details->speed_after_finished_working_today = $sectionItem['speedAfterFinished'] ?? null;
-                $submission_details->speed_after_finished_working_link = $sectionItem['screenshotUrlAfterFinished'] ?? null;
-                $submission_details->speed_comment = $sectionItem['comment'] ?? null;
-                $submission_details->domain_hosting_comment = $sectionItem['comment'] ?? null;
-                $submission_details->migration_size_of_the_website = $sectionItem['websiteSize'] ?? null;
-                $submission_details->migration_reason = $sectionItem['migrationReason'] ?? null;
-                $submission_details->migration_comment = $sectionItem['comment'] ?? null;
-                $submission_details->product_uploading_today = $sectionItem['totalProducts'] ?? null;
-                $submission_details->product_uploading_link = $sectionItem['screenshotUrl'] ?? null;
-                $submission_details->product_uploading_comment = $sectionItem['comment'] ?? null;
-                $submission_details->blog_uploading_post_today = $sectionItem['totalBlogPosts'] ?? null;
-                $submission_details->blog_uploading_link = $sectionItem['screenshotUrl'] ?? null;
-                $submission_details->blog_uploading_comment = $sectionItem['comment'] ?? null;
-                $submission_details->cloning_page_create_today = $sectionItem['totalClonedPages'] ?? null;
-                $submission_details->cloning_change_content_img_page = $sectionItem['isContentChanged'] ?? null;
-                $submission_details->cloning_page_link = $sectionItem['screenshotUrl'] ?? null;
-                $submission_details->cloning_comment = $sectionItem['comment'] ?? null;
-                $submission_details->others_title = $sectionItem['workDone'] ?? null;
-                $submission_details->others_link = $sectionItem['screenshotUrl'] ?? null;
-                $submission_details->others_comment = $sectionItem['comment'] ?? null;
+
+                if($sectionItem['categoryId'] == 1){
+                    $submission_details->section_name = isset($sectionItem['sectionName']) ? $sectionItem['sectionName'] : null;
+                    $submission_details->web_version_link = isset($sectionItem['webVersionUrl']) ? $sectionItem['webVersionUrl'] : null;
+                    $submission_details->web_version_file = isset($sectionItem['webVersionFile']) ? implode(',', $sectionItem['webVersionFile']) : null;
+                    $submission_details->mobile_version_link = isset($sectionItem['mobileVersionUrl']) ? $sectionItem['mobileVersionUrl'] : null;
+                    $submission_details->mobile_version_file = isset($sectionItem['mobileVersionFile']) ? implode(',', $sectionItem['mobileVersionFile']) : null;
+                    $submission_details->tab_version_link = isset($sectionItem['tabVersionUrl']) ? $sectionItem['tabVersionUrl'] : null;
+                    $submission_details->tab_version_file = isset($sectionItem['tabVersionFile']) ? implode(',', $sectionItem['tabVersionFile']) : null;
+                    $submission_details->section_comment = isset($sectionItem['comment']) ? $sectionItem['comment'] : null;
+                }elseif($sectionItem['categoryId'] == 2){
+                    $submission_details->responsiveness_title = $sectionItem['name'] ?? null;
+                    $submission_details->responsiveness_link = $sectionItem['screenshotUrl'] ?? null;
+                    $submission_details->responsiveness_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 3){
+                    $submission_details->revisions_list = $sectionItem['assignedRevisions'] ?? null;
+                    $submission_details->revisions_complete_today = $sectionItem['completedRevisions'] ?? null;
+                    $submission_details->revisions_percentage = $sectionItem['completedPercentage'] ?? null;
+                    $submission_details->revisions_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 4){
+                    $submission_details->bug_about = $sectionItem['bugName'] ?? null;
+                    $submission_details->bug_fix_today = $sectionItem['bugFixedPercentage'] ?? null;
+                    $submission_details->bug_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 5){
+                    $submission_details->functionality_about = $sectionItem['functionalityName'] ?? null;
+                    $submission_details->functionality_fix_today = $sectionItem['totalFixedPercentage'] ?? null;
+                    $submission_details->functionality_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 6){
+                    $submission_details->speed_before_started_today = $sectionItem['speedBeforeStarted'] ?? null;
+                    $submission_details->speed_before_link = $sectionItem['screenshotUrlBeforeStarted'] ?? null;
+                    $submission_details->speed_after_finished_working_today = $sectionItem['speedAfterFinished'] ?? null;
+                    $submission_details->speed_after_finished_working_link = $sectionItem['screenshotUrlAfterFinished'] ?? null;
+                    $submission_details->speed_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 7){
+                    $submission_details->domain_hosting_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 8){
+                    $submission_details->migration_size_of_the_website = $sectionItem['websiteSize'] ?? null;
+                    $submission_details->migration_reason = $sectionItem['migrationReason'] ?? null;
+                    $submission_details->migration_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 9){
+                    $submission_details->product_uploading_today = $sectionItem['totalProducts'] ?? null;
+                    $submission_details->product_uploading_link = $sectionItem['screenshotUrl'] ?? null;
+                    $submission_details->product_uploading_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 10){
+                    $submission_details->blog_uploading_post_today = $sectionItem['totalBlogPosts'] ?? null;
+                    $submission_details->blog_uploading_link = $sectionItem['screenshotUrl'] ?? null;
+                    $submission_details->blog_uploading_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 11){
+                    $submission_details->cloning_page_create_today = $sectionItem['totalClonedPages'] ?? null;
+                    $submission_details->cloning_change_content_img_page = $sectionItem['isContentChanged'] ?? null;
+                    $submission_details->cloning_page_link = $sectionItem['screenshotUrl'] ?? null;
+                    $submission_details->cloning_comment = $sectionItem['comment'] ?? null;
+                }elseif($sectionItem['categoryId'] == 12){
+                    $submission_details->others_title = $sectionItem['workDone'] ?? null;
+                    $submission_details->others_link = $sectionItem['screenshotUrl'] ?? null;
+                    $submission_details->others_comment = $sectionItem['comment'] ?? null;
+                } 
                 $submission_details->save();
             }
         }
@@ -6848,6 +6858,7 @@ class TaskController extends AccountBaseController
         // $daily_submission->status = 1;
         // $daily_submission->report_date = $request->report_date;
         // $daily_submission->mark_as_complete = $request->mark_as_complete;
+
         DB::commit();
         return response()->json([
             'message' => 'Daily submission submitted successfully',
@@ -6882,7 +6893,6 @@ class TaskController extends AccountBaseController
     }
     public function allDailySubmission(Request $request)
     {
-        // /   dd($request);
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
         $employeeId = $request->input('employee_id', null);
@@ -6891,7 +6901,62 @@ class TaskController extends AccountBaseController
         $status = $request->input('status', null);
         $projectId = $request->input('project_id', null);
         //    / dd($startDate,$endDate);
-        $dailySubmission = DailySubmission::select(
+
+        // $dailySubmission = DailySubmissionDetail::with(['section', 'section.daily_submission'])
+        //                 ->select(
+        //                     'daily_submission_details.*',
+        //                     // 'employee.id as employee_id',
+        //                     // 'employee.name as employee_name',
+        //                     // 'employee.image as employee_image',
+        //                     // 'daily_submissions.report_date as report_date',
+        //                     // 'client.id as client_id',
+        //                     // 'client.name as client_name',
+        //                     // 'client.image as client_image',
+        //                     // 'projects.id as project_id',
+        //                     // 'projects.project_name as project_name',
+        //                     // 'tasks.id as task_id',
+        //                     // 'tasks.heading as task_name',
+        //                     // 'tasks.status as task_status',
+        //                     // 'pm.id as pm_id',
+        //                     // 'pm.name as pm_name',
+        //                     // 'pm.image as pm_image',
+        //                     // 'ld.id as ld_id',
+        //                     // 'ld.name as ld_name',
+        //                     // 'ld.image as ld_image',
+        //                     // 'task_types.id as page_type_id',
+        //                     // 'task_types.task_type as task_type',
+        //                     // 'task_types.page_type as page_type',
+        //                     // 'task_types.page_url as page_link',
+        //                     // 'daily_submissions.comment as comment',
+        //                     // 'daily_submissions.hours_spent as total_time_spent',
+        //                     // 'daily_submissions.attachments as attachments',
+        //                     // 'working_environments.site_url as site_url',
+        //                     // 'working_environments.frontend_password as frontend_password',
+        //                     // 'daily_submissions.link_name as screenshot_screenrecord_link',
+        //                     // 'daily_submissions.created_at as report_submission_date',
+        //                     // 'taskboard_columns.column_name as status_name',
+        //                     // 'taskboard_columns.label_color as status_color',
+        //                     )
+
+        //                 ->leftJoin('daily_submissions', 'daily_submissions.id', '=', 'daily_submission_details.daily_submission_id')
+        //                 // ->leftJoin('tasks', 'tasks.id', '=', 'daily_submissions.task_id')
+        //                 // ->leftJoin('task_types', 'tasks.id', '=', 'task_types.task_id')
+        //                 // ->leftJoin('users as employee', 'employee.id', '=', 'daily_submissions.user_id')
+        //                 // ->leftJoin('users as client', 'client.id', '=', 'daily_submissions.client_id')
+        //                 // ->leftJoin('projects', 'projects.id', '=', 'daily_submissions.project_id')
+        //                 // ->leftJoin('project_members', 'projects.id', '=', 'project_members.project_id')
+        //                 // ->leftJoin('users as pm', 'pm.id', '=', 'projects.pm_id')
+        //                 // ->leftJoin('users as ld', 'ld.id', '=', 'tasks.added_by')
+        //                 // ->leftJoin('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
+        //                 // ->leftJoin('working_environments', 'projects.id', '=', 'working_environments.project_id')
+        //                 // ->groupBy('daily_submissions.task_id')
+        //                 ->get();
+
+        // dd($dailySubmission);
+
+
+        $dailySubmission = DailySubmission::with('sections.submission_details')->select(
+            'daily_submissions.id',
             'employee.id as employee_id',
             'employee.name as employee_name',
             'employee.image as employee_image',
@@ -6923,8 +6988,7 @@ class TaskController extends AccountBaseController
             'daily_submissions.link_name as screenshot_screenrecord_link',
             'daily_submissions.created_at as report_submission_date',
             'taskboard_columns.column_name as status_name',
-            'taskboard_columns.label_color as status_color'
-            // DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.task_id = tasks.id  AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
+            'taskboard_columns.label_color as status_color',
         )
             ->join('tasks', 'tasks.id', '=', 'daily_submissions.task_id')
             ->leftJoin('task_types', 'tasks.id', '=', 'task_types.task_id')
@@ -6978,6 +7042,8 @@ class TaskController extends AccountBaseController
                 }
             }
         }
+
+        // dd($dailySubmission);
 
 
         return response()->json([

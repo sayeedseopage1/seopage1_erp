@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class DailySubmission extends Model
 {
     use HasFactory;
+
+    public function sections()
+    {
+        return $this->hasMany(DailySubmissionSection::class, 'daily_submission_id');
+    }
 }
