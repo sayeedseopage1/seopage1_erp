@@ -48,6 +48,8 @@ export const apiSlice = createApi({
         "GET_ACHIEVED_INCENTIVE",
         "GET_INCENTIVE_HELD_AMOUNT",
         "INCENTIVE_CRITERIA",
+        "SINGLE_PROJECT_DETAILS",
+        "PROJECT_PENDING_EXTENSION_HISTORY",
         "ALL_PORTFOLIO",
         "PORTFOLIO_BY_ID",
     ],

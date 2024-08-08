@@ -44,13 +44,6 @@
     background-color: #eff1f6;
 }
 
-.sp1_project_task_table{
-    /* border-left: 1px solid #e9eaec; */
-    color: #777;
-    border-radius: 0;
-    padding-top: 3px;
-    padding-bottom: 3px;
-}
 
 .sp1_tasks_filter_container{
     padding: 10px;
@@ -66,10 +59,13 @@
 
 .sp1_project_task_table{
     font-weight: 500;
-    border-radius: 3px;
     font-size: 14px;
     padding: 0px 10px;
     height: 35px;
+    color: #777;
+    border-radius: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 
 .sp1_tasks_filter_item{
@@ -125,3 +121,45 @@
 .sp1_data_table_td--acknowledgement{
     min-width: 320px;
 }
+
+
+
+/* 
+    Custom Class
+*/
+
+.flexCenter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flexItemCenter{
+    display: flex;
+    align-items: center;
+}
+
+.flexBetween{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flexStart{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.flexEnd{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.flexColumn{
+    display: flex;
+    flex-direction: column;
+}
+
+

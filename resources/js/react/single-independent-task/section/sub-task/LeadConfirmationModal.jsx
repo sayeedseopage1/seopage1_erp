@@ -10,7 +10,12 @@ const LeadConfirmationModal = ({ isOpen, onConfirm }) => {
     const auth = new User(window.Laravel.user);
 
     React.useEffect(() => {
-        if (auth.getRoleId() && auth.getRoleId() === 6) {
+        if (
+            auth.getRoleId() &&
+            (auth.getRoleId() === 6 ||
+                auth.getRoleId() === 15 ||
+                auth.getRoleId() === 16)
+        ) {
             let count = countDown ?? 0;
 
             let timeIntervelId = setInterval(() => {

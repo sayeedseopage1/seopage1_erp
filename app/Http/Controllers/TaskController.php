@@ -1294,6 +1294,14 @@ class TaskController extends AccountBaseController
             $task_revision->lead_comment = $request->comment;
         }
 
+        if(Auth::user()->role_id == 15){
+            $task_revision->revision_status = 'Probationary Project Manager';
+            $task_revision->lead_comment = $request->comment;
+        }elseif(Auth::user()->role_id == 16){
+            $task_revision->revision_status = 'Probationary Lead Developer';
+            $task_revision->lead_comment = $request->comment;
+        }
+
         if (Auth::user()->role_id == 4 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
             $task_revision->revision_status = 'Project Manager Revision';
             $task_revision->pm_comment = $request->comment;
@@ -1330,18 +1338,21 @@ class TaskController extends AccountBaseController
 
         /**EMPLOYEE EVALUATION START */
         $evaluation_task = EmployeeEvaluationTask::where('task_id',$task_revision->task_id)->first();
-        $user = User::where('id',$evaluation_task->user_id)->first();
-        if($user->role_id == 15 || $user->role_id == 16 || $user->role_id == 17){
-            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
-            if($taskFind != null){
-                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
-                if($evaluation !=null)
-                {
-                    $evaluation->revision_number = $task_revision->revision_no;
-                    $evaluation->save();
+        if($evaluation_task !=null)
+        {
+            $user = User::where('id',$evaluation_task->user_id)->first();
+            if($user->role_id == 15 || $user->role_id == 16 || $user->role_id == 17){
+                $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+                if($taskFind != null){
+                    $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+                    if($evaluation !=null)
+                    {
+                        $evaluation->revision_number = $task_revision->revision_no;
+                        $evaluation->save();
+                    }
                 }
             }
-        }
+        }        
         //ONLY FOR Developer
         $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); 
         if($taskFind != null){
@@ -4679,6 +4690,14 @@ class TaskController extends AccountBaseController
             }
             $Sub_Tasks = $subtasks;
             $revisions = TaskRevision::where('task_id', $task->id)->get();
+            foreach ($revisions as $revision) {
+                $timeLogData = ProjectTimeLog::where('revision_id', $revision->id)->get();
+                if (!$timeLogData->isEmpty()) {
+                    $revision->total_hours = $timeLogData->sum('total_hours');
+                    $revision->total_minutes = $timeLogData->sum('total_minutes');
+                }
+            }
+
             if ($revisions == null) {
                 $revisions = '';
             }
@@ -4806,6 +4825,7 @@ class TaskController extends AccountBaseController
             ->orWhere('role_id',9)
             ->orWhere('role_id',10) 
             ->orWhere('role_id',14) 
+            ->orWhere('role_id',6) 
             ->get()
             ->map(function ($row) {
                 $task_assign = Task::select('tasks.*')
@@ -6733,26 +6753,20 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
-
-
         $daily_submission = new DailySubmission();
+        
+        $file_name = [];
+        if ($request->hasFile('file')) {
+            $files = $request->file('file');
 
-        if ($request->file('file') != null) {
-            foreach ($request->file('file') as $att) {
-                $task_submit = new TaskSubmission();
-                $filename = null;
-                if ($att) {
-                    $filename = time() . $att->getClientOriginalName();
-
-                    Storage::disk('public')->putFileAs(
-                        'DailySubmission/',
-                        $att,
-                        $filename
-                    );
-                }
-                $daily_submission->attachments = $filename;
+            foreach ($files as $file) {
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
             }
         }
+
+        $daily_submission->attachments = !empty($file_name) ? json_encode($file_name) : null;
         $daily_submission->user_id = $request->user_id;
         $daily_submission->task_id = $request->task_id;
         $daily_submission->project_id = $request->project_id;
@@ -6839,6 +6853,7 @@ class TaskController extends AccountBaseController
             'daily_submissions.attachments as attachments',
             'working_environments.site_url as site_url',
             'working_environments.frontend_password as frontend_password',
+            'daily_submissions.link_name as screenshot_screenrecord_link',
             'daily_submissions.created_at as report_submission_date',
             'taskboard_columns.column_name as status_name',
             'taskboard_columns.label_color as status_color'
@@ -6885,6 +6900,17 @@ class TaskController extends AccountBaseController
             $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
         }
         $dailySubmission = $dailySubmission->get();
+        $baseUrl = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/';
+        foreach ($dailySubmission as $submission) {
+            if (!empty($submission->attachments)) {
+                $attachments = json_decode($submission->attachments, true);
+                if (is_array($attachments)) {
+                    $submission->attachments = array_map(function($attachment) use ($baseUrl) {
+                        return $baseUrl . $attachment;
+                    }, $attachments);
+                }
+            }
+        }
 
 
         return response()->json([

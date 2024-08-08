@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Popover from "../../global/Popover";
 import ActionDropdown from "./ActionDropdown";
 import { User } from "../../utils/user-details";
+import PersonAvatar from "../../global/PersonAvatar";
 
 const compareDate = new CompareDate();
 
@@ -58,13 +59,12 @@ export const TaskTableColumns = [
                                 <span
                                     className="badge badge-success"
                                     style={{
-                                        display: `${
-                                            Number(
-                                                data?.independent_task_status
-                                            ) === 1
-                                                ? "inline-block"
-                                                : "none"
-                                        }`,
+                                        display: `${Number(
+                                            data?.independent_task_status
+                                        ) === 1
+                                            ? "inline-block"
+                                            : "none"
+                                            }`,
                                         position: "absolute",
                                         top: "-10px",
                                         right: "-5px",
@@ -247,7 +247,7 @@ export const TaskTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return data?.project_manager_id ? (
-                <Person
+                <PersonAvatar
                     url={`/account/employees/${data?.project_manager_id}`}
                     name={data?.pm_id_name}
                     avatar={data?.pm_id_avatar}
@@ -331,13 +331,13 @@ export const TaskTableColumns = [
                 <strong>
                     {Number(data?.board_column_id) === 4
                         ? data?.completion_date && (
-                              <>
-                                  {dayjs(data?.completion_date).format(
-                                      "DD-MM-YYYY"
-                                  )}{" "}
-                                  <br />
-                              </>
-                          )
+                            <>
+                                {dayjs(data?.completion_date).format(
+                                    "DD-MM-YYYY"
+                                )}{" "}
+                                <br />
+                            </>
+                        )
                         : "--"}
                 </strong>
             );
@@ -348,10 +348,9 @@ export const TaskTableColumns = [
         id: "submission_data",
         header: "Submission Date",
         accessorFn: (row) =>
-            `${
-                row?.task_submission_date
-                    ? dayjs(row?.task_submission_date).format("DD-MM-YYYY")
-                    : "--"
+            `${row?.task_submission_date
+                ? dayjs(row?.task_submission_date).format("DD-MM-YYYY")
+                : "--"
             }`,
         cell: ({ row }) => {
             const data = row?.original;
@@ -434,7 +433,7 @@ export const TaskTableColumns = [
             const data = row?.original;
 
             return (
-                <Person
+                <PersonAvatar
                     url={`/account/employees/${data?.added_by}`}
                     avatar={data?.added_by_avatar}
                     name={data?.added_by_name}
@@ -449,7 +448,7 @@ export const TaskTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <Person
+                <PersonAvatar
                     url={`/account/employees/${data?.assigned_to_id}`}
                     avatar={data?.assigned_to_avatar}
                     name={data?.assigned_to_name}

@@ -58,8 +58,8 @@ const EvaluationAcknowledgeModal = ({
                         `/account/get-single-evaluation/${developerId}`
                     );
                     // console.log(response);
-                    setSingleEvaluation(response?.data.data[0]);
-                    setEvaluationObject(response?.data.data[0]);
+                    setSingleEvaluation(response?.data.data);
+                    setEvaluationObject(response?.data.data);
                 }
             } catch (error) {
                 console.error("Error fetching evaluations:", error);

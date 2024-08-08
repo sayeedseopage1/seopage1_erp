@@ -6,7 +6,9 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { store } from "../services/store";
 import Loading from "./components/Loading";
-import IndependentTaskProvider, { useIndependentTask } from "./context/IndependentTaskProvider";
+import IndependentTaskProvider, {
+    useIndependentTask,
+} from "./context/IndependentTaskProvider";
 import Tasks from "./pages/Tasks";
 import "./table.css";
 import "./tasks.css";
@@ -85,12 +87,10 @@ const SubtasksContainer = () => {
 //   )
 // }
 
-
-
 export const RefreshContext = createContext({});
-export function useRefresh(){
-    const { refreshState,refresh, handleRefresh } = useContext(RefreshContext);
-    return { refreshState,refresh, handleRefresh };
+export function useRefresh() {
+    const { refreshState, refresh, handleRefresh } = useContext(RefreshContext);
+    return { refreshState, refresh, handleRefresh };
 }
 
 const IndependentTask = () => {
@@ -99,20 +99,20 @@ const IndependentTask = () => {
     const { tableData, setTableData } = useIndependentTask();
     // console.log(data);
     // const { data: tasks } = useGetIndependentTaskQuery();
-    const [getIndependentTask, { isFetching, isLoading, }] = useLazyGetIndependentTaskQuery();
+    const [getIndependentTask, { isFetching, isLoading }] =
+        useLazyGetIndependentTaskQuery();
 
     // user and auth
     const user = new User(window.Laravel.user);
     const auth = _.includes([1, 8], user.getRoleId());
 
-    const filteredData = (data=[])=>{
-      const newData = data.filter((d)=>{
-        return d.assigned_by_id === user.id || d.assigned_to_id === user.id;
-      })
-
-      return newData;
-    }
-
+    const filteredData = (data = []) => {
+        const newData = data.filter((d) => {
+            return d.assigned_by_id === user.id || d.assigned_to_id === user.id;
+        });
+        console.log("new data filter filter", newData);
+        return newData;
+    };
 
     // fetching data against dependencies
     useEffect(() => {
@@ -124,17 +124,15 @@ const IndependentTask = () => {
                     if (Number(status) === 200) {
                         if (auth) {
                             setTableData(data);
-                        }else{
-                            setTableData(filteredData(data))
+                        } else {
+                            setTableData(filteredData(data));
                         }
                     } else {
                         setTableData([]);
                     }
-                })
+                });
         }
-    }, [filter, refresh])
-
-
+    }, [filter, refresh]);
 
     // console.log({ filter, refresh, isLoading, isFetching, tableData });
 
@@ -145,7 +143,7 @@ const IndependentTask = () => {
         if (queryString) {
             setFilter(queryString);
         }
-    }
+    };
 
     //   return (
     //
@@ -154,53 +152,58 @@ const IndependentTask = () => {
     //     </RefreshContext.Provider>
     //   );
 
-    const handleRefresh = useCallback(()=>{
-      setRefresh(prev=>!prev);
-    },[setRefresh]) ;
+    const handleRefresh = useCallback(() => {
+        setRefresh((prev) => !prev);
+    }, [setRefresh]);
 
     return (
-            <RefreshContext.Provider value={{ refreshState:refresh,refresh:isLoading||isFetching, handleRefresh }}>
-                <BrowserRouter basename="/account/independent">
-                    <Routes>
-                        <Route path="/" element={<Container />}>
-                            <Route
-                                path="/tasks"
-                                element={
-                                    <Tasks
-                                        tableData={tableData}
-                                        isLoading={isLoading || isFetching}
-                                        onFilter={onFilter}
-                                        filter={filter}
-                                    />
-                                }
-                            />
+        <RefreshContext.Provider
+            value={{
+                refreshState: refresh,
+                refresh: isLoading || isFetching,
+                handleRefresh,
+            }}
+        >
+            <BrowserRouter basename="/account/independent">
+                <Routes>
+                    <Route path="/" element={<Container />}>
+                        <Route
+                            path="/tasks"
+                            element={
+                                <Tasks
+                                    tableData={tableData}
+                                    isLoading={isLoading || isFetching}
+                                    onFilter={onFilter}
+                                    filter={filter}
+                                />
+                            }
+                        />
 
-                            <Route
-                                path="/subtasks"
-                                element={
-                                    <Subtasks
-                                        tableData={tableData}
-                                        isLoading={isLoading || isFetching}
-                                        onFilter={onFilter}
-                                        filter={filter}
-                                    />
-                                }
-                            />
+                        <Route
+                            path="/subtasks"
+                            element={
+                                <Subtasks
+                                    tableData={tableData}
+                                    isLoading={isLoading || isFetching}
+                                    onFilter={onFilter}
+                                    filter={filter}
+                                />
+                            }
+                        />
 
-                            <Route
-                                path="/my-tasks"
-                                element={
-                                    <Subtasks
-                                        tableData={tableData}
-                                        isLoading={isLoading || isFetching}
-                                        onFilter={onFilter}
-                                        filter={filter}
-                                    />
-                                }
-                            />
+                        <Route
+                            path="/my-tasks"
+                            element={
+                                <Subtasks
+                                    tableData={tableData}
+                                    isLoading={isLoading || isFetching}
+                                    onFilter={onFilter}
+                                    filter={filter}
+                                />
+                            }
+                        />
 
-
-                            {/* <Route
+                        {/* <Route
                                 path="/subtasks"
                                 element={<SubtasksContainer />}
                             />
@@ -208,14 +211,12 @@ const IndependentTask = () => {
                                 path="/my-tasks"
                                 element={<SubtasksContainer />}
                             /> */}
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
-            </RefreshContext.Provider>
-    )
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </RefreshContext.Provider>
+    );
 };
-
-
 
 if (container) {
     ReactDOM.createRoot(container).render(
@@ -230,4 +231,3 @@ if (container) {
         </React.StrictMode>
     );
 }
-

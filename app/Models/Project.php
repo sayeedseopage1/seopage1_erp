@@ -5,11 +5,20 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\User;
-use App\Models\ProjectStatus;
-use App\Models\ProjectCategory;
-use App\Traits\CustomFieldsTrait;
-use App\Observers\ProjectObserver;
 use App\Helper\ProjectManagerPointLogic;
+use App\Models\QCSubmission;
+use App\Models\ProjectStatus;
+use App\Models\ProjectDispute;
+use App\Models\PmTaskGuideline;
+use App\Models\ProjectCategory;
+use App\Models\ProjectPortfolio;
+use App\Models\ProjectSubmission;
+use App\Traits\CustomFieldsTrait;
+use App\Models\ProjectDeliverable;
+use App\Models\WorkingEnvironment;
+use App\Observers\ProjectObserver;
+use App\Models\ProjectDeadlineExtension;
+use App\Models\PMTaskGuidelineAuthorization;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\ProjectDeliverablesClientDisagree;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -483,5 +492,49 @@ class Project extends BaseModel
     public function pmProject()
     {
         return $this->hasOne(PMProject::class, 'project_id');
+    }
+    public function workingEnvironment()
+    {
+        return $this->hasOne(WorkingEnvironment::class, 'project_id');
+    }
+
+    public function pmTaskGuidline()
+    {
+        return $this->hasOne(PmTaskGuideline::class, 'project_id');
+    }
+
+    public function pmTaskGuidelineAuthorizations()
+    {
+        return $this->hasMany(PMTaskGuidelineAuthorization::class, 'project_id');
+    }
+
+    public function projectSubmission()
+    {
+        return $this->hasOne(ProjectSubmission::class, 'project_id')->orderBy('id', 'desc');
+    }
+
+    public function projectPortfolio()
+    {
+        return $this->hasOne(ProjectPortfolio::class, 'project_id');
+    }
+
+    public function projectDeadlineExtension()
+    {
+        return $this->hasMany(ProjectDeadlineExtension::class, 'project_id');
+    }
+
+    public function projectQcSubmission()
+    {
+        return $this->hasOne(QCSubmission::class, 'project_id');
+    }
+
+    public function projectDispute()
+    {
+        return $this->hasOne(ProjectDispute::class, 'project_id');
+    }
+
+    public function projectDeliverables()
+    {
+        return $this->hasMany(ProjectDeliverable::class, 'project_id');
     }
 }

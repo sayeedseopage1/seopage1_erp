@@ -1,0 +1,49 @@
+.customTextArea {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.customTextArea label {
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 16px;
+}
+
+.customTextArea textarea {
+  background: #FFF;
+  border-radius: 7px;
+  border: 1px solid #CCC;
+  color: #626262; 
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  resize: none;
+  padding: 15px;
+} 
+.customTextArea .dangerHtml {
+  background: #FFF;
+  border-radius: 7px;
+  border: 1px solid #CCC;
+  color: #626262; 
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 15px;
+} 
+
+
+
+.customTextAreaActive {
+  color: #000 !important;
+  border: 1px solid #D8D8D8 !important;
+  background: linear-gradient(0deg, #ECECEC 0%, #ECECEC 100%), #FFF !important;
+}

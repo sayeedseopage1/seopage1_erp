@@ -5,7 +5,7 @@
 @endpush
 
 @section('filter-section')
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+<link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
 
     <x-filters.filter-box>
         {{-- <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">

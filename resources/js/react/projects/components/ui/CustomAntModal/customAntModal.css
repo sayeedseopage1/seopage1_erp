@@ -1,0 +1,178 @@
+.customAntModal .ant-modal-content {
+  border-radius: 29px !important;
+  padding: 24px !important;
+}
+
+
+
+/* 
+  Custom Modal Title hide with close button
+*/
+.customAntModalTitleWithCloseHide .ant-modal-close {
+  display: none !important;
+}
+
+/* 
+  Custom Modal Title hide with close button
+*/
+.customAntModalTitleWithCloseHide .ant-modal-content {
+  padding: 0 !important;
+  border-radius: 10px !important;
+}
+
+/* 
+  Custom Modal Title show with close button
+*/
+.customAntModalTitleWithClose .ant-modal-title {
+  color: #000 !important;
+  font-family: Poppins, sans-serif !important;
+  font-size: 20px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+}
+
+.customAntModalTitleWithClose .ant-modal-close {
+  top: 29px !important;
+  right: 20px !important;
+}
+
+.customAntModalTitleWithClose .ant-modal-close-x {
+  font-size: 25px !important;
+}
+
+
+
+
+
+
+/* 
+    Dashboard Modal Table Styles
+*/
+.dashboardModalTableContainer {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #DDDCDC;
+  scrollbar-width: thin;
+  scrollbar-color: #99BCD4 transparent;
+  scroll-behavior: smooth !important;
+}
+
+.dashboardModalTableContainer::-webkit-scrollbar {
+  width: 10px !important;
+  scroll-behavior: smooth !important;
+}
+
+.dashboardModalTableContainer::-webkit-scrollbar-thumb {
+  background-color: #ccc !important;
+  border-radius: 10px !important;
+}
+
+.dashboardModalTableContainer::-webkit-scrollbar-track {
+  background-color: transparent !important;
+
+}
+
+.dashboardModalTableItem {
+  display: flex;
+  border-bottom: 1px solid #DDDCDC;
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 15px 0;
+  margin: 0;
+}
+
+.dashboardModalTableItem a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.dashboardModalTableItem:nth-child(odd) {
+  background-color: #F2F9FE;
+}
+
+.dashboardModalTableItem:nth-child(even) {
+  background-color: #D8EDFC;
+}
+
+.dashboardModalTableItem:hover {
+  transition: 0.3s ease-in-out;
+  background-color: #D8EDFC;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem:last-child {
+  border-bottom: none;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem p {
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 15px 0;
+  margin: 0;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem ol li {
+  margin-left: 20px !important;
+  padding: 5px 0 !important;
+  list-style: auto !important;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem .dangerouslySetInnerStyle p {
+  padding: 0 !important;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem .dangerouslySetInnerStyle ul li {
+  margin-left: 20px !important;
+  padding: 5px 0 !important;
+  list-style-type: disc !important;
+}
+
+
+/* Each Modal Style */
+.projectCompletionModal .ant-modal-content {
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projectCompletionModal .ant-modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.projectQCSubmissionForm .ant-modal-content {
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projectQCSubmissionForm .ant-modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+
+.confirmationModal .ant-modal-content {
+  padding: 0 !important;
+}
+
+
+@media screen and (max-width: 768px) {
+  .customAntModalTitleWithClose .ant-modal-title {
+    font-size: 24px !important;
+  }
+
+  .customAntModalTitleWithClose .ant-modal-close {
+    top: 20px !important;
+  }
+
+  .customAntModalTitleWithClose .ant-modal-close-x {
+    font-size: 20px !important;
+  }
+}
