@@ -339,9 +339,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::group(['prefix' => '/dashboard/lead'], function () {
         Route::controller(DashboardController::class)->group(function () {
             Route::get('/table/list', 'tableListApi');
-            Route::get('/number-of-submitted-tasks', 'leadNumberOfSubmittedTasksApi');
-            Route::get('/number-of-tasks-received', 'leadNumberOfSubmittedTasksApi');
-            Route::get('/number-of-approved-tasks-on-1st-attempt-and-avg-by-project-manager', 'leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManagerApi');
         });
     });
     Route::get('dashboard/{temp?}', [DashboardController::class, 'tempDashboard'])->name('temp_dashboard');

@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use Nette\Utils\DateTime;
 use App\Models\TaskHistory;
 use App\Models\TaskRevision;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Models\TaskRevisionDispute;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,10 +75,10 @@ trait LeadDashboard
             ];
 
             $leadNumberOfTasksReceived = clone $taskWithStartEndDateWithId;
-            $this->number_of_tasks_received_lead = $this->leadNumberOfTasksReceived($leadNumberOfTasksReceived);
+            $this->number_of_tasks_received_lead_data_count = $this->leadNumberOfTasksReceived($leadNumberOfTasksReceived);
 
             $leadDashboardApi += [
-                'number_of_tasks_received_lead' => $this->number_of_tasks_received_lead,
+                'number_of_tasks_received_lead_data_count' => $this->number_of_tasks_received_lead_data_count,
             ];
 
             $leadNumberOfSubmittedTasks = clone $taskHistoryWithDateAndId;
@@ -288,10 +289,32 @@ trait LeadDashboard
 
     public function tableListApi()
     {
+
+        $tableType = [
+            'leadNumberOfTasksReceived',
+            'leadNumberOfSubmittedTasks',
+            'leadDevNumberOfApprovedTaskByClientInFirstAttempt',
+            'leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager',
+            'leadDevAvgNumberOfAttemptsNeededForApprovalByClient',
+            'leadPercentageOfTasksWithRevisions',
+            'leadAverageTaskSubmissionTime',
+            'leadAverageNumberOfInProgressTasks',
+            'leadAverageTaskHoldTime',
+            'leadPercentageOfTasksWhereDeadlineWasMissed',
+            'leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision',
+            'leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions',
+            'leadNoOfDisputesFiledLoseOverall',
+            'leadNoOfDisputesFiledLose',
+            'leadNumberOfDisputesInvolvedIn',
+            'leadHoursSpentInRevisions',
+            'leadNumberOfApproval',
+            'leadCurrentAndPastLimitedTask',
+        ];
+
         $validator = Validator::make(request()->all(), [
             'start_date' => 'date',
             'end_date'   => 'date|after:start_date',
-            'table_type' => 'string|required',
+            'table_type' => ['string', 'required', Rule::in($tableType)],
         ]);
 
         if ($validator->fails()) {
@@ -348,23 +371,31 @@ trait LeadDashboard
 
             if ($tableType == 'leadNumberOfTasksReceived') {
                 $number_of_tasks_received_lead_data = $taskWithStartEndDateWithId
-                    ->select('id', 'heading', 'project_id', 'created_at', 'status', 'start_date', 'board_column_id')
-                    ->with(
-                        'project.pm:id,name',
-                        'project.client:id,name',
+                    ->without(['submissions'])
+                    ->with([
+                        'project.pm'     => function ($pm) {
+                            $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
+                        'project.client' => function ($client) {
+                            $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
                         'project:id,pm_id,client_id',
                         'stat:id,label_color,column_name',
                         'oldestSubTask'
-                    )->get();
+                    ])
+                    ->select('id', 'heading', 'project_id', 'created_at', 'status', 'start_date', 'board_column_id')
+                    ->get();
 
                 return response([
                     'data' => [
-                        'number_of_tasks_received_lead_data_count' => $number_of_tasks_received_lead_data->count(),
-                        'number_of_tasks_received_lead_data'       => $number_of_tasks_received_lead_data,
+                        'number_of_tasks_received_lead'      => $number_of_tasks_received_lead_data->count(),
+                        'number_of_tasks_received_lead_data' => $number_of_tasks_received_lead_data,
                     ]
                 ], 200);
             }
-            // leadNumberOfSubmittedTasks
+
             if ($tableType == 'leadNumberOfSubmittedTasks') {
                 $taskHistoryWithDateAndId = $taskHistoryWithDateAndId->where('board_column_id', 6)
                     ->groupBy('task_id')
@@ -389,12 +420,12 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'submit_number_of_tasks_lead_dev_data_count' => $submit_number_of_tasks_lead_dev_data->count(),
-                        'submit_number_of_tasks_lead_dev_data'       => $submit_number_of_tasks_lead_dev_data,
+                        'submit_number_of_tasks_in_this_month_lead'      => $submit_number_of_tasks_lead_dev_data->count(),
+                        'submit_number_of_tasks_in_this_month_lead_data' => $submit_number_of_tasks_lead_dev_data,
                     ]
                 ], 200);
             }
-            // leadDevNumberOfApprovedTaskByClientInFirstAttempt
+
             if ($tableType == 'leadDevNumberOfApprovedTaskByClientInFirstAttempt') {
                 $task_ids = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
                     $q->whereNull('subtask_id');
@@ -458,8 +489,8 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'number_of_approved_tasks_on_1st_attempt_by_client_data_count' => $number_of_approved_tasks_on_1st_attempt_by_client_data->count(),
-                        'number_of_approved_tasks_on_1st_attempt_by_client_data'       => $number_of_approved_tasks_on_1st_attempt_by_client_data,
+                        'number_of_approved_tasks_on_1st_attempt_by_client'      => $number_of_approved_tasks_on_1st_attempt_by_client_data->count(),
+                        'number_of_approved_tasks_on_1st_attempt_by_client_data' => $number_of_approved_tasks_on_1st_attempt_by_client_data,
                     ]
                 ], 200);
             }
@@ -507,11 +538,11 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'average_number_of_attempts_needed'                                     => $average_number_of_attempts_needed ?? 0,
-                        'number_of_approved_tasks_by_project_manager_date_count'                => $number_of_approved_tasks_by_project_manager_date->count(),
-                        'number_of_approved_tasks_by_project_manager_date'                      => $number_of_approved_tasks_by_project_manager_date,
-                        'number_of_approved_tasks_on_1st_attempt_by_project_manager_date_count' => $number_of_approved_tasks_on_1st_attempt_by_project_manager_date->count(),
-                        'number_of_approved_tasks_on_1st_attempt_by_project_manager_date'       => $number_of_approved_tasks_on_1st_attempt_by_project_manager_date,
+                        'average_submission_approval_by_pm_lead'             => $average_number_of_attempts_needed ?? 0,
+                        'submission_approval_by_pm_lead'                     => $number_of_approved_tasks_by_project_manager_date->count(),
+                        'submission_approval_by_pm_lead_date'                => $number_of_approved_tasks_by_project_manager_date,
+                        'first_attempt_approve_task_in_this_month_lead'      => $number_of_approved_tasks_on_1st_attempt_by_project_manager_date->count(),
+                        'first_attempt_approve_task_in_this_month_lead_date' => $number_of_approved_tasks_on_1st_attempt_by_project_manager_date,
                     ]
                 ], 200);
             }
@@ -568,9 +599,9 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'avg_no_attempts'                                  => $avg_no_attempts,
-                        'total_attempts'                                   => $total_attempts,
-                        'number_of_attempts_needed_for_approval_by_client' => $number_of_attempts_needed_for_approval_by_client,
+                        'avg_number_of_attempts_needed_for_approval_by_client'   => $avg_no_attempts,
+                        'total_number_of_attempts_needed_for_approval_by_client' => $total_attempts,
+                        'number_of_attempts_needed_for_approval_by_client'       => $number_of_attempts_needed_for_approval_by_client,
                     ]
                 ], 200);
             }
@@ -623,48 +654,41 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'total_revisions_count'                               => $total_revisions_count,
-                        'number_of_tasks_with_revision_completed_model_count' => $number_of_tasks_with_revision_completed_model->count(),
-                        'number_of_tasks_with_revision_completed_model'       => $number_of_tasks_with_revision_completed_model,
-                        'percentage_of_tasks_with_revision'                   => $percentage_of_tasks_with_revision,
+                        'lead_task_with_revision_total'                 => $total_revisions_count,
+                        'lead_task_with_revision'                       => $number_of_tasks_with_revision_completed_model->count(),
+                        'percentage_of_tasks_with_revision_lead'        => $percentage_of_tasks_with_revision,
+                        'number_of_tasks_with_revision_completed_model' => $number_of_tasks_with_revision_completed_model,
                     ]
                 ], 200);
             }
             if ($tableType == 'leadAverageTaskSubmissionTime') {
-                $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+
+                $taskIds = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
                     $q->whereNull('subtask_id');
                 })->where('board_column_id', 6)
-                    ->get()->pluck('task_id')->toArray();
+                    ->pluck('task_id')
+                    ->toArray();
 
-                $average_task_submission_time_data = Task::has('firstHistoryForDevReview')
-                    ->with(
-                        'firstHistoryForDevReview',
-                        'project.pm:id,name',
-                        'project.client:id,name',
-                        'project:id,pm_id,client_id',
-                        'historyForReviews:id,task_id,created_at'
-                    )->select('id', 'created_at', 'heading', 'board_column_id', 'project_id')->find($task_id);
+                $tasks = Task::has('firstHistoryForDevReview')
+                    ->with('firstHistoryForDevReview')
+                    ->select('id', 'created_at', 'heading', 'board_column_id', 'project_id')
+                    ->find($taskIds);
 
+                $totalDays = 0;
+                $taskCount = $tasks->count();
 
-                $days = [];
-                $total_days = 0;
-                foreach ($average_task_submission_time_data as $task) {
-
+                foreach ($tasks as $task) {
                     $diffInMinutes = $task->firstHistoryForDevReview->created_at->diffInMinutes($task->created_at);
-
                     $diffInDays = round($diffInMinutes / 1440, 2);
-                    $total_days += $diffInDays;
-                    array_push($days, $diffInDays);
+                    $totalDays += $diffInDays;
                 }
 
-                $average_task_submission_time = 0;
-                if ($total_days) {
-                    $average_task_submission_time = round($total_days / $average_task_submission_time_data->count());
-                }
+                $averageTaskSubmissionTime = $taskCount > 0 ? round($totalDays / $taskCount, 2) : 0;
+
                 return response([
                     'data' => [
-                        'average_task_submission_time'      => $average_task_submission_time,
-                        'average_task_submission_time_data' => $average_task_submission_time_data
+                        'average_submission_day_in_this_month_lead'      => $averageTaskSubmissionTime,
+                        'average_submission_day_in_this_month_lead_data' => $tasks
                     ]
                 ], 200);
             }
@@ -682,10 +706,10 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'avg_number_of_in_progress_task'  => $avg_number_of_in_progress_task,
-                        'total_task_found'                => $total_task_found,
-                        'total_task_found_with_in_pro'    => $total_task_found_with_in_pro,
-                        'number_of_in_progress_task_data' => $number_of_in_progress_task_data,
+                        'avg_number_of_in_progress_task'        => $avg_number_of_in_progress_task,
+                        'total_number_in_task_lead_from_in_pro' => $total_task_found,
+                        'average_in_progress_date_range_lead'   => $total_task_found_with_in_pro,
+                        'number_of_in_progress_task_data'       => $number_of_in_progress_task_data,
                     ]
                 ], 200);
             }
@@ -753,8 +777,8 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'average_hold_time_formatted'      => $averageHoldTimeFormatted,
-                        'average_hold_time_formatted_data' => $tasks
+                        'average_average_task_hold_time_lead'      => $averageHoldTimeFormatted,
+                        'average_average_task_hold_time_lead_data' => $tasks
                     ]
                 ], 200);
             }
@@ -786,8 +810,8 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'percentage_of_tasks_where_deadline_was_missed'      => $percentage_of_tasks_where_deadline_was_missed,
-                        'percentage_of_tasks_where_deadline_was_missed_data' => $percentage_of_tasks_where_deadline_was_missed_data
+                        'percentage_of_tasks_deadline_lead'      => $percentage_of_tasks_where_deadline_was_missed,
+                        'percentage_of_tasks_deadline_lead_data' => $percentage_of_tasks_where_deadline_was_missed_data
                     ]
                 ], 200);
             }
@@ -822,9 +846,9 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'percentage_of_tasks_where_given_estimated_time_was_missed_with_revision'            => $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
-                        'percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data_count' => count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data),
-                        'percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data'       => $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data
+                        'percentage_number_task_cross_estimate_time_lead'                              => $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
+                        'percentage_of_tasks_where_given_estimated_time_was_missed_with_revision'      => count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data),
+                        'percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data' => $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data
                     ]
                 ], 200);
             }
@@ -873,10 +897,10 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'disputes_filed_by_lead_dev_overall_data_count' => $disputes_filed_by_lead_dev_overall_data->count(),
-                        'disputes_filed_by_lead_dev_overall_data'       => $disputes_filed_by_lead_dev_overall_data,
-                        'disputes_lost_by_lead_dev_overall_data_count'  => $disputes_lost_by_lead_dev_overall_data->count(),
-                        'disputes_lost_by_lead_dev_overall_data'        => $disputes_lost_by_lead_dev_overall_data
+                        'number_of_dispute_filed_own_overall_lead'      => $disputes_filed_by_lead_dev_overall_data->count(),
+                        'number_of_dispute_filed_own_overall_lead_data' => $disputes_filed_by_lead_dev_overall_data,
+                        'number_of_dispute_lose_own_overall_lead'       => $disputes_lost_by_lead_dev_overall_data->count(),
+                        'number_of_dispute_lose_own_overall_lead_data'  => $disputes_lost_by_lead_dev_overall_data
                     ]
                 ], 200);
             }
@@ -891,18 +915,18 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'disputes_filed_by_lead_dev_data_count' => $disputes_filed_by_lead_dev_data->count(),
-                        'disputes_filed_by_lead_dev_data'       => $disputes_filed_by_lead_dev_data,
-                        'disputes_lost_by_lead_dev_data_count'  => $disputes_lost_by_lead_dev_data->count(),
-                        'disputes_lost_by_lead_dev_data'        => $disputes_lost_by_lead_dev_data
+                        'number_of_dispute_filed_own_lead'      => $disputes_filed_by_lead_dev_data->count(),
+                        'number_of_dispute_filed_own_lead_data' => $disputes_filed_by_lead_dev_data,
+                        'number_of_dispute_lose_own_lead'       => $disputes_lost_by_lead_dev_data->count(),
+                        'number_of_dispute_lose_own_lead_data'  => $disputes_lost_by_lead_dev_data
                     ]
                 ], 200);
             }
             if ($tableType == 'leadNumberOfDisputesInvolvedIn') {
                 return response([
                     'data' => [
-                        'disputes_involved_in_lead_dev_with_date_count' => $disputes_involved_in_lead_dev_with_date->count(),
-                        'disputes_involved_in_lead_dev_with_date'       => $disputes_involved_in_lead_dev_with_date->get()
+                        'disputes_lead_developer_involved'      => $disputes_involved_in_lead_dev_with_date->count(),
+                        'disputes_lead_developer_involved_date' => $disputes_involved_in_lead_dev_with_date->get()
                     ]
                 ], 200);
             }
@@ -949,62 +973,11 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'logged_hours_for_all_submitted'                             => $logged_hours_for_all_submitted,
-                        'logged_hours_in_tasks_with_revisions'                       => $logged_hours_in_tasks_with_revisions,
-                        'parent_task_wise_total_hours_spent_in_revisions'            => $parent_task_wise_total_hours_spent_in_revisions ?? 0,
-                        'parent_task_wise_total_hours_spent_in_revisions_data_count' => $parent_task_wise_total_hours_spent_in_revisions_data->count(),
-                        'parent_task_wise_total_hours_spent_in_revisions_data'       => $parent_task_wise_total_hours_spent_in_revisions_data,
-                    ]
-                ], 200);
-            }
-            if ($tableType == 'leadNumberOfApproval') {
-                $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
-                    $q->whereNull('subtask_id');
-                })->get()->pluck('task_id')->toArray();
-
-                $parent_task_wise_total_hours_spent_in_revisions_data = Task::has('revisions')
-                    ->with([
-                        'project.pm:id,name',
-                        'project.client:id,name',
-                        'project:id,pm_id,client_id',
-                        'taskSubTasks.timeLoggedOnlyRevision',
-                        'taskSubTasks.submissions.timeLogs',
-                        'taskSubTasks.timeLogged',
-                        'taskSubTasks.firstTaskSubmission' => function ($query) {
-                            $query->withSum('timeLogs', 'total_minutes');
-                        },
-                        'taskSubTasks.revisions'           => function ($query) {
-                            $query->withSum('timeLogs', 'total_minutes');
-                        },
-                        'taskUser',
-                    ])->where('board_column_id', 4)
-                    ->withSum('timeLoggedOnlyRevision', 'total_minutes')
-                    ->find($task_id);
-
-                $parent_task_wise_total_mins_spent_in_revisions = 0;
-                $logged_min_for_all_submitted = 0;
-                $logged_min_in_tasks_with_revisions = 0;
-                foreach ($parent_task_wise_total_hours_spent_in_revisions_data as $task) {
-                    $subTask = clone $task->taskSubTasks;
-                    $total_sub_task_log_time = $subTask->sum('total_log_time_only_revision_in_min');
-                    $parent_task_wise_total_mins_spent_in_revisions += $total_sub_task_log_time + $task->time_logged_only_revision_sum_total_minutes;
-                    $logged_min_for_all_submitted += $subTask->sum('total_submissions_log_time_in_min');
-                    $logged_min_in_tasks_with_revisions += $subTask->sum('total_log_time_in_min');
-                }
-
-
-                $logged_hours_for_all_submitted = intdiv($logged_min_for_all_submitted, 60) . ' Hours, ' . ($logged_min_for_all_submitted % 60) . ' Minutes';
-                $logged_hours_in_tasks_with_revisions = intdiv($logged_min_in_tasks_with_revisions, 60) . ' Hours, ' . ($logged_min_in_tasks_with_revisions % 60) . ' Minutes';
-                $parent_task_wise_total_hours_spent_in_revisions = intdiv($parent_task_wise_total_mins_spent_in_revisions, 60) . ' Hours, ' . ($parent_task_wise_total_mins_spent_in_revisions % 60) . ' Minutes';
-
-
-                return response([
-                    'data' => [
-                        'logged_hours_for_all_submitted'                             => $logged_hours_for_all_submitted,
-                        'logged_hours_in_tasks_with_revisions'                       => $logged_hours_in_tasks_with_revisions,
-                        'parent_task_wise_total_hours_spent_in_revisions'            => $parent_task_wise_total_hours_spent_in_revisions ?? 0,
-                        'parent_task_wise_total_hours_spent_in_revisions_data_count' => $parent_task_wise_total_hours_spent_in_revisions_data->count(),
-                        'parent_task_wise_total_hours_spent_in_revisions_data'       => $parent_task_wise_total_hours_spent_in_revisions_data
+                        'logged_hours_for_all_submitted'           => $logged_hours_for_all_submitted,
+                        'logged_hours_in_tasks_with_revisions'     => $logged_hours_in_tasks_with_revisions,
+                        'spent_revision_developer_lead'            => $parent_task_wise_total_hours_spent_in_revisions ?? 0,
+                        'spent_revision_developer_lead_count'      => $parent_task_wise_total_hours_spent_in_revisions_data->count(),
+                        'spent_revision_developer_lead_count_data' => $parent_task_wise_total_hours_spent_in_revisions_data,
                     ]
                 ], 200);
             }
@@ -1045,13 +1018,13 @@ trait LeadDashboard
 
                 return response([
                     'data' => [
-                        'number_of_approval_data_count'      => $number_of_approval_data->count(),
-                        'number_of_approval_data'            => $number_of_approval_data,
-                        'auto_approved_tasks_data_count'     => count($auto_approved_tasks_data),
-                        'auto_approved_tasks_data'           => $auto_approved_tasks_data,
-                        'manually_approved_tasks_data_count' => count($manually_approved_tasks_data),
-                        'manually_approved_tasks_data'       => $manually_approved_tasks_data,
-                        'manually_approved_tasks_array'      => $manually_approved_tasks_array
+                        'number_of_approval'            => $number_of_approval_data->count(),
+                        'number_of_approval_data'       => $number_of_approval_data,
+                        'auto_approved_tasks'           => count($auto_approved_tasks_data),
+                        'auto_approved_tasks_data'      => $auto_approved_tasks_data,
+                        'manually_approved_tasks'       => count($manually_approved_tasks_data),
+                        'manually_approved_tasks_data'  => $manually_approved_tasks_data,
+                        'manually_approved_tasks_array' => $manually_approved_tasks_array
                     ]
                 ], 200);
             }
@@ -1082,13 +1055,7 @@ trait LeadDashboard
 
         $number_of_tasks_received_lead_data = $taskWithStartEndDateWithId
             ->select('id', 'heading', 'project_id', 'created_at', 'status', 'start_date', 'board_column_id')
-            ->with(
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-                'stat:id,label_color,column_name',
-                'oldestSubTask'
-            )->get();
+            ->get();
         return $number_of_tasks_received_lead_data->count();
     }
 
@@ -1340,10 +1307,7 @@ trait LeadDashboard
 
         $percentage_of_tasks_with_revision = 0;
         if ($number_of_tasks_completed_model->count()) {
-            $percentage_of_tasks_with_revision = round(
-                ($task_with_revisions / $number_of_tasks_completed_model->count()) * 100,
-                2
-            );
+            $percentage_of_tasks_with_revision = round(($task_with_revisions / $number_of_tasks_completed_model->count()) * 100, 2);
         }
 
         return [
