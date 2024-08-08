@@ -3,6 +3,7 @@ import { getColor } from "../../../utils/getColor";
 import Popover from "../ui/Popover";
 import { CreatedBy } from "./ui";
 import style from "../ui/popover.module.css";
+import Switch from "../../../global/Switch";
 
 export const ProjectStatusTableColumns = [
     {
@@ -195,25 +196,50 @@ export const ProjectStatusTableColumns = [
                         <div
                             className={`${style.projectStatus_popover_button}`}
                         >
-                            {data.upcoming_goal_day === 0 ? (
-                                <p>Today</p>
-                            ) : data.upcoming_goal_day ? (
-                                <p>In {data.upcoming_goal_day} Days</p>
-                            ) : (
-                                <p>No upcoming goals!</p>
-                            )}
+                            <Switch>
+                                <Switch.Case
+                                    condition={
+                                        data?.total_goal === data?.goal_meet
+                                    }
+                                >
+                                    <p>No Goal Remaining</p>
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={
+                                        data?.total_goal !== data?.goal_meet
+                                    }
+                                >
+                                    {data.upcoming_goal_day === 0 ? (
+                                        <p>Today</p>
+                                    ) : (
+                                        <p>In {data?.upcoming_goal_day} Days</p>
+                                    )}
+                                </Switch.Case>
+                            </Switch>
                         </div>
                     </Popover.Button>
                     <Popover.Panel>
                         <div className={`${style.projectStatus_popover_panel}`}>
                             <div className="d-flex flex-column justify-content-start align-items-start">
-                                {data.next_goal_date ? (
-                                    <p>
-                                        Next Goal Date : {data.next_goal_date}
-                                    </p>
-                                ) : (
-                                    <p>All goals are completed!</p>
-                                )}
+                                <Switch>
+                                    <Switch.Case
+                                        condition={
+                                            data?.total_goal === data?.goal_meet
+                                        }
+                                    >
+                                        <p>No Goal Remaining</p>
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={
+                                            data?.total_goal !== data?.goal_meet
+                                        }
+                                    >
+                                        <p>
+                                            Next Goal Date :{" "}
+                                            {data?.next_goal_date}
+                                        </p>
+                                    </Switch.Case>
+                                </Switch>
                             </div>
                         </div>
                     </Popover.Panel>
@@ -231,6 +257,7 @@ export const ProjectStatusTableColumns = [
                 <button
                     onClick={() => handler.onNextGoalDetails(data)}
                     className="btn btn-success"
+                    disabled={data?.total_goal === data?.goal_meet}
                 >
                     View Details
                 </button>
