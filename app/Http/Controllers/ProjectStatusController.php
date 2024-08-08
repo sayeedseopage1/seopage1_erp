@@ -169,7 +169,12 @@ class ProjectStatusController extends AccountBaseController
                     else 
                         $query->where('pm_id', User::where('role_id', 4)->first()->id);
                 }
+
+                if ($request->clientId) {
+                    $query->where('client_id', $request->clientId);
+                }
             })->get();
+
 
             foreach ($pm_goals as $key => $goal) {
                 $project = Project::find($goal->project_id);
@@ -185,6 +190,7 @@ class ProjectStatusController extends AccountBaseController
         }
 
         $this->pmIds = User::where('role_id', 4)->get();
+        $this->clients = User::allClients();
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request)
