@@ -11,8 +11,8 @@
 @endpush
 
 @section('filter-section')
+
     <x-filters.filter-box>
-        <!-- SEARCH BY TASK START -->
         <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
             <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
                 <div class="input-group bg-grey rounded">
@@ -26,7 +26,6 @@
                 </div>
             </form>
         </div>
-        <!-- SEARCH BY TASK END -->
 
         <!-- RESET START -->
         <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
@@ -35,6 +34,38 @@
             </x-forms.button-secondary>
         </div>
         <!-- RESET END -->
+
+        @if (auth()->user()->role_id == 1)
+        <div class="select-box d-flex py-2 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">Project Manager</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="status" id="pm-select" data-live-search="true" data-size="8">
+                    <option value="">All</option>
+                    @foreach ($pmIds as $key => $item)
+                        <option value="{{$item->id}}" {{$key == 0 ? 'selected' : ''}}>{{$item->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        @endif
+
+        <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 ml-5 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.clientName')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
+                    data-size="8">
+                    @if (!in_array('client', user_roles()))
+                        <option value="">@lang('app.all')</option>
+                    @endif
+                    @foreach ($clients as $client)
+                        <option
+                            data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $client->image_url }}' ></div> {{ ucfirst($client->name) }}"
+                            value="{{ $client->id }}">{{ ucfirst($client->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
     </x-filters.filter-box>
 @endsection
 
@@ -67,7 +98,7 @@ $addHolidayPermission = user()->permission('add_holiday');
         </div>
 
         <!-- leave table Box Start -->
-        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+        <div class="d-flex flex-column w-tables rounded mt-3 bg-white mt-2">
             <x-cards.data>
                 <div id="calendar"></div>
             </x-cards.data>
@@ -94,6 +125,10 @@ $addHolidayPermission = user()->permission('add_holiday');
                     loadData();
                 }
             });
+
+        $('#pm-select, #client_id').on('change', function() {
+            loadData();
+        });
 
         $('#reset-filters').click(function() {
             $('#filter-form')[0].reset();
@@ -124,11 +159,12 @@ $addHolidayPermission = user()->permission('add_holiday');
             events: {
                 url: "{{ route('project-status-calendar') }}",
                 extraParams: function() {
-                    var searchText = $('#search-text-field').val();
+                    let params = {};
+                    params.searchText = $('#search-text-field').val();
 
-                    return {
-                        searchText: searchText,
-                    };
+                    if($('#pm-select').val()) params.pmId = $('#pm-select').val();
+                    if($('#client_id').val()) params.clientId = $('#client_id').val();
+                    return params;
                 }
             },
             eventTimeFormat: {

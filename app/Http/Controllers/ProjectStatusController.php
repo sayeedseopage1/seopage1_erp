@@ -159,7 +159,22 @@ class ProjectStatusController extends AccountBaseController
                 $holidays->where('holidays.occassion', 'like', '%' . request()->searchText . '%');
             }
 
-            $pm_goals= ProjectPmGoal::get();
+            $pm_goals = ProjectPmGoal::where(function($query) use ($request){
+                if (auth()->user()->role_id == 4) 
+                    $query->where('pm_id', auth()->user()->id);
+                else if(auth()->user()->role_id == 1)
+                {
+                    if ($request->pmId) 
+                        $query->where('pm_id', $request->pmId);
+                    else 
+                        $query->where('pm_id', User::where('role_id', 4)->first()->id);
+                }
+
+                if ($request->clientId) {
+                    $query->where('client_id', $request->clientId);
+                }
+            })->get();
+
 
             foreach ($pm_goals as $key => $goal) {
                 $project = Project::find($goal->project_id);
@@ -174,7 +189,8 @@ class ProjectStatusController extends AccountBaseController
             return $holidayArray;
         }
 
-
+        $this->pmIds = User::where('role_id', 4)->get();
+        $this->clients = User::allClients();
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request)
@@ -692,10 +708,10 @@ class ProjectStatusController extends AccountBaseController
             ->paginate($limit);
 
             foreach($pm_goals as $pmGoal){
-                $goal = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status','0')->first();
+                $goal = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('expired_status','0')->first();
                 $goal_count = ProjectPmGoal::where('project_id',$pmGoal->project_id)->count();
                 $goal_expire = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('expired_meet_description','!=',null)->where('goal_status','0')->count();
-                $goal_meet = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status',1)->count();
+                $goal_meet = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status','1')->count();
                 $next_goal_date = $goal->goal_end_date ?? '';
                 $currentDate = Carbon::now();
                 $upcoming_goal_day = $currentDate->diffInDays($next_goal_date);

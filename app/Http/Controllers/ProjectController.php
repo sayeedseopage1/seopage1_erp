@@ -3011,7 +3011,29 @@ class ProjectController extends AccountBaseController
             'quantity' => 'required',
             'delivery-type' => 'required',
             'from' => 'required',
+            'project_id' => 'required'
         ]);
+
+
+        $project = Project::where('id', $request->project_id)->first();
+
+        if($project->deal->project_type == 'hourly')
+        {
+            $goal = ProjectPmGoal::where('project_id', $project->id)->first();
+            if (in_array($goal->project_category, ['regular', 'priority'])) {
+                $request->validate([
+                    'estimation_time' => 'required|numeric|min:5',
+                ]);
+            } else if ($goal->project_category == 'highPriority') {
+                $request->validate([
+                    'estimation_time' => 'required|numeric|min:6',
+                ]);
+            } else if (in_array($goal->project_category, ['topMostPriority', 'criticallySensitive'])) {
+                $request->validate([
+                    'estimation_time' => 'required|numeric|min:7',
+                ]);
+            }
+        }
 
         if ($validate) {
 
@@ -3032,9 +3054,6 @@ class ProjectController extends AccountBaseController
             $deliverable->milestone_id = $request->milestone_id;
             $deliverable->description = $request->description;
             $deliverable->save();
-
-            $project = Project::where('id', $deliverable->project_id)->first();
-
 
 
             $actions = PendingAction::where('code', 'DCA')->where('past_status', 0)->where('project_id', $request->project_id)->get();
