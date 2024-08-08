@@ -2271,6 +2271,8 @@ class ContractController extends AccountBaseController
         //kpi point
 
         $project = Project::where('deal_id', $request->id)->first();
+        $project->added_by = $project->pm_id;
+        $project->save();
 
         $authorization_bonus_check = Cashpoint::where('project_id', $project->id)->where('user_id', $user_name->id)->where('type', 'Authorization Bonus')->first();
         // if ($authorization_bonus_check == null) {
