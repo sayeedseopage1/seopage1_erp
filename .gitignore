@@ -14,7 +14,6 @@
 /public/bundle-report.html
 /public/report.html
 
-
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -44,6 +43,9 @@ __TODO__
 package-lock.json
 
 #test
+coverage
 .scannerwork
 reload_pages.sh
+deadcode.json
+webpack.plugins.config.js
 .devdbrc

@@ -745,7 +745,7 @@ class ContractController extends AccountBaseController
             //  dd("true");
 
             $find_pm_id = Project::where('client_id', $existing_client->id)->orderBy('id', 'desc')->where('id', '!=', $project->id)->where('pm_id', '!=', null)->first();
-            if ($find_pm_id != null) {
+            if ($find_pm_id != null && in_array(PMAssign::where('pm_id', $find_pm_id->pm_id)->first()->status, [0, 1])) {
 
                 $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 
@@ -2092,6 +2092,8 @@ class ContractController extends AccountBaseController
             },
             'discussion.user',
         ])->findOrFail($id);
+
+        $this->contract->project_details = Project::select(['id','deal_id','status','project_status'])->where('deal_id', $this->contract->deal_id)->first();
 
         abort_403(
             !($viewPermission == 'all' ||

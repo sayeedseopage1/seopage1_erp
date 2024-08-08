@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../../../../../global/Button";
 import Switch from "../../../../../../global/Switch";
 import { convertTime } from "../../../../../../utils/converTime";
@@ -11,6 +11,17 @@ import Option4 from "./helper/acknowledgement-options/Option4";
 import Option5 from "./helper/acknowledgement-options/Option5";
 import Option6 from "./helper/acknowledgement-options/Option6";
 
+import TrackedTimeTable from "./tracked-time-table/Table/TrackedTimeTable";
+import Card from "../../../../../../global/Card";
+
+import styles from "./tracked-time-table/Table/card.module.css";
+import formatTimeTo12Hour from "../../../../../../utils/formatTimeTo12Hour";
+import formatTimeTo12HourSecond from "../../../../../../utils/formatTimeTo12HourWithoutSecond";
+import extractTime from "../../../../../../utils/extractTime";
+import { fromAndToValidation } from "../../../../../../utils/fromAndToValidation";
+import checkOverlapRange from "../../../../../../utils/checkOverlapRange";
+import checkOverlap from "../../../../../../utils/checkOverlap";
+
 /**
  * * This components responsible for showing daily working report to developer
  */
@@ -20,40 +31,180 @@ const dayjs = new CompareDate();
 const DateFormat = (date) => {
     const d = {
         unFormatted: date,
-        formatted: dayjs.dayjs(date).isSame(dayjs.dayjs(), 'day') ? 'Today' : dayjs.dayjs(date).format('MMM DD, YYYY')
-    }
+        formatted: dayjs.dayjs(date).isSame(dayjs.dayjs(), "day")
+            ? "Today"
+            : dayjs.dayjs(date).format("MMM DD, YYYY"),
+    };
 
     return d;
 };
 
-const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDate, reminderType, data, onSubmit }) => {
+const AcknowledgementReminderModal = ({
+    close,
+    title = "Stop timer",
+    reminderDate,
+    reminderType,
+    data,
+    trackedTimeHistory,
+    lastClockData,
+    incomplete_hours,
+    onSubmit,
+}) => {
+    // const [sType, setSType] = React.useState("");
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+    const [timeLeft, setTImeLeft] = useState();
+
+    //overlapping validation
+    let newOverlappingTimes = [];
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
 
     // handle form submission
-    const handleSubmitForm = async (data, submissionType, cb) => {
+    const handleSubmitForm = async (
+        data,
+        submissionType,
+        cb,
+        durations,
+        setDurations
+    ) => {
+        if (durations) {
+            if (fromAndToValidation(durations)) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Invalid Time Range",
+                    text: "The end time should be greater than the start time.",
+                    showConfirmButton: true,
+                });
+                return;
+            }
+
+            if (checkOverlapRange(lastClockOutTime, durations)) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "You have selected wrong time range!",
+                    text: `You must select time within this time range: 07:45 AM - ${formatTimeTo12Hour(
+                        lastClockOutTime
+                    )}.`,
+                    showConfirmButton: true,
+                });
+                return;
+            }
+
+            if (
+                checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)
+            ) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Your selected time is overlapping with your tracked time!",
+                    text: `Overlapping time: ${newOverlappingTimes
+                        ?.map(
+                            (t) =>
+                                `${formatTimeTo12Hour(
+                                    t.trackedStart
+                                )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+                        )
+                        .join(", ")}`,
+                    showConfirmButton: true,
+                });
+                return;
+            }
+        }
+
         setIsSubmitting(true);
 
-        try{
-            await axios.post('/account/developer/daily-minimum-track-hours-log/acknowledgement', {
-                ...data,
-                date: dayjs.dayjs(reminderDate).format('YYYY-MM-DD'),
-                _token: document.querySelector("meta[name='csrf-token']").getAttribute('content')
-            }).then(res => {
-                if(submissionType !== 'CONTINUE'){
-                    onSubmit();
-                    close();
-                }
+        try {
+            await axios
+                .post(
+                    "/account/developer/daily-minimum-track-hours-log/acknowledgement",
+                    {
+                        ...data,
+                        date: dayjs.dayjs(reminderDate).format("YYYY-MM-DD"),
+                        incomplete_hours: incomplete_hours,
+                        submission_type:
+                            submissionType === "CONTINUE"
+                                ? "continue"
+                                : "final_submission",
 
-                cb();
-            })
+                        _token: document
+                            .querySelector("meta[name='csrf-token']")
+                            .getAttribute("content"),
+                    }
+                )
+                .then((res) => {
+                    console.log("response ", res);
+                    if (res.data.status === 422) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: `${res.data.title}`,
+                            text: `${formatTimeTo12HourSecond(
+                                res.data.start
+                            )} - ${formatTimeTo12HourSecond(res.data.end)}\n${
+                                res.data.message
+                            }`,
+                            showConfirmButton: true,
+                        });
+                        setIsSubmitting(false);
+                        return;
+                    }
+
+                    if (res.data.status === 400) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: `Your missing hours do not match submitted hours !`,
+                            text: `Your current missed hours: ${convertTime(
+                                res.data.leftMin
+                            )}`,
+
+                            showConfirmButton: true,
+                        });
+                        setIsSubmitting(false);
+                        return;
+                    }
+
+                    if (res.data.status === 200 && setDurations !== undefined) {
+                        setDurations([
+                            {
+                                start: "",
+                                end: "",
+                                id: "d32sew",
+                            },
+                        ]);
+                    }
+
+                    setTImeLeft(res.data.leftMin);
+
+                    if (
+                        submissionType !== "CONTINUE" ||
+                        (submissionType === "CONTINUE" && res.data.leftMin <= 0)
+                    ) {
+                        onSubmit();
+                        close();
+                    }
+
+                    cb();
+                });
 
             setIsSubmitting(false);
-        }catch(error){
-            console.log(error)
+        } catch (error) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: `Server Error 500!`,
+                text: `${error.message}`,
+                showConfirmButton: true,
+            });
+            setIsSubmitting(false);
+            console.log(error);
         }
-    }
+    };
 
     return (
         <div className="sp1_single_task--modal">
@@ -64,7 +215,12 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                 >
                     {/* modal header */}
                     <div className="border-bottom pb-2 px-3 d-flex align-items-center justify-content-between">
-                        <div className="font-weight-bold f-16">{reminderType} on <span style={{color: 'red'}}>{DateFormat(reminderDate).formatted}</span></div>
+                        <div className="font-weight-bold f-16">
+                            {reminderType} on{" "}
+                            <span style={{ color: "red" }}>
+                                {DateFormat(reminderDate).formatted}
+                            </span>
+                        </div>
                         <Button variant="tertiary" onClick={close}>
                             <i className="fa-solid fa-xmark" />
                         </Button>
@@ -73,9 +229,68 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                     {/* modal body */}
                     <div className="sp1_single_task--modal-body sp1_single_task-modal-body-options p-3">
                         <div className="alert alert-warning">
-                            Your tracked time for <strong>{DateFormat(reminderDate).formatted}</strong> is <strong>{convertTime(data?.data?.complete_hours)}</strong>. Your minimum tracked hours should have been <strong>{convertTime(data?.data?.target_minimum_log_hours)}</strong>, and it is <strong>{convertTime(data?.data?.incomplete_hours)}</strong> less.
+                            Your tracked time for{" "}
+                            <strong>
+                                {DateFormat(reminderDate).formatted}
+                            </strong>{" "}
+                            is{" "}
+                            <strong>
+                                {convertTime(data?.data?.complete_hours)}
+                            </strong>
+                            . Your minimum tracked hours should have been{" "}
+                            <strong>
+                                {convertTime(
+                                    data?.data?.target_minimum_log_hours
+                                )}
+                            </strong>
+                            , and it is{" "}
+                            <strong>
+                                {convertTime(data?.data?.incomplete_hours)}
+                            </strong>{" "}
+                            less.
                         </div>
 
+                        {/* time tracked data */}
+
+                        {trackedTimeHistory &&
+                            trackedTimeHistory?.length > 0 && (
+                                <div>
+                                    <Card className={styles.revision_card}>
+                                        <span
+                                            style={{
+                                                fontWeight: "bold",
+                                                fontSize: "16px",
+                                            }}
+                                        >
+                                            Tracked Hours
+                                        </span>
+                                        <Card.Body className={styles.card_body}>
+                                            <div
+                                                style={{
+                                                    maxHeight: "300px",
+                                                    overflowY: "auto",
+                                                }}
+                                            >
+                                                <TrackedTimeTable
+                                                    trackedTimeHistory={
+                                                        trackedTimeHistory
+                                                    }
+                                                />
+                                            </div>
+                                        </Card.Body>
+                                    </Card>
+                                </div>
+                            )}
+
+                        {timeLeft > 0 && (
+                            <div className="alert alert-warning text-center">
+                                You have to submit explanation for
+                                <span className="ml-2 text-danger font-weight-bold">
+                                    {convertTime(timeLeft)}
+                                </span>{" "}
+                                more.
+                            </div>
+                        )}
 
                         {/* options */}
                         <div className="sp1_stop-button-confirmation-option">
@@ -83,11 +298,18 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                             <div className="confirmation--options">
                                 <Switch>
                                     {/* option: I did not have enough work to do. */}
-                                    <Switch.Case condition={!step || step === 1}>
+                                    <Switch.Case
+                                        condition={!step || step === 1}
+                                    >
                                         <Option1
+                                            // sType={sType}
+                                            // setSType={setSType}
+
                                             checked={step === 1}
                                             index={1}
-                                            onChange={e => setStep(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setStep(Number(e.target.value))
+                                            }
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
                                             isLoading={isSubmitting}
@@ -95,11 +317,15 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                                     </Switch.Case>
 
                                     {/* option: During transition from one task to another, I had to wait for a while. */}
-                                    <Switch.Case condition={!step || step === 2}>
+                                    <Switch.Case
+                                        condition={!step || step === 2}
+                                    >
                                         <Option2
                                             checked={step === 2}
                                             index={2}
-                                            onChange={e => setStep(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setStep(Number(e.target.value))
+                                            }
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
                                             isLoading={isSubmitting}
@@ -107,24 +333,35 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                                     </Switch.Case>
 
                                     {/* option3: I was present less hours at work today or last day  */}
-                                    <Switch.Case condition={!step || step === 3}>
+                                    <Switch.Case
+                                        condition={!step || step === 3}
+                                    >
                                         <Option3
                                             checked={step === 3}
                                             index={3}
-                                            onChange={e => setStep(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setStep(Number(e.target.value))
+                                            }
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
-                                            checkInTime={DateFormat(reminderDate).formatted}
+                                            checkInTime={
+                                                DateFormat(reminderDate)
+                                                    .formatted
+                                            }
                                             isLoading={isSubmitting}
                                         />
                                     </Switch.Case>
 
-                                    {/* option4: I was present less hours at work today or last day  */}
-                                    <Switch.Case condition={!step || step === 4}>
+                                    {/* option4: I couldn't log hours  */}
+                                    <Switch.Case
+                                        condition={!step || step === 4}
+                                    >
                                         <Option4
                                             checked={step === 4}
                                             index={4}
-                                            onChange={e => setStep(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setStep(Number(e.target.value))
+                                            }
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
                                             isLoading={isSubmitting}
@@ -132,11 +369,15 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                                     </Switch.Case>
 
                                     {/* option5: I forgot to track hours. */}
-                                    <Switch.Case condition={!step || step === 5}>
+                                    <Switch.Case
+                                        condition={!step || step === 5}
+                                    >
                                         <Option5
                                             checked={step === 5}
                                             index={5}
-                                            onChange={e => setStep(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setStep(Number(e.target.value))
+                                            }
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
                                             isLoading={isSubmitting}
@@ -144,17 +385,20 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                                     </Switch.Case>
 
                                     {/* option6: In the morning, I had to wait for work before I could start.. */}
-                                    <Switch.Case condition={!step || step === 6}>
+                                    <Switch.Case
+                                        condition={!step || step === 6}
+                                    >
                                         <Option6
                                             checked={step === 6}
                                             index={6}
-                                            onChange={e => setStep(Number(e.target.value))}
+                                            onChange={(e) =>
+                                                setStep(Number(e.target.value))
+                                            }
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
                                             isLoading={isSubmitting}
                                         />
                                     </Switch.Case>
-
                                 </Switch>
                             </div>
                         </div>

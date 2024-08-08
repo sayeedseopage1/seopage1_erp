@@ -23,8 +23,8 @@ export class BoardColumn {
 export class Category {
     constructor(cat) {
         (this.name = cat?.category_name),
-        (this.addedBy = cat?.added_by),
-        (this.id = cat?.id);
+            (this.addedBy = cat?.added_by),
+            (this.id = cat?.id);
     }
 }
 
@@ -191,6 +191,8 @@ export class TaskRevision {
         this.revisionAcknowledgement = data.revision_acknowledgement;
         this.revisionNo = data.revision_no;
         this.revisionReason = data.revision_reason;
+        this.totalMin = data.total_minutes ?? "";
+        this.totalHour = data.total_hours ?? "";
         this.revisionStatus = data.revision_status;
         this.saleAccept = data.sale_accept;
         this.saleComment = data.sale_comment;
@@ -259,10 +261,11 @@ export class SingleTask {
             existingDesignLink: task?.existing_design_link,
             numberOfPages: task?.number_of_pages,
             status: task?.primary_page_authorization_status,
-            comment: task?.primary_page_authorization_comment
+            comment: task?.primary_page_authorization_comment,
         });
 
         this.revisionLogMin = task?.revision_log_min;
+        this.revisionLogHour = task?.revision_log_hour;
         this.subtaskId = task?.subtask_id;
         this.projectManagerId = task?.project_manager_id;
         this.projectManagerAvatar = task?.project_manager_avatar;
@@ -275,11 +278,11 @@ export class SingleTask {
         this.attachments = task?.taskFiles;
         this.hasSubtask = _.size(task?.taskSubTask);
         this.additionalInfo = {
-            loginURL : task?.pp_task_login_url,
-            username : task?.pp_task_user_name,
-            refSite : task?.pp_task_reference_site,
-            password : task?.pp_task_password,
-        }
+            loginURL: task?.pp_task_login_url,
+            username: task?.pp_task_user_name,
+            refSite: task?.pp_task_reference_site,
+            password: task?.pp_task_password,
+        };
     }
 
     isLeadDeveloperAbleToSubmit() {

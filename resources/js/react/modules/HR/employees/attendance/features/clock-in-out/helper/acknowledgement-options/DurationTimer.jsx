@@ -1,26 +1,17 @@
-import React, {useState, useEffect, useMemo, useId} from 'react';
+import React, { useState, useEffect, useMemo } from "react";
+import { TimePicker, Space } from "antd";
+import dayjs from "dayjs";
 
-// duration time
-const DurationTime = ({durations,setDurations,id, startTime, endTime, onRemove }) => {
+const DurationTime = ({
+    durations,
+    setDurations,
+    id,
+    startTime,
+    endTime,
+    onRemove,
+}) => {
     const [start, setStart] = useState(startTime);
     const [end, setEnd] = useState(endTime);
-    useEffect(() => {
-        window
-            .$(`#timepicker1${id}`)
-            .timepicker("setTime", startTime)
-            .on("changeTime.timepicker", function (e) {
-                e.preventDefault();
-                setStart(e.target.value);
-            });
-
-        window
-            .$(`#timepicker5${id}`)
-            .timepicker("setTime", endTime)
-            .on("changeTime.timepicker", function (e) {
-                e.preventDefault();
-                setEnd(e.target.value);
-            });
-    }, []);
 
     const _start = useMemo(() => start, [start]);
     const _end = useMemo(() => end, [end]);
@@ -28,36 +19,45 @@ const DurationTime = ({durations,setDurations,id, startTime, endTime, onRemove }
     // time duration
     const handleSelectTimeDuration = (value, id) => {
         const arr = durations.map((d) => {
-          return d.id === id ? { ...value, id } : d;
+            return d.id === id ? { ...value, id } : d;
         });
         setDurations(arr);
-      };
-      
+    };
 
     useEffect(() => {
-        handleSelectTimeDuration({ start: _start, end: _end}, id);
+        handleSelectTimeDuration({ start: _start, end: _end }, id);
     }, [_start, _end]);
 
     return (
         <div className="position-relative row mt-2">
-            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                <input
-                    id={`timepicker1${id}`}
-                    className="form-control w-100 py-2"
-                    data-minute-step="1"
-                    data-modal-backdrop="false"
-                    type="text"
-                />
+            <div className="col-5 input-group d-flex flex-column">
+                <Space wrap>
+                    <TimePicker
+                        needConfirm={false}
+                        use12Hours
+                        format="h:mm a"
+                        defaultValue={start}
+                        onChange={(time) =>
+                            setStart(dayjs(time, "HH:mm:ss").format("HH:mm:ss"))
+                        }
+                        className="w-100 py-2"
+                    />
+                </Space>
             </div>
 
-            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                <input
-                    id={`timepicker5${id}`}
-                    className="form-control w-100 py-2"
-                    data-minute-step="1"
-                    data-modal-backdrop="false"
-                    type="text"
-                />
+            <div className="col-5 input-group d-flex flex-column">
+                <Space wrap>
+                    <TimePicker
+                        needConfirm={false}
+                        use12Hours
+                        format="h:mm a"
+                        defaultValue={end}
+                        onChange={(time) =>
+                            setEnd(dayjs(time, "HH:mm:ss").format("HH:mm:ss"))
+                        }
+                        className="w-100 py-2"
+                    />
+                </Space>
             </div>
 
             {durations?.length > 1 && (
@@ -74,5 +74,4 @@ const DurationTime = ({durations,setDurations,id, startTime, endTime, onRemove }
     );
 };
 
-
-export default DurationTime
+export default DurationTime;

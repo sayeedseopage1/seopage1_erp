@@ -1,0 +1,159 @@
+.card{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px;
+    font-family: Inter;
+}
+
+.card_auth_form{
+    width: 600px;
+
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%)
+}
+
+@media only screen and (max-width: 1200px){
+    .card{
+        width: 95vw;
+    }
+
+    .card_auth_form{
+        width: 600px;
+    }
+}
+
+@media only screen and (max-width: 756px){
+    .card_auth_form{
+        width: 95vw;
+    }
+}
+
+.card_body{
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 16px;;
+}
+
+
+.approval_button{
+    font-family: Inter;
+    font-weight: 500;
+}
+
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.tabs li a {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabs li a span.badge{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0 0 0 / 15%);
+}
+
+.tabs li a[data-type='all'] {
+    background-color: #e9f8fa;
+    color: #24b8cf;
+}
+
+.tabs li a[data-type='all']:hover,
+.tabs li a[data-type='all'][data-active="true"]{
+   color: #e9f8fa !important;
+   background-color: #24b8cf;
+}
+
+
+.tabs li a[data-type='pending'] {
+    background-color:rgb(255, 238, 219);
+    color:rgb(255, 145, 20);
+}
+
+.tabs li a[data-type='pending']:hover,
+.tabs li a[data-type='pending'][data-active="true"]{
+    color:rgb(255, 248, 240) !important;
+    background-color:rgb(255, 145, 20);
+}
+
+.tabs li a[data-type='authorized'] {
+    color: #119911;
+    background-color: #e7f5e7;
+}
+
+.tabs li a[data-type='authorized']:hover,
+.tabs li a[data-type='authorized'][data-active="true"]{
+    background-color: #119911;
+    color: #e7f5e7 !important;
+}
+
+
+.tabs li a[data-type='denied'] {
+    color: rgb(240, 51, 44);
+    background-color: rgb(250, 221, 220);
+}
+
+.tabs li a[data-type='denied']:hover,
+.tabs li a[data-type='denied'][data-active="true"] {
+    background-color: rgb(240, 51, 44);
+    color: rgb(255, 250, 249) !important;
+}
+
+.items{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.item{
+    display: -ms-grid;
+    display: -moz-grid;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1rem;
+}
+
+.item div[data-type = 'label']{
+    font-weight: 500;
+    position: relative;
+}
+
+.item div[data-type = 'label']::after{
+    content: ':';
+    position: absolute;
+    right: 0;
+}
+
+.item div[data-type = 'data']{
+    color: #161616;
+    font-size: 400;
+}
+
+.item div[data-type = 'data'] a {
+    color: #161616;
+}
+
+.item div[data-type = 'data'] a:hover {
+    color: #161616;
+    text-decoration: underline;
+}
+
+.description{
+    margin-top: -15px;
+    background-color: #F1F3F6;
+    padding: 10px;
+    border-radius: 4px;
+}

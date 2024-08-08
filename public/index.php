@@ -15,6 +15,10 @@ if (version_compare(PHP_VERSION, '8.0.1') < 0){
     exit(1);
 }
 
+if(ini_get('memory_limit') == '128M'){
+    ini_set('memory_limit', '500M');
+}
+
 define('LARAVEL_START', microtime(true));
 
 /*

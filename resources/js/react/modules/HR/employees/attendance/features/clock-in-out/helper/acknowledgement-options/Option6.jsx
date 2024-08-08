@@ -2,17 +2,33 @@ import React from "react";
 import CKEditorComponent from "../../../../../../../../ckeditor";
 import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
-import { FormGroup, Label } from "../../../../../../../../global/styled-component/Form";
+import {
+    FormGroup,
+    Label,
+} from "../../../../../../../../global/styled-component/Form";
 import DurationTime from "./DurationTimer";
-
-const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
+import extractTime from "../../../../../../../../utils/extractTime";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import Swal from "sweetalert2";
+const Option6 = ({
+    checked,
+    index,
+    onChange,
+    onSubmit,
+    isLoading,
+    onBack,
+    trackedTimeHistory,
+    lastClockData,
+}) => {
     const [comment, setComment] = React.useState("");
     const [durations, setDurations] = React.useState([
-        { start: "00:00 AM", end: "00:00 AM", id: "de2sew" },
+        { start: "", end: "", id: "de2sew" },
     ]);
     const [error, setError] = React.useState(null);
     const uniqueId = Math.random().toString(6).slice(2);
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
     // editor data change
     const handleEditorChange = (e, editor) => {
         const data = editor.getData();
@@ -32,8 +48,8 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             ...prev,
             {
                 id: uniqueId,
-                start: "00:00 AM",
-                end: "00:00 AM",
+                start: "",
+                end: "",
             },
         ]);
     };
@@ -50,7 +66,6 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         return !errCount;
     };
 
-    // handle form submit
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
         const data = {
@@ -60,17 +75,18 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             comment,
         };
 
-        setSType(submissionType)
-        if (isValid()) {
-            onSubmit(data, submissionType, onBack);
-        } else {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
                 title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack, durations, setDurations);
     };
     return (
         <React.Fragment>
@@ -97,7 +113,8 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                             {/* time duration */}
                             <FormGroup>
                                 <Label className="font-weight-bold">
-                                    Select an approximate time here. <sup>*</sup>
+                                    Select an approximate time here.{" "}
+                                    <sup>*</sup>
                                 </Label>
                                 {/* duration selection row */}
                                 <div className="row">
@@ -140,7 +157,9 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
 
                             {/* comment field */}
                             <div className="mt-3">
-                                <Label className="font-weight-bold">Write your comments here: </Label>
+                                <Label className="font-weight-bold">
+                                    Write your comments here:{" "}
+                                </Label>
                                 <div className="ck-editor-holder stop-timer-options">
                                     <CKEditorComponent
                                         data={comment}
@@ -159,26 +178,41 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) => {
+                                        handleSubmission(e, "CONTINUE");
+                                    }}
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

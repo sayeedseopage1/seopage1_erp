@@ -8,7 +8,7 @@
     $createPublicProjectPermission = user()->permission('create_public_project');
 
 @endphp
-<style media="screen">
+<style>
     .rating {
         float:left;
         display:flex;
@@ -17,9 +17,6 @@
         margin-right:auto;
     }
 
-    /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
-      follow these rules. Every browser that supports :checked also supports :not(), so
-      it doesn’t make the test unnecessarily selective */
     .rating:not(:checked) > input {
         position:absolute;
         top:-9999px;
@@ -29,29 +26,24 @@
     .rating:not(:checked) > label {
         float:left;
         width:1em;
-        /* padding:0 .1em; */
         overflow:hidden;
         white-space:nowrap;
         cursor:pointer;
         font-size:300%;
-        /* line-height:1.2; */
         color:#ddd;
     }
 
     .rating:not(:checked) > label:before{
         content: '★ ';
-
     }
 
     .rating > input:checked ~ label {
         color: orange;
-
     }
 
     .rating:not(:checked) > label:hover,
     .rating:not(:checked) > label:hover ~ label{
         color: orange;
-
     }
 
     .rating > input:checked + label:hover,
@@ -59,10 +51,8 @@
     .rating > input:checked ~ label:hover,
     .rating > input:checked ~ label:hover ~ label,
     .rating > label:hover ~ input:checked ~ label
-
     {
         color: orange;
-
     }
 
     .rating > label:active {
@@ -70,21 +60,10 @@
         top:2px;
         left:2px;
     }
-    /* .rating:not(:checked) > label {
-      float: left;
-      width: 55px;
 
-      overflow: hidden;
-      white-space: nowrap;
-      cursor: pointer;
-      font-size: 5em;
-      line-height: 1.2;
-      color: #ddd;
-  } */
     .rating:not(:checked) > label {
         float: left;
         width: 30px;
-        /* padding: 0 .1em; */
         overflow: hidden;
         white-space: nowrap;
         cursor: pointer;
@@ -92,7 +71,6 @@
         line-height: 1.2;
         color: #ddd;
     }
-
 </style>
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
@@ -218,6 +196,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="drive_yesError" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-3" id="drive_yes_box">
@@ -425,7 +404,6 @@
 
                             <div class="col-md-6 col-lg-6 mt-1">
                                 <label class="" for="">Submit The Niche/Sub Category of The Project
-                                    <sup class="f-14 mr-1">*</sup>
                                     <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Niche/Parent Category of The Project" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                         <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                     </svg>
@@ -579,6 +557,7 @@
                                         </label>
                                     </div>
                                 </div>
+                                <span id="dummy_yesError" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12 mt-3" id="dummy_yes_box">
@@ -659,6 +638,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="actual_yesError" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-3" id="actual_yes_box">
@@ -743,16 +723,25 @@
                 plugin_url_values.push(plugin_url[i].value);
             }
             var description = CKEDITOR.instances.descriptionText.getData();
+
+            var loginYesCheckbox = document.getElementById("login_yes");
+            var loginYesValue = loginYesCheckbox.checked ? "1" : null;
+            var driveYesCheckbox = document.getElementById("drive_yes");
+            var driveYesValue = driveYesCheckbox.checked ? "1" : null;
+            var dummyYesCheckbox = document.getElementById("dummy_yes");
+            var dummyYesValue = dummyYesCheckbox.checked ? "1" : null;
+            var actualYesCheckbox = document.getElementById("actual_yes");
+            var actualYesValue = actualYesCheckbox.checked ? "1" : null;
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'qc_protocol': qc_protocol,
-                'login_yes': document.getElementById("login_yes").value,
+                'login_yes': loginYesValue,
                 'login_information': login_information,
                 'login_url': document.getElementById("login_url").value,
                 'login': document.getElementById("login1").value,
                 'password': document.getElementById("password").value,
                 'screenshot': document.getElementById("screenshot").value,
-                'drive_yes': document.getElementById("drive_yes").value,
+                'drive_yes': driveYesValue,
                 'drive_information': drive_information,
                 'google_link': document.getElementById("google_link").value,
                 'rating': rating,
@@ -776,11 +765,11 @@
                 // 'theme_name': document.getElementById("theme_name").value,
                 // 'theme_url': document.getElementById("theme_url").value,
                 'theme_id': document.getElementById("theme_id").value,
-                'dummy_yes': document.getElementById("dummy_yes").value,
+                'dummy_yes': dummyYesValue,
                 'dummy_information': dummy_information,
                 'dummy_link': document.getElementById("dummy_link").value,
                 'notify': notify,
-                'actual_yes': document.getElementById("actual_yes").value,
+                'actual_yes': actualYesValue,
                 'actual_information': actual_information,
                 'actual_link': document.getElementById("actual_link").value,
                 'description': description,
@@ -895,8 +884,8 @@
                     }else{
                         $('#comments3Error').text('');
                     }
-                    if(error.responseJSON.errors.cms_category){
-                        $('#cms_categoryError').text(error.responseJSON.errors.cms_category);
+                    if(error.responseJSON.errors.cms_id){
+                        $('#cms_categoryError').text(error.responseJSON.errors.cms_id);
                     }else{
                         $('#cms_categoryError').text('');
                     }
@@ -1292,6 +1281,18 @@
         function changeUrl() {
             alert('sadf');
         }
+
+        document.querySelectorAll('.rating > label').forEach(label => {
+        label.addEventListener('click', function(event) {
+            event.preventDefault();
+            const input = document.getElementById(label.htmlFor);
+            if (input) {
+                input.checked = true;
+                // Trigger any change event if needed
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+    });
     </script>
 
 
