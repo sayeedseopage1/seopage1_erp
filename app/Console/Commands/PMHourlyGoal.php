@@ -6,6 +6,7 @@ use App\Listeners\PmGoalEventListener;
 use Illuminate\Console\Command;
 use App\Models\ProjectPmGoal;
 use App\Models\ProjectTimeLog;
+use Carbon\Carbon;
 use DateTime;
 
 class PMHourlyGoal extends Command
@@ -43,11 +44,10 @@ class PMHourlyGoal extends Command
                 ->get()->map(function ($logItem) use (&$logMinutes) {
                     // dd($logItem);
 
-                    $datetime1 = new DateTime($logItem->start_time);
-                    $datetime2 = new DateTime();
+                    $datetime1 = Carbon::parse($logItem->start_time);
+                    $datetime2 = Carbon::now();
                     // dump($datetime1, $datetime2);
-                    $interval = $datetime1->diff($datetime2);
-                    $logMinutes += (int) $interval->format('%i');
+                    $logMinutes += $datetime1->diffInMinutes($datetime2);
                     // dd($logMinutes);
                 });
             if ($logMinutes > 0) {
