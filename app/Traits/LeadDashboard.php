@@ -328,46 +328,57 @@ trait LeadDashboard
                 $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
             }
 
-            // Retrieve task history within the specified date range and for the given lead developer
-            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
-                ->where('user_id', $LeadDevId);
+            if (
+                !($tableType == 'leadNoOfDisputesFiledLoseOverall') ||
+                !($tableType == 'leadNumberOfDisputesInvolvedIn') ||
+                !($tableType == 'leadNoOfDisputesFiledLose')
+            ) {
+                // Retrieve task history within the specified date range and for the given lead developer
+                $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
+                    ->where('user_id', $LeadDevId);
 
-            // Retrieve tasks assigned to the lead developer, excluding subtasks
-            $taskWithId = Task::whereRelation('taskUsers', 'user_id', $LeadDevId)
-                ->whereNull('subtask_id');
+                // Retrieve tasks assigned to the lead developer, excluding subtasks
+                $taskWithId = Task::whereRelation('taskUsers', 'user_id', $LeadDevId)
+                    ->whereNull('subtask_id');
 
-            // Clone the tasks query for filtering by creation date
-            $taskWithStartEndDateWithId = clone $taskWithId;
-            $taskWithStartEndDateWithId->whereBetween('created_at', [$startDate, $endDate]);
+                // Clone the tasks query for filtering by creation date
+                $taskWithStartEndDateWithId = clone $taskWithId;
+                $taskWithStartEndDateWithId->whereBetween('created_at', [$startDate, $endDate]);
+            }
 
+            if (
+                $tableType == 'leadNoOfDisputesFiledLoseOverall' ||
+                $tableType == 'leadNumberOfDisputesInvolvedIn' ||
+                $tableType == 'leadNoOfDisputesFiledLose'
+            ) {
+                // Disputes Query
+                $disputes_involved_in_lead_dev_without_date = TaskRevisionDispute::with(
+                    'task:id,created_at,due_date,heading,board_column_id,project_id',
+                    'task.project:id,pm_id,client_id',
+                    'task.project.client:id,name',
+                    'task.project.pm:id,name',
+                    'disputeWinner',
+                    'raisedAgainst',
+                    'raisedBy'
+                )->where(function ($query) use ($LeadDevId) {
+                    $query->where('raised_by', $LeadDevId)
+                        ->orWhere('raised_against', $LeadDevId);
+                })->select(
+                        'id',
+                        'task_id',
+                        'winner',
+                        'raised_by_percent',
+                        'raised_against_percent',
+                        'raised_by',
+                        'raised_against',
+                        'created_at'
+                    );
 
-            // Disputes Query
-            $disputes_involved_in_lead_dev_without_date = TaskRevisionDispute::with(
-                'task:id,created_at,due_date,heading,board_column_id,project_id',
-                'task.project:id,pm_id,client_id',
-                'task.project.client:id,name',
-                'task.project.pm:id,name',
-                'disputeWinner',
-                'raisedAgainst',
-                'raisedBy'
-            )->where(function ($query) use ($LeadDevId) {
-                $query->where('raised_by', $LeadDevId)
-                    ->orWhere('raised_against', $LeadDevId);
-            })->select(
-                    'id',
-                    'task_id',
-                    'winner',
-                    'raised_by_percent',
-                    'raised_against_percent',
-                    'raised_by',
-                    'raised_against',
-                    'created_at'
-                );
+                $disputes_involved_in_lead_dev_with_date = clone $disputes_involved_in_lead_dev_without_date;
 
-            $disputes_involved_in_lead_dev_with_date = clone $disputes_involved_in_lead_dev_without_date;
-
-            $disputes_involved_in_lead_dev_with_date = $disputes_involved_in_lead_dev_with_date->whereBetween('created_at', [$startDate, $endDate]);
-            // Disputes Query
+                $disputes_involved_in_lead_dev_with_date = $disputes_involved_in_lead_dev_with_date->whereBetween('created_at', [$startDate, $endDate]);
+                // Disputes Query
+            }
 
             if ($tableType == 'leadNumberOfTasksReceived') {
                 $number_of_tasks_received_lead_data = $taskWithStartEndDateWithId
