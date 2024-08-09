@@ -196,19 +196,11 @@ class ProjectController extends AccountBaseController
         }
 
         /** PROJECT MANAGER GOAL FUNCTION START */
-        if (Auth::user()->role_id == 4) {
-            $pm_goal = ProjectPmGoal::where('goal_status', '0')->get();
-            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
-                foreach ($pm_goal as $item) {
-                    $current_date = now();
-                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
-                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date)) {
-                        if(PmGoalExpHistory::where('goal_id', $item->id)->count() < 1)
-                        {
-                            return view('projects.ajax.goale_alert', $this->data);
-                        }
-                    }
-                }
+        if (auth()->user()->role_id == 4) {
+            $expiredGoalCount = ProjectPmGoal::where('pm_id', auth()->user()->id)->where('expired_status', '1')->where('reason_status', '0')->count();
+            if($expiredGoalCount > 0)
+            {
+                return view('projects.ajax.goale_alert', $this->data);
             }
         }
         /** PROJECT MANAGER GOAL FUNCTION END */
