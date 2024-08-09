@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { CreatedAt, CreatedBy, EmptySpace } from "./ui";
 import Avatar from "../../../../../global/Avatar";
 import ActionDropdown from "./ActionDropdown";
+import PersonAvatar from "../../../../../global/PersonAvatar";
 
 export const WonDealsTableColumns = [
     {
@@ -76,7 +77,7 @@ export const WonDealsTableColumns = [
             const data = row.original;
             return (
                 <CreatedBy href={`/account/clients/${data.client_id}`}>
-                    <Avatar
+                    {/* <Avatar
                         type="circle"
                         name={data?.client_name}
                         src={
@@ -84,6 +85,11 @@ export const WonDealsTableColumns = [
                                 ? `/user-uploads/avatar/${data?.client_avatar}`
                                 : null
                         }
+                    /> */}
+
+                    <PersonAvatar
+                        name={data?.client_name}
+                        avatar={data?.client_avatar}
                     />
 
                     <span>{data?.client_name}</span>
@@ -103,7 +109,11 @@ export const WonDealsTableColumns = [
 
             return (
                 <CreatedBy href={`/account/employees/${data.pm_id}`}>
-                    <Avatar
+                    <PersonAvatar
+                        name={data?.pm_name}
+                        avatar={data?.pm_avatar}
+                    />
+                    {/* <Avatar
                         type="circle"
                         name={data?.pm_name}
                         src={
@@ -111,8 +121,7 @@ export const WonDealsTableColumns = [
                                 ? `/user-uploads/avatar/${data?.pm_avatar}`
                                 : null
                         }
-                    />
-
+                    /> */}
                     <span>{data?.pm_name}</span>
                 </CreatedBy>
             );
@@ -178,7 +187,7 @@ export const WonDealsTableColumns = [
 
             return (
                 <CreatedBy href={`/account/employees/${data.added_by}`}>
-                    <Avatar
+                    {/* <Avatar
                         type="circle"
                         name={data?.added_by_name}
                         src={
@@ -186,6 +195,10 @@ export const WonDealsTableColumns = [
                                 ? `/user-uploads/avatar/${data?.added_by_avatar}`
                                 : null
                         }
+                    /> */}
+                    <PersonAvatar
+                        name={data?.added_by_name}
+                        avatar={data?.added_by_avatar}
                     />
 
                     <span>{data?.added_by_name}</span>
@@ -213,6 +226,8 @@ export const WonDealsTableColumns = [
     {
         id: "action",
         header: "Action",
-        cell: (props) => <ActionDropdown {...props} />,
+        cell: (props) => {
+            return <ActionDropdown {...props} />;
+        },
     },
 ];

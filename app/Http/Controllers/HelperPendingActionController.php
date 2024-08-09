@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
+use App\Models\Designation;
+use App\Models\EmployeeDetails;
 use App\Models\EmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
+use App\Models\PendingParentTasks;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -2248,7 +2251,7 @@ class HelperPendingActionController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$user)->first();
             $new_pm = User::where('id',$user)->first(); 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$new_pm->id)->first(); 
-            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $task = $evaluation_task ? Task::where('id', $evaluation_task->task_id)->first() : null;
             $authorizers= User::where('role_id',8)->get();
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
@@ -2272,7 +2275,7 @@ class HelperPendingActionController extends AccountBaseController
                     $action->message = 'Fill out the initial performance evaluation form for the new Sales Person <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
                 }
                 $action->timeframe= 24;
-                $action->task_id = $task->id;
+                $action->task_id = $task->id ?? null;
                 $action->developer_id = $new_pm->id;
                 $action->authorization_for= $authorizer->id;
                 if($evaluation->user_status == 'PM'){
@@ -2463,5 +2466,33 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
+        public function independentTaskCreation($indTask)
+        {
+            $ppTask = PendingParentTasks::where('id',$indTask)->first();
+            $taskAddded = User::where('id',$ppTask->added_by)->first();
+            $role = Role::where('id',$taskAddded->role_id)->first();
+            $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'INDTA';
+                $action->serial = 'INDTA'.'x'.$key;
+                $action->item_name= 'Independent task authorization';
+                $action->heading= 'Independent task authorization!';
+                $action->message = 'Independent task '.$ppTask->heading.' created by '.$role->display_name.' <a href="'.route('employees.show',$taskAddded->id).'">'.$taskAddded->name.'</a> needs to be Authorized!';
+                $action->timeframe= 24;
+                $action->ind_task_id = $ppTask->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Authorize',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => url('account/independent/tasks'),
+                    ],
 
-}
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+    }

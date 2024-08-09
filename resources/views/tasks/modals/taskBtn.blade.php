@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+<link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
 <style>
     .modal:nth-of-type(even) {
         z-index: 1052 !important;
@@ -63,7 +63,7 @@
     </div>
 </div>
 
-<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+<script src="{{asset('toastr/toastr.min.js')}}"></script>
 <script>
     function disableButton() {
         var btn = document.getElementById('submitBtnRevision_ajax');
