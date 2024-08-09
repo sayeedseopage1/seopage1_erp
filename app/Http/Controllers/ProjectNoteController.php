@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Helper\Reply;
 use App\Http\Requests\Project\StoreProjectNote;
+use App\Models\Deal;
 use App\Models\Project;
+use App\Models\ProjectMilestone;
 use App\Models\ProjectNote;
 use App\Models\ProjectUserNote;
+use App\Models\Task;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,7 +33,20 @@ class ProjectNoteController extends AccountBaseController
         $this->viewProjectPermission = user()->permission('add_project_note');
         $this->project = Project::findOrFail(request('project'));
         abort_403(!(in_array($this->viewProjectPermission, ['all']) || $this->project->project_admin == user()->id));
-
+        
+        
+        $this->milestones = ProjectMilestone::where('project_id',$this->project->id)->where('status','incomplete')->get();
+        $this->tasks = Task::where('project_id',$this->project->id)->where('subtask_id',null)->where('board_column_id', '!=', 4)->get();
+        $this->deal = Deal::where('id',$this->project->deal_id)->first();
+        
+        $deal_time = Carbon::parse($this->deal->released_at)->toTimeString();
+        $project_time = Carbon::parse($this->project->deadline);
+        $project_deadline = $project_time->setTimeFromTimeString($deal_time);
+        $diffTime = $project_deadline->diffInDays(Carbon::parse($this->deal->released_at));
+        $today = Carbon::now();
+        $day_of_project = (int) ceil(Carbon::parse($this->deal->released_at)->diffInHours($today) / 24);
+        $this->deadline = $diffTime;
+        $this->daysRemaining = $day_of_project + 1;
 
         $this->employees = $this->project->membersMany;
 
@@ -44,8 +61,19 @@ class ProjectNoteController extends AccountBaseController
         return view('projects.create', $this->data);
     }
 
-    public function store(StoreProjectNote $request)
+    public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required',
+            'details' => 'required',
+            'select_item' => ['required_if:set_reminder,Timebound reminder'],
+            'milestone_id' => ['required_if:note_type,Project'],
+            'task_id' => ['required_if:note_type,Project'],
+            'deal_id' => ['required_if:note_type,Deal'],
+            'won_deal_id' => ['required_if:note_type,Won Deal'],
+            'reminder_time' => 'required',
+        ]);
+
         $this->addProjectPermission = user()->permission('add_project_note');
         $this->project = Project::findOrFail(request('project_id'));
 
