@@ -563,7 +563,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->duration = number_format($duration, 2);
         $goal->added_by = Auth::user()->id;
 
-        $goal->data = json_encode(['deliverable_id' => $deliverable->id]);
+        $goal->data = json_encode(['deliverable_id' => $deliverable->id, 'estimated_hours' => $estimatedHours]);
         $goal->save();
     }
 }

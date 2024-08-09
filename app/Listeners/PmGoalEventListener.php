@@ -252,9 +252,10 @@ class PmGoalEventListener
             $totalMinutes = $data['totalMinute'];
         }
         // dd($data);
-
+        // dd($totalMinutes);
         if ($totalMinutes < 60) return;
-
+        $totalMinutes -= 60;
+        // dd($totalMinutes);
         // find first goal
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'HTA'])->first();
         if (!$goal) return;
@@ -275,6 +276,7 @@ class PmGoalEventListener
 
         if ($totalMinutes < 3 * 60) return;
 
+        // dd($totalMinutes);
         // 2nd goal completion ----------------------- //
         if ($projectPriority == 'regular' || $projectPriority == 'priority') {
             $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '3HT', 'goal_status' => 0])->first();
@@ -328,15 +330,12 @@ class PmGoalEventListener
         foreach ($goals as $item) {
 
             $data = json_decode($item->data);
-            if (!isset($data->deliverable_id)) return;
-
-            if (!$deliverable = ProjectDeliverable::find($data->deliverable_id)) return;
-
+            if (!isset($data->estimated_hours)) return;
             // check deliverable time exceeded
             if ($item->goal_status == 0) {
                 if (time() > strtotime($item->goal_end_date)) return;
-                // dd($dIds, $total, $totalMinutes, ($deliverable->estimation_time * 60));
-                if ($totalMinutes >= ($deliverable->estimation_time * 60)) {
+                // dd($totalMinutes, ($data->estimated_hours * 60));
+                if ($totalMinutes >= ($data->estimated_hours * 60)) {
                     $item->expired_meet_description = $item->goal_name;
                     $item->goal_status = 1;
                     $item->save();
@@ -345,7 +344,7 @@ class PmGoalEventListener
             } else {
                 // $total += $deliverable->estimation_time;
                 // $dIds[] = [$deliverable->id => $deliverable->estimation_time ];
-                $totalMinutes -= ($deliverable->estimation_time * 60);
+                $totalMinutes -= ($data->estimated_hours * 60);
             }
         }
     }

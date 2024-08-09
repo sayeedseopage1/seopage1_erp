@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Deal;
 use App\Models\Project;
+use App\Models\ProjectPmGoal;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -34,14 +35,17 @@ class DatabaseSync extends Command
     {
         try {
 
-            // deals - status list update
+            // ---- deals
+            $this->comment('deals - status list update');
             $statusList = "'" . implode("','", Deal::$saleAnalysisStatus) . "'";
             DB::statement("ALTER TABLE `deals`
             CHANGE COLUMN `sale_analysis_status` `sale_analysis_status` 
             ENUM(" . $statusList . ") 
             NOT NULL DEFAULT 'pending';");
 
-            // project default goal creation date type set to 2 (released_at)
+
+            // ---- Project
+            $this->comment('project default goal creation date type set to 2 (released_at)');
             Schema::table('projects', function (Blueprint $table) {
 
                 $string = "";
@@ -62,6 +66,16 @@ class DatabaseSync extends Command
                 5. when admin authorizes the extension request  = award_time_incresses_request::updated_at
                 6. when project manager submits the extension request  = award_time_incresses_request::created_at
                 ");
+            });
+
+            // ---- Pm goal
+            $this->comment('Filling estimated hour for pm goal');
+            ProjectPmGoal::where('goal_code', 'RAM')->get()->map(function($item){
+                $data = json_decode($item->data);
+                if (! isset($data->estimated_hours)) {
+                    $item->data = json_encode(['deliverable_id' => $data->deliverable_id, 'estimated_hours' => explode(' ', $item->goal_name)[2]]);
+                    $item->save();
+                }
             });
 
             $this->info('Database sync ends successfully.');
