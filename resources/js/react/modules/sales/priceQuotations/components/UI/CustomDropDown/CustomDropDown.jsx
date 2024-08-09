@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { Popover, Tooltip } from "antd";
@@ -32,6 +32,7 @@ const CustomDropDown = ({
     isMultiple = false,
 }) => {
     const [query, setQuery] = React.useState("");
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const startCase = _.startCase(selected?.name);
 
     const debouncedSetQuery = useCallback(
@@ -97,7 +98,7 @@ const CustomDropDown = ({
                     <Placeholder width="100%" height="48px" />
                 </Switch.Case>
                 <Switch.Case condition={!isFullDropDownLoading}>
-                    <Popover title={disabledTitle}>
+                    <Popover title={disabledTitle} open={disabledTitle ? undefined : false} >
                         <div
                             className={`${
                                 sidebarItem
