@@ -1857,6 +1857,10 @@ class ContractController extends AccountBaseController
             $client->email = $request->client_email;
             $client->name = $request->client_name;
             $client->save();
+
+            // is final admin in between approve operation
+            if ($request->is_final && in_array($deal->sale_analysis_status, ['authorized','auto-authorized']))
+                $request->merge(['is_drafted' => 0]);
             
             // assign pm lead
             if ($deal->pm_id == null && ($deal->is_drafted && !$request->is_drafted)) 
