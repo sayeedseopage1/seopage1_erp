@@ -3011,20 +3011,25 @@ class ProjectController extends AccountBaseController
 
         if($project->deal->project_type == 'hourly')
         {
-            $goal = ProjectPmGoal::where('project_id', $project->id)->first();
-            if (in_array($goal->project_category, ['regular', 'priority'])) {
-                $request->validate([
-                    'estimation_time' => 'required|numeric|min:5',
-                ]);
-            } else if ($goal->project_category == 'highPriority') {
-                $request->validate([
-                    'estimation_time' => 'required|numeric|min:6',
-                ]);
-            } else if (in_array($goal->project_category, ['topMostPriority', 'criticallySensitive'])) {
-                $request->validate([
-                    'estimation_time' => 'required|numeric|min:7',
-                ]);
+            $goalCount = ProjectPmGoal::where('project_id', $project->id)->count();
+            if($goalCount == 2)
+            {
+                $goal = ProjectPmGoal::where('project_id', $project->id)->first();
+                if (in_array($goal->project_category, ['regular', 'priority'])) {
+                    $request->validate([
+                        'estimation_time' => 'required|numeric|min:5',
+                    ]);
+                } else if ($goal->project_category == 'highPriority') {
+                    $request->validate([
+                        'estimation_time' => 'required|numeric|min:6',
+                    ]);
+                } else if (in_array($goal->project_category, ['topMostPriority', 'criticallySensitive'])) {
+                    $request->validate([
+                        'estimation_time' => 'required|numeric|min:7',
+                    ]);
+                }
             }
+            
         }
 
         if ($validate) {
