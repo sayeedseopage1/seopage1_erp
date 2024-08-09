@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class DailySubmissionDetail extends Model
 {
     use HasFactory;
+
+    public function category()
+    {
+        return $this->belongsTo(DailySubmissionCategory::class, 'daily_submission_category_id');
+    }
 }

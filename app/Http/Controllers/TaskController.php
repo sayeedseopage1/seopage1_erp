@@ -6955,7 +6955,7 @@ class TaskController extends AccountBaseController
         // dd($dailySubmission);
 
 
-        $dailySubmission = DailySubmission::with('sections.submission_details')->select(
+        $dailySubmission = DailySubmission::with('sections.submission_details.category')->select(
             'daily_submissions.id',
             'daily_submissions.report_date as report_date',
             'daily_submissions.section_name as section',
@@ -6964,6 +6964,8 @@ class TaskController extends AccountBaseController
             'daily_submissions.attachments as attachments',
             'daily_submissions.link_name as screenshot_screenrecord_link',
             'daily_submissions.created_at as report_submission_date',
+            'daily_submissions.frontend_password as frontend_password_new',
+            'daily_submissions.password',
             'employee.id as employee_id',
             'employee.name as employee_name',
             'employee.image as employee_image',
