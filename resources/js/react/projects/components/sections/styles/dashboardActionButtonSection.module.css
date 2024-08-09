@@ -1,0 +1,95 @@
+.dashboardActionButtonSection {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 16px;
+}
+
+.dashboardActionLeftButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboardActionLeftButton button {
+  width: 50% !important;
+}
+
+.dashboardActionRightButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboardActionRightButton button {
+  width: 33.3% !important;
+}
+
+.dashboardActionButton {
+  border-radius: 9px;
+  background: #1492E6;
+  color: #FFF;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px;
+}
+
+
+.dashboardActionButtonPending {
+  background: #FFC107 !important;
+  color: #000 !important;
+  cursor: not-allowed !important;
+}
+
+@media (min-width: 1342px) and (max-width: 1601px) {
+  .dashboardActionButton {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1341px) {
+  .dashboardActionButtonSection {
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 16px;
+  }
+
+  .dashboardActionButton {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .dashboardActionButtonSection {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardActionLeftButton {
+    flex-direction: column;
+  }
+
+  .dashboardActionRightButton {
+    flex-direction: column;
+  }
+
+  .dashboardActionLeftButton button {
+    width: 100% !important;
+  }
+
+  .dashboardActionRightButton button {
+    width: 100% !important;
+  }
+
+  .dashboardActionButton {
+    padding: 12px;
+    font-size: 14px;
+  }
+}

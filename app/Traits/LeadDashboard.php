@@ -32,7 +32,7 @@ trait LeadDashboard
 
             if (request('start_date') && request('end_date')) {
                 $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
-                $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
             } else {
                 $startDate = Carbon::now()->endOfMonth()->format('Y-m-d');
                 $endDate = Carbon::now()->endOfDay()->format('Y-m-d');
@@ -325,7 +325,7 @@ trait LeadDashboard
 
             if (request('start_date') && request('end_date')) {
                 $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
-                $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
             }
 
             if (

@@ -2168,6 +2168,39 @@ class HelperPendingActionController extends AccountBaseController
 
             }
         }
+
+        public function projectDeadlineExtForAdmin($projectId)
+        {
+            $project = Project::where('id',$projectId)->first();
+            $pm = User::where('id',$project->pm_id)->first();
+            $client = User::where('id',$project->client_id)->first();
+            $authorizers = User::where('role_id', 1)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'PDER';
+                $action->serial = 'PDER'.'x'.$key;
+                $action->item_name= 'Project Deadline Extension Request!';
+                $action->heading= 'Project Deadline Extension Request!';
+                $action->message = 'Review the deadline extension request by project manager <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+                $action->timeframe= 12;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', $project->id),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            }
+        }
+
         public function portfolioRating($projectId)
         {
             $project = Project::where('id',$projectId)->first();

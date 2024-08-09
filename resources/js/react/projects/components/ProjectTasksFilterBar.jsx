@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Button from "../../tasks/components/Button";
 import UserFilter from "../../tasks/components/Filter-bar/UserFilter";
 import StatusFilter from "../../tasks/components/Filter-bar/StatusFilter";
@@ -77,7 +78,7 @@ const ProjectTasksFilterBar = ({ onFilter, page = "tasks",  }) => {
                 >
                     <i className="fa-solid fa-filter"></i>
                     <span>Filter</span>
-                    {activeFilter && <i className="fa-regular fa-circle-xmark text-danger" onClick={clear}></i>}
+                    {activeFilter && <i className="fa-regular fa-circle-xmark text-danger" role="button" onClick={clear}></i>}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="sp1_table_tab--dd-menu">
                     <div className="sp1_tasks_filter_container">
@@ -145,3 +146,9 @@ const ProjectTasksFilterBar = ({ onFilter, page = "tasks",  }) => {
 };
 
 export default ProjectTasksFilterBar;
+
+ProjectTasksFilterBar.propTypes = {
+    onFilter: PropTypes.func.isRequired,
+    page: PropTypes.string,
+
+}
