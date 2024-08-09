@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 trait LeadDashboard
 {
-
     public function leadDashboard()
     {
         return view('dashboard.employee.lead', $this->data);
@@ -50,8 +49,7 @@ trait LeadDashboard
                 ->where('user_id', $LeadDevId);
 
             // Retrieve tasks assigned to the lead developer, excluding subtasks
-            $taskWithId = Task::whereRelation('taskUsers', 'user_id', $LeadDevId)
-                ->whereNull('subtask_id');
+            $taskWithId = Task::whereRelation('taskUsers', 'user_id', $LeadDevId)->whereNull('subtask_id');
 
             // Clone the tasks query for filtering by creation date
             $taskWithStartEndDateWithId = clone $taskWithId;
@@ -138,16 +136,31 @@ trait LeadDashboard
                 'auto_approved_tasks'     => $this->auto_approved_tasks,
                 'manually_approved_tasks' => $this->manually_approved_tasks,
             ];
-
-            $disputes_involved_in_lead_dev_without_date = TaskRevisionDispute::with(
+            // Disputes Query
+            $disputes_involved_in_lead_dev_without_date = TaskRevisionDispute::with([
+                'task.project.pm'     => function ($pm) {
+                    $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                        ->select('id', 'name');
+                },
+                'task.project.client' => function ($client) {
+                    $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                        ->select('id', 'name');
+                },
                 'task:id,created_at,due_date,heading,board_column_id,project_id',
                 'task.project:id,pm_id,client_id',
-                'task.project.client:id,name',
-                'task.project.pm:id,name',
-                'disputeWinner',
-                'raisedAgainst',
-                'raisedBy'
-            )->where(function ($query) use ($LeadDevId) {
+                'disputeWinner'       => function ($disputeWinner) {
+                    $disputeWinner->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                        ->select('id', 'name');
+                },
+                'raisedAgainst'       => function ($raisedAgainst) {
+                    $raisedAgainst->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                        ->select('id', 'name');
+                },
+                'raisedBy'            => function ($raisedBy) {
+                    $raisedBy->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                        ->select('id', 'name');
+                },
+            ])->where(function ($query) use ($LeadDevId) {
                 $query->where('raised_by', $LeadDevId)
                     ->orWhere('raised_against', $LeadDevId);
             })->select(
@@ -164,6 +177,7 @@ trait LeadDashboard
             $disputes_involved_in_lead_dev_with_date = clone $disputes_involved_in_lead_dev_without_date;
 
             $disputes_involved_in_lead_dev_with_date = $disputes_involved_in_lead_dev_with_date->whereBetween('created_at', [$startDate, $endDate]);
+            // Disputes Query
 
 
             $leadNumberOfDisputesInvolvedIn = clone $disputes_involved_in_lead_dev_with_date;
@@ -357,15 +371,30 @@ trait LeadDashboard
                 $tableType == 'leadNoOfDisputesFiledLose'
             ) {
                 // Disputes Query
-                $disputes_involved_in_lead_dev_without_date = TaskRevisionDispute::with(
+                $disputes_involved_in_lead_dev_without_date = TaskRevisionDispute::with([
+                    'task.project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'task.project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'task:id,created_at,due_date,heading,board_column_id,project_id',
                     'task.project:id,pm_id,client_id',
-                    'task.project.client:id,name',
-                    'task.project.pm:id,name',
-                    'disputeWinner',
-                    'raisedAgainst',
-                    'raisedBy'
-                )->where(function ($query) use ($LeadDevId) {
+                    'disputeWinner'       => function ($disputeWinner) {
+                        $disputeWinner->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'raisedAgainst'       => function ($raisedAgainst) {
+                        $raisedAgainst->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'raisedBy'            => function ($raisedBy) {
+                        $raisedBy->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                ])->where(function ($query) use ($LeadDevId) {
                     $query->where('raised_by', $LeadDevId)
                         ->orWhere('raised_against', $LeadDevId);
                 })->select(
@@ -411,7 +440,6 @@ trait LeadDashboard
                     ]
                 ], 200);
             }
-
             if ($tableType == 'leadNumberOfSubmittedTasks') {
                 $taskHistoryWithDateAndId = $taskHistoryWithDateAndId->where('board_column_id', 6)
                     ->groupBy('task_id')
@@ -426,13 +454,21 @@ trait LeadDashboard
                 }
 
 
-                $submit_number_of_tasks_lead_dev_data = Task::with(
+                $submit_number_of_tasks_lead_dev_data = Task::with([
                     'stat:id,label_color,column_name',
-                    'oldestSubTask',
+                    'oldestSubTask'  => function ($oldestSubTask) {
+                        $oldestSubTask->without(['assignedTo']);
+                    },
                     'project:id,pm_id,client_id',
-                    'project.client:id,name',
-                    'project.pm:id,name',
-                )->select('id', 'created_at', 'start_date', 'due_date', 'heading', 'board_column_id', 'project_id')->find($taskId);
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                ])->select('id', 'created_at', 'start_date', 'due_date', 'heading', 'board_column_id', 'project_id')->find($taskId);
 
                 return response([
                     'data' => [
@@ -441,22 +477,27 @@ trait LeadDashboard
                     ]
                 ], 200);
             }
-
             if ($tableType == 'leadDevNumberOfApprovedTaskByClientInFirstAttempt') {
                 $task_ids = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
                     $q->whereNull('subtask_id');
                 })->where('board_column_id', 6)->get()->pluck('task_id')->toArray();
 
 
-                $number_of_approved_tasks = Task::with(
+                $number_of_approved_tasks = Task::with([
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'stat:id,label_color,column_name',
-                    'project.pm:id,name',
-                    'project.client:id,name',
                     'project:id,pm_id,client_id',
                     'latestTaskSubmission:id,task_id,created_at',
                     'latestTaskApprove:id,task_id,created_at',
                     'revisions.taskRevisionDispute',
-                )->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')->whereIn('id', $task_ids);
+                ])->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')->whereIn('id', $task_ids);
 
                 $task_with_revisions = clone $number_of_approved_tasks;
 
@@ -512,22 +553,27 @@ trait LeadDashboard
             }
             if ($tableType == 'leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager') {
                 $number_of_approved_tasks_by_project_manager_date = $taskHistoryWithDateAndId
-                    ->with(
-                        'task.stat:id,label_color,column_name',
+                    ->with([
+                        'task.project.pm'     => function ($pm) {
+                            $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
+                        'task.project.client' => function ($client) {
+                            $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
                         'task:id,created_at,due_date,heading,board_column_id,project_id',
+                        'task.stat:id,label_color,column_name',
                         'task.project:id,pm_id,client_id',
-                        'task.project.client:id,name',
-                        'task.project.pm:id,name',
                         'task.latestTaskSubmission:id,task_id,created_at',
                         'task.latestTaskApprove:id,task_id,created_at',
-                    )->whereHas('task', function ($q) {
+                    ])->whereHas('task', function ($q) {
                         $q->whereNull('subtask_id');
                     })->where('board_column_id', 6)
                     ->whereRelation('task', 'board_column_id', 4)
                     ->groupBy('task_id')
                     ->select('id', 'task_id', 'user_id', 'created_at', 'board_column_id', DB::raw('COUNT(*) as total_submitted'))
                     ->get();
-
                 // Dispute
                 $dispute_win_lead_dev = 0;
                 $task_revisions = TaskRevision::with('taskRevisionDispute')->whereIn('task_id', $number_of_approved_tasks_by_project_manager_date->pluck('task_id')->toArray())
@@ -593,16 +639,22 @@ trait LeadDashboard
                 }
 
                 // Step 4: Retrieve the required task information
-                $number_of_attempts_needed_for_approval_by_client = Task::with(
+                $number_of_attempts_needed_for_approval_by_client = Task::with([
                     'taskType:id,task_id,task_type,page_type',
-                    'project.pm:id,name',
-                    'project.client:id,name',
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'project:id,pm_id,client_id',
                     'stat:id,label_color,column_name',
                     'latestTaskApprove:id,task_id,created_at',
                     'latestTaskSubmission:id,task_id,created_at',
                     'taskUser'
-                )->find($task_ids);
+                ])->find($task_ids);
 
                 // Step 5: Calculate the total number of attempts
                 $total_attempts = $only_responsible_revisions_count + $number_of_attempts_needed_for_approval_by_client->count();
@@ -627,12 +679,19 @@ trait LeadDashboard
                 })->get()->pluck('task_id')->toArray();
 
 
-                $allTask = Task::with(
-                    'project.client:id,name',
+                $allTask = Task::with([
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'project:id,pm_id,client_id',
                     'revisions:id,task_id,final_responsible_person,dispute_between',
                     'revisions.taskRevisionDispute:id,revision_id,task_id,raised_against_percent',
-                )->whereHas('history', function (Builder $query) {
+                ])->whereHas('history', function (Builder $query) {
                     $query->where('board_column_id', 6);
                 })->whereIn('id', $task_id)->where('board_column_id', 4);
 
@@ -731,12 +790,18 @@ trait LeadDashboard
             }
             if ($tableType == 'leadAverageTaskHoldTime') {
                 $tasks = $taskWithStartEndDateWithId
-                    ->with(
-                        'project.pm:id,name',
-                        'project.client:id,name',
+                    ->with([
+                        'project.pm'     => function ($pm) {
+                            $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
+                        'project.client' => function ($client) {
+                            $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
                         'project:id,pm_id,client_id',
                         'oldestSubTask'
-                    )
+                    ])
                     ->has('oldestSubTask')
                     ->get();
 
@@ -803,12 +868,18 @@ trait LeadDashboard
                     $q->whereNull('subtask_id');
                 })->get()->pluck('task_id')->toArray();
 
-                $completed_tasks_by_lead_developer = Task::with(
+                $completed_tasks_by_lead_developer = Task::with([
                     'firstHistoryForDevReview',
-                    'project.pm:id,name',
-                    'project.client:id,name',
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'project:id,pm_id,client_id',
-                )->where('board_column_id', 4)
+                ])->where('board_column_id', 4)
                     ->find($task_id);
 
                 $percentage_of_tasks_where_deadline_was_missed_data = [];
@@ -836,13 +907,19 @@ trait LeadDashboard
                     $q->whereNull('subtask_id');
                 })->get()->pluck('task_id')->toArray();
 
-                $completed_tasks_by_lead_developer = Task::with(
+                $completed_tasks_by_lead_developer = Task::with([
                     'taskSubTasks.timeLogged',
-                    'project.pm:id,name',
-                    'project.client:id,name',
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'project:id,pm_id,client_id',
                     'timeLogged',
-                )->where('board_column_id', 4)
+                ])->where('board_column_id', 4)
                     ->withSum('timeLogged', 'total_minutes')->find($task_id);
 
                 $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data = [];
@@ -873,13 +950,19 @@ trait LeadDashboard
                     $q->whereNull('subtask_id');
                 })->get()->pluck('task_id')->toArray();
 
-                $completed_tasks_by_lead_developer = Task::with(
+                $completed_tasks_by_lead_developer = Task::with([
                     'taskSubTasks.timeLoggedWithoutRevision',
-                    'project.pm:id,name',
-                    'project.client:id,name',
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'project:id,pm_id,client_id',
                     'timeLogged'
-                )->where('board_column_id', 4)
+                ])->where('board_column_id', 4)
                     ->withSum('timeLoggedWithoutRevision', 'total_minutes')->find($task_id);
 
                 $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data = [];
@@ -953,8 +1036,14 @@ trait LeadDashboard
 
                 $parent_task_wise_total_hours_spent_in_revisions_data = Task::has('revisions')
                     ->with([
-                        'project.pm:id,name',
-                        'project.client:id,name',
+                        'project.pm'                       => function ($pm) {
+                            $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
+                        'project.client'                   => function ($client) {
+                            $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                                ->select('id', 'name');
+                        },
                         'project:id,pm_id,client_id',
                         'taskSubTasks.timeLoggedOnlyRevision',
                         'taskSubTasks.submissions.timeLogs',
@@ -1045,12 +1134,19 @@ trait LeadDashboard
                 ], 200);
             }
             if ($tableType == 'leadCurrentAndPastLimitedTask') {
-                $tasks = $taskWithStartEndDateWithId->with(
-                    'project.client:id,name',
+                $tasks = $taskWithStartEndDateWithId->with([
+                    'project.pm'     => function ($pm) {
+                        $pm->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
+                    'project.client' => function ($client) {
+                        $client->without(['role', 'clientDetails', 'session', 'employeeDetail'])
+                            ->select('id', 'name');
+                    },
                     'project:id,pm_id,client_id',
                     'latestTaskSubmission',
                     'stat:id,label_color,column_name',
-                )->orderBy('created_at', 'desc')
+                ])->orderBy('created_at', 'desc')
                     ->limit(200)->get();
 
                 $past_tasks = $taskWithStartEndDateWithId
@@ -1068,7 +1164,6 @@ trait LeadDashboard
 
     private function leadNumberOfTasksReceived($taskWithStartEndDateWithId)
     {
-
         $number_of_tasks_received_lead_data = $taskWithStartEndDateWithId
             ->select('id', 'heading', 'project_id', 'created_at', 'status', 'start_date', 'board_column_id')
             ->get();
@@ -1077,7 +1172,6 @@ trait LeadDashboard
 
     private function leadNumberOfSubmittedTasks($taskHistoryWithDateAndId, $startDate, $endDate)
     {
-
         $taskHistoryWithDateAndId = $taskHistoryWithDateAndId->where('board_column_id', 6)
             ->groupBy('task_id')
             ->select('id', 'task_id', 'created_at', 'board_column_id')
@@ -1090,21 +1184,13 @@ trait LeadDashboard
             }
         }
 
-
-        $submit_number_of_tasks_lead_dev_data = Task::with(
-            'stat:id,label_color,column_name',
-            'oldestSubTask',
-            'project:id,pm_id,client_id',
-            'project.client:id,name',
-            'project.pm:id,name',
-        )->select('id', 'created_at', 'start_date', 'due_date', 'heading', 'board_column_id', 'project_id')->find($taskId);
+        $submit_number_of_tasks_lead_dev_data = Task::find($taskId);
 
         return $submit_number_of_tasks_lead_dev_data->count();
     }
 
     private function leadDevNumberOfApprovedTaskByClientInFirstAttempt($taskHistoryWithDateAndId)
     {
-
         // Step 1: Get task IDs that are not subtasks and have board_column_id = 6
         $taskIds = $taskHistoryWithDateAndId->whereHas('task', function ($query) {
             $query->whereNull('subtask_id');
@@ -1112,12 +1198,12 @@ trait LeadDashboard
 
         // Step 2: Retrieve the required task information
         $numberOfApprovedTasks = Task::with(
-            'stat:id,label_color,column_name',
-            'project.pm:id,name',
-            'project.client:id,name',
-            'project:id,pm_id,client_id',
-            'latestTaskSubmission:id,task_id,created_at',
-            'latestTaskApprove:id,task_id,created_at',
+            // 'stat:id,label_color,column_name',
+            // 'project.pm:id,name',
+            // 'project.client:id,name',
+            // 'project:id,pm_id,client_id',
+            // 'latestTaskSubmission:id,task_id,created_at',
+            // 'latestTaskApprove:id,task_id,created_at',
             'revisions.taskRevisionDispute'
         )->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')->whereIn('id', $taskIds);
 
@@ -1169,15 +1255,7 @@ trait LeadDashboard
     private function leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager($taskHistoryWithDateAndId)
     {
         $number_of_approved_tasks_by_project_manager_date = $taskHistoryWithDateAndId
-            ->with(
-                'task.stat:id,label_color,column_name',
-                'task:id,created_at,due_date,heading,board_column_id,project_id',
-                'task.project:id,pm_id,client_id',
-                'task.project.client:id,name',
-                'task.project.pm:id,name',
-                'task.latestTaskSubmission:id,task_id,created_at',
-                'task.latestTaskApprove:id,task_id,created_at',
-            )->whereHas('task', function ($q) {
+            ->whereHas('task', function ($q) {
                 $q->whereNull('subtask_id');
             })->where('board_column_id', 6)
             ->whereRelation('task', 'board_column_id', 4)
@@ -1248,16 +1326,7 @@ trait LeadDashboard
         }
 
         // Step 4: Retrieve the required task information
-        $number_of_attempts_needed_for_approval_by_client = Task::with(
-            'taskType:id,task_id,task_type,page_type',
-            'project.pm:id,name',
-            'project.client:id,name',
-            'project:id,pm_id,client_id',
-            'stat:id,label_color,column_name',
-            'latestTaskApprove:id,task_id,created_at',
-            'latestTaskSubmission:id,task_id,created_at',
-            'taskUser'
-        )->find($task_ids);
+        $number_of_attempts_needed_for_approval_by_client = Task::find($task_ids);
 
         // Step 5: Calculate the total number of attempts
         $total_attempts = $only_responsible_revisions_count + $number_of_attempts_needed_for_approval_by_client->count();
@@ -1276,17 +1345,11 @@ trait LeadDashboard
 
     private function leadPercentageOfTasksWithRevisions($taskHistoryWithDateAndId)
     {
-
         $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
             $q->whereNull('subtask_id');
         })->get()->pluck('task_id')->toArray();
 
-        $allTask = Task::with(
-            'project.client:id,name',
-            'project:id,pm_id,client_id',
-            'revisions:id,task_id,final_responsible_person,dispute_between',
-            'revisions.taskRevisionDispute:id,revision_id,task_id,raised_against_percent',
-        )->whereHas('history', function (Builder $query) {
+        $allTask = Task::whereHas('history', function (Builder $query) {
             $query->where('board_column_id', 6);
         })->whereIn('id', $task_id)->where('board_column_id', 4);
 
@@ -1384,9 +1447,9 @@ trait LeadDashboard
 
         $tasks = $taskWithStartEndDateWithId
             ->with(
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
+                // 'project.pm:id,name',
+                // 'project.client:id,name',
+                // 'project:id,pm_id,client_id',
                 'oldestSubTask'
             )
             ->has('oldestSubTask')
@@ -1745,9 +1808,9 @@ trait LeadDashboard
 
         $completedTasks = Task::with(
             'firstHistoryForDevReview',
-            'project.pm:id,name',
-            'project.client:id,name',
-            'project:id,pm_id,client_id'
+            // 'project.pm:id,name',
+            // 'project.client:id,name',
+            // 'project:id,pm_id,client_id'
         )->where('board_column_id', 4)
             ->find($taskHistoryTaskIds);
 
@@ -1772,9 +1835,9 @@ trait LeadDashboard
 
         $completed_tasks_by_lead_developer = Task::with(
             'taskSubTasks.timeLogged',
-            'project.pm:id,name',
-            'project.client:id,name',
-            'project:id,pm_id,client_id',
+            // 'project.pm:id,name',
+            // 'project.client:id,name',
+            // 'project:id,pm_id,client_id',
             'timeLogged',
         )->where('board_column_id', 4)
             ->withSum('timeLogged', 'total_minutes')->find($task_id);
@@ -1809,9 +1872,9 @@ trait LeadDashboard
 
         $completed_tasks_by_lead_developer = Task::with(
             'taskSubTasks.timeLoggedWithoutRevision',
-            'project.pm:id,name',
-            'project.client:id,name',
-            'project:id,pm_id,client_id',
+            // 'project.pm:id,name',
+            // 'project.client:id,name',
+            // 'project:id,pm_id,client_id',
             'timeLogged'
         )->where('board_column_id', 4)
             ->withSum('timeLoggedWithoutRevision', 'total_minutes')->find($task_id);
@@ -1878,9 +1941,9 @@ trait LeadDashboard
 
         $tasks = Task::has('revisions')
             ->with([
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
+                // 'project.pm:id,name',
+                // 'project.client:id,name',
+                // 'project:id,pm_id,client_id',
                 'taskSubTasks.timeLoggedOnlyRevision',
                 'taskSubTasks.submissions.timeLogs',
                 'taskSubTasks.timeLogged',
@@ -1930,11 +1993,11 @@ trait LeadDashboard
         $tasks = Task::with(
             'TaskApproves',
             'firstHistoryForLeadDevApproval',
-            'project.pm:id,name',
-            'project.client:id,name',
-            'project:id,pm_id,client_id',
+            // 'project.pm:id,name',
+            // 'project.client:id,name',
+            // 'project:id,pm_id,client_id',
             'oldestSubTask',
-            'latestTaskApprove:id,task_id,created_at'
+            // 'latestTaskApprove:id,task_id,created_at'
         )->has('firstHistoryForLeadDevApproval')->find($task_id);
 
         $manually_approved_tasks_count = 0;
