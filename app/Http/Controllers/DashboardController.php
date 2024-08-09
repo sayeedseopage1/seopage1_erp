@@ -106,7 +106,7 @@ class DashboardController extends AccountBaseController
     {
         $this->isCheckScript();
         if (in_array('Lead Developer', user_roles())) {
-            return $this->leadDashboard();
+            return $this->leadDashboardApi();
         }
         if ($this->user->role_id == 4) {
             return $this->PmDashboard();

@@ -16,7 +16,12 @@ use Illuminate\Support\Facades\Validator;
 
 trait LeadDashboard
 {
-    public function LeadDashboard()
+
+    public function leadDashboard()
+    {
+        return view('dashboard.employee.lead', $this->data);
+    }
+    public function leadDashboardApi()
     {
         $validator = Validator::make(request()->all(), [
             'start_date' => 'date',
