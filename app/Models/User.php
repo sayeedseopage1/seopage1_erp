@@ -180,14 +180,17 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'created_at', 'updated_at',
+        'password',
+        'remember_token',
+        'created_at',
+        'updated_at',
     ];
 
     public $dates = ['created_at', 'updated_at', 'last_login', 'two_factor_expires_at'];
 
     protected $appends = ['image_url', 'modules', 'user_other_role'];
 
-    public $clientCustomFieldModel = 'App\Models\ClientDetails';
+    public $clientCustomFieldModel   = 'App\Models\ClientDetails';
     public $employeeCustomFieldModel = 'App\Models\employeeDetails';
 
     public function getImageUrlAttribute()
@@ -201,7 +204,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         // Craft a potential url and test its headers
         $hash = md5(strtolower(trim($email)));
 
-        $uri = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+        $uri     = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
         $headers = @get_headers($uri);
 
         $has_valid_avatar = true;
@@ -406,9 +409,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
         if (!isRunningInConsoleOrSeeding() && !is_null($overRidePermission)) {
             $viewClientPermission = $overRidePermission;
-
-        }
-        elseif (!isRunningInConsoleOrSeeding() && user()) {
+        } elseif (!isRunningInConsoleOrSeeding() && user()) {
             $viewClientPermission = user()->permission('view_clients');
         }
 
@@ -453,9 +454,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     {
         if (!isRunningInConsoleOrSeeding() && !is_null($overRidePermission)) {
             $viewEmployeePermission = $overRidePermission;
-
-        }
-        elseif (!isRunningInConsoleOrSeeding() && user()) {
+        } elseif (!isRunningInConsoleOrSeeding() && user()) {
             $viewEmployeePermission = user()->permission('view_employees');
         }
 
@@ -467,7 +466,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         if (!is_null($exceptId)) {
             if (is_array($exceptId)) {
                 $users->whereNotIn('users.id', $exceptId);
-
             } else {
                 $users->where('users.id', '<>', $exceptId);
             }
@@ -483,20 +481,14 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
                     $q->where('employee_details.user_id', user()->id);
                     $q->orWhere('employee_details.added_by', user()->id);
                 });
-
-            }
-            elseif ($viewEmployeePermission == 'owned' && !in_array('client', user_roles())) {
+            } elseif ($viewEmployeePermission == 'owned' && !in_array('client', user_roles())) {
                 $users->where('users.id', user()->id);
-
-            }
-            elseif ($viewEmployeePermission == 'both' && !in_array('client', user_roles())) {
+            } elseif ($viewEmployeePermission == 'both' && !in_array('client', user_roles())) {
                 $users->where(function ($q) {
                     $q->where('employee_details.user_id', user()->id);
                     $q->orWhere('employee_details.added_by', user()->id);
                 });
-
-            }
-            elseif (($viewEmployeePermission == 'none' || $viewEmployeePermission == '') && !in_array('client', user_roles())) {
+            } elseif (($viewEmployeePermission == 'none' || $viewEmployeePermission == '') && !in_array('client', user_roles())) {
                 $users->where('users.id', user()->id);
             }
         }
@@ -524,7 +516,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
             $users->where('users.id', '<>', $exceptId);
         }
 
-        return $users->get();;
+        return $users->get();
+        ;
     }
 
     public static function departmentUsers($teamId)
@@ -550,13 +543,11 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
             if ($messageSetting->allow_client_admin == 'no') {
                 $termCnd .= "and roles.name != 'client'";
             }
-        }
-        elseif (in_array('employee', user_roles())) {
+        } elseif (in_array('employee', user_roles())) {
             if ($messageSetting->allow_client_employee == 'no') {
                 $termCnd .= "and roles.name != 'client'";
             }
-        }
-        elseif (in_array('client', user_roles())) {
+        } elseif (in_array('client', user_roles())) {
             if ($messageSetting->allow_client_admin == 'no') {
                 $termCnd .= "and roles.name != 'admin'";
             }
@@ -676,8 +667,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
             // If we've made it this far and $requireAll is TRUE, then ALL of the perms were found.
             // Return the value of $requireAll;
             return $requireAll;
-        }
-        else {
+        } else {
             foreach ($this->cachedRoles() as $role) {
                 // Validate against the Permission table
                 foreach ($role->cachedPermissions() as $perm) {
@@ -699,7 +689,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         }
 
         $userRole = null;
-        $roles = cache()->remember(
+        $roles    = cache()->remember(
             'non-client-roles',
             60 * 60 * 24,
             function () {
@@ -728,7 +718,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function permission($permission)
     {
-        return Cache::rememberForever('permission-' .  $permission . '-' . $this->id, function () use ($permission) {
+        return Cache::rememberForever('permission-' . $permission . '-' . $this->id, function () use ($permission) {
             $permissionType = UserPermission::join('permissions', 'user_permissions.permission_id', '=', 'permissions.id')
                 ->join('permission_types', 'user_permissions.permission_type_id', '=', 'permission_types.id')
                 ->select('permission_types.name')
@@ -738,7 +728,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
             return $permissionType ? $permissionType->name : false;
         });
-
     }
 
     public function permissionTypeId($permission)
@@ -789,8 +778,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
                 ->where('user_id', $this->id)
                 ->firstOrNew();
 
-            $userPermission->permission_id = $value->permission_id;
-            $userPermission->user_id = $this->id;
+            $userPermission->permission_id      = $value->permission_id;
+            $userPermission->user_id            = $this->id;
             $userPermission->permission_type_id = $value->permission_type_id;
             $userPermission->save();
         }
@@ -798,16 +787,16 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     public function generateTwoFactorCode()
     {
-        $this->timestamps = false;
-        $this->two_factor_code = rand(100000, 999999);
+        $this->timestamps            = false;
+        $this->two_factor_code       = rand(100000, 999999);
         $this->two_factor_expires_at = now()->addMinutes(10);
         $this->save();
     }
 
     public function resetTwoFactorCode()
     {
-        $this->timestamps = false;
-        $this->two_factor_code = null;
+        $this->timestamps            = false;
+        $this->two_factor_code       = null;
         $this->two_factor_expires_at = null;
         $this->save();
     }

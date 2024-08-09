@@ -343,6 +343,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::get('/table/list', 'tableListApi');
         });
     });
+    // Sale Dashboard Auth APi
+    Route::get('dashboard-sales/sale-dashboard-details/country-wise-bidding-breakdown', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
+    Route::get('dashboard-sales/sale-dashboard-details/country-wise-won-deal', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
+    // Temp React Dashboard
     Route::get('dashboard/{temp?}', [DashboardController::class, 'tempDashboard'])->name('temp_dashboard');
 
     // admin advance dashboard
@@ -366,6 +370,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dashboard-developer-performance/{id}/temp', [DashboardController::class, 'tempDevDashboard'])->name('temp-dev-dashboard');
     //sales dashboard
     Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
+    // Admin Dashboard Sale Performance Api
+    Route::get('dashboard-sales-performance/admin-sale-dashboard-details/{sale_id}', [DashboardController::class, 'adminSalesPerformanceApi']);
+    Route::get('dashboard-sales-performance/admin-sale-dashboard-details/country-wise-bidding-breakdown/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseBiddingBreakdownApi']);
+    Route::get('dashboard-sales-performance/admin-sale-dashboard-details/country-wise-won-deal/{sale_id}', [DashboardController::class, 'adminSalesPerformanceCountryWiseWiseWonDealsApi']);
+    // Role Wise get User api
+    Route::get('dashboard-user/with-lead/{role}', [DashboardController::class, 'getUserRoleWiseWithLead']);
     //sales dashboard temp
     Route::get('dashboard-sales-performance/{id}/temp', [DashboardController::class, 'tempSalesDashboard'])->name('temp-sales-dashboard');
 

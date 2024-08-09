@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Observers\AttendanceObserver;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Lead;
 use Illuminate\Support\Facades\DB;
+use App\Observers\AttendanceObserver;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Attendance
@@ -51,7 +53,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Attendance extends BaseModel
 {
-    protected $dates = ['clock_in_time', 'clock_out_time', 'shift_end_time', 'shift_start_time'];
+    protected $dates   = ['clock_in_time', 'clock_out_time', 'shift_end_time', 'shift_start_time'];
     protected $appends = ['clock_in_date'];
     protected $guarded = ['id'];
 
@@ -78,7 +80,7 @@ class Attendance extends BaseModel
 
     public static function attendanceByDate($date)
     {
-        DB::statement('SET @attendance_date = '.$date);
+        DB::statement('SET @attendance_date = ' . $date);
 
         return User::withoutGlobalScope('active')
             ->leftJoin(
@@ -116,7 +118,7 @@ class Attendance extends BaseModel
 
     public static function attendanceByUserDate($userid, $date)
     {
-        DB::statement('SET @attendance_date = '.$date);
+        DB::statement('SET @attendance_date = ' . $date);
 
         return User::withoutGlobalScope('active')
             ->leftJoin(
@@ -152,9 +154,11 @@ class Attendance extends BaseModel
 
     public static function attendanceDate($date)
     {
-        return User::with(['attendance' => function ($q) use ($date) {
-            $q->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $date);
-        }])
+        return User::with([
+            'attendance' => function ($q) use ($date) {
+                $q->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $date);
+            }
+        ])
             ->withoutGlobalScope('active')
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
@@ -174,7 +178,7 @@ class Attendance extends BaseModel
     public static function attendanceHolidayByDate($date)
     {
         $holidays = Holiday::all();
-        $user = User::leftJoin(
+        $user     = User::leftJoin(
             'attendances',
             function ($join) use ($date) {
                 $join->on('users.id', '=', 'attendances.user_id')
@@ -276,14 +280,14 @@ class Attendance extends BaseModel
             ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $date)->get();
     }
 
-    public function totalTime($startDate, $endDate, $userId, $format=null)
+    public function totalTime($startDate, $endDate, $userId, $format = null)
     {
         $attendanceActivity = Attendance::userAttendanceByDate($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $userId);
 
         $attendanceActivity = $attendanceActivity->reverse()->values();
 
         $settingStartTime = Carbon::createFromFormat('H:i:s', attendance_setting()->shift->office_start_time, global_setting()->timezone);
-        $defaultEndTime = $settingEndTime = Carbon::createFromFormat('H:i:s', attendance_setting()->shift->office_end_time, global_setting()->timezone);
+        $defaultEndTime   = $settingEndTime = Carbon::createFromFormat('H:i:s', attendance_setting()->shift->office_end_time, global_setting()->timezone);
 
         if ($settingStartTime->gt($settingEndTime)) {
             $settingEndTime->addDay();
@@ -298,7 +302,7 @@ class Attendance extends BaseModel
         foreach ($attendanceActivity as $key => $activity) {
             if ($key == 0) {
                 $firstClockIn = $activity;
-                $startTime = Carbon::parse($firstClockIn->clock_in_time)->timezone(global_setting()->timezone);
+                $startTime    = Carbon::parse($firstClockIn->clock_in_time)->timezone(global_setting()->timezone);
             }
 
             $lastClockOut = $activity;
@@ -341,5 +345,8 @@ class Attendance extends BaseModel
 
         return $ressultTotalTime;
     }
-
+    public function leads(): HasMany
+    {
+        return $this->hasMany(Lead::class, 'added_by', 'user_id');
+    }
 }

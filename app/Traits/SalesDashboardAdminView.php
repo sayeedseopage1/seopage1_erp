@@ -2,2567 +2,987 @@
 
 namespace App\Traits;
 
-use App\Helper\Reply;
-use App\Http\Requests\ClockIn\ClockInRequest;
-use App\Models\Attendance;
-use App\Models\AttendanceSetting;
-use App\Models\CompanyAddress;
-use App\Models\DashboardWidget;
-use App\Models\EmployeeDetails;
-use App\Models\EmployeeShiftSchedule;
-use App\Models\Event;
-use App\Models\Holiday;
-use App\Models\Lead;
-use App\Models\Deal;
-use App\Models\LeadAgent;
-use App\Models\Leave;
-use App\Models\Notice;
-use App\Models\Project;
-use App\Models\ProjectTimeLog;
-use App\Models\ProjectTimeLogBreak;
-use App\Models\Task;
-use App\Models\TaskboardColumn;
-use App\Models\Ticket;
-use App\Models\TicketAgentGroups;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use Illuminate\Http\Request;
+use App\Models\Deal;
+use App\Models\Lead;
+use App\Helper\Reply;
+use App\Models\Project;
+use App\Models\Contract;
+use App\Models\Attendance;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Auth;
-use DateTime;
-use App\Models\DealStage;
+use Illuminate\Support\Facades\Validator;
 
-/**
-*
-*/
 trait SalesDashboardAdminView
 {
+    public function salesDashboardAdminApi($sales)
+    {
+        $validator = Validator::make(request()->all(), [
+            'start_date' => 'date',
+            'end_date'   => 'date|after:start_date',
+            'table_type' => 'string',
+            'sale_id'    => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return Reply::error(__('validation_failed'), $validator->errors());
+        } else {
+            $salesId = request('sale_id') ?? $sales->id;
+            $tableType = request('table_type');
+
+            if (request('start_date') && request('end_date')) {
+                $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
+            } else {
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate = Carbon::now()->endOfDay();
+                // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+                // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+            }
+
+            $exclude_end_date = Carbon::parse($endDate)->subDays(45)->format('Y-m-d');
+            $this->username = $sales->name;
+
+            $saleExecutive = [];
+
+            $leadsWithSaleId = Lead::where('added_by', $salesId);
+            $leadsWithDateAndIdClone = clone $leadsWithSaleId;
+
+            $leadsWithDateAndId = $leadsWithDateAndIdClone->with('currency:id,currency_symbol', 'addedByUser:id,name', 'addedByUser.employeeDetail:id,user_id,designation_id,employee_id', 'addedByUser.employeeDetail.designation:id,name')
+                ->whereBetween('created_at', [$startDate, $endDate])->select('id', 'client_name', 'bid_value', 'created_at', 'deal_status', 'currency_id', 'added_by', 'bidding_minutes', 'bidding_seconds');
+            $numberOfLeadsReceivedGet = clone $leadsWithDateAndId;
+
+            $numberOfLeadsReceivedFixed = clone $leadsWithDateAndId;
+            $numberOfLeadsReceivedHourly = clone $leadsWithDateAndId;
+            $numberOfLeadsReceivedFixed = clone $numberOfLeadsReceivedFixed->where('project_type', 'fixed');
+            $numberOfLeadsReceivedHourly = clone $numberOfLeadsReceivedHourly->where('project_type', 'hourly');
+
+            if ($tableType == 'leads_received') {
+                $saleExecutive += [
+                    'number_of_leads_received_list' => $numberOfLeadsReceivedGet->get(),
+                ];
+            } else {
+                $saleExecutive += [
+                    'number_of_leads_received_list' => [],
+                ];
+            }
+            $number_of_leads_received = $numberOfLeadsReceivedGet->count();
+            $number_of_leads_received_fixed = $numberOfLeadsReceivedFixed->count();
+            $number_of_leads_received_hourly = $numberOfLeadsReceivedHourly->count();
+
+
+            $saleExecutive += [
+                'sale_user'                       => $sales,
+                'start_date'                      => $startDate,
+                'end_date'                        => $endDate,
+                'table_type'                      => $tableType,
+                'number_of_leads_received'        => $number_of_leads_received,
+                'number_of_leads_received_fixed'  => $number_of_leads_received_fixed,
+                'number_of_leads_received_hourly' => $number_of_leads_received_hourly,
+            ];
+
+
+            $number_of_leads_convert_deals = $numberOfLeadsReceivedGet->whereHas('dealStage', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            });
+
+            $number_of_leads_convert_deals_fixed = $numberOfLeadsReceivedFixed->whereHas('dealStage', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            });
+
+            $number_of_leads_convert_deals_hourly = $numberOfLeadsReceivedHourly->whereHas('dealStage', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            });
+
+            if ($tableType == 'convert_deals') {
+                $saleExecutive += [
+                    'number_of_leads_convert_deals_list' => $number_of_leads_convert_deals->get(),
+                ];
+            } else {
+                $saleExecutive += [
+                    'number_of_leads_convert_deals_list' => [],
+                ];
+            }
+            $this->number_of_leads_convert_deals = $number_of_leads_convert_deals->count();
+            $this->number_of_leads_convert_deals_fixed = $number_of_leads_convert_deals_fixed->count();
+            $this->number_of_leads_convert_deals_hourly = $number_of_leads_convert_deals_hourly->count();
+
+
+            $saleExecutive += [
+                'number_of_leads_convert_deals'        => $this->number_of_leads_convert_deals,
+                'number_of_leads_convert_deals_fixed'  => $this->number_of_leads_convert_deals_fixed,
+                'number_of_leads_convert_deals_hourly' => $this->number_of_leads_convert_deals_hourly,
+            ];
+
+
+            $number_of_leads_convert_won_deals = $number_of_leads_convert_deals->whereHas('leadDeal', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            });
 
-	/**
-		* @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-	*/
-	public function SalesDashboardAdminView($sales)
-	{
-        // dd($sales);
-        $this->viewEventPermission = user()->permission('view_events');
-        $this->viewNoticePermission = user()->permission('view_notice');
-        $this->editTimelogPermission = user()->permission('edit_timelogs');
-        $currentDate = now(global_setting()->timezone)->format('Y-m-d');
-    $this->checkTodayLeave = Leave::where('status', 'approved')
-    ->select('id')
-    ->where('leave_date', now(global_setting()->timezone)->toDateString())
-    ->where('user_id', user()->id)
-    ->where('duration', '<>', 'half day')
-    ->first();
-    $this->checkTodayHoliday = Holiday::where('date', $currentDate)->first();
-    $this->myActiveTimer = ProjectTimeLog::with('task', 'user', 'project', 'breaks', 'activeBreak')
-    ->where('user_id', user()->id)
-    ->whereNull('end_time')
-    ->first();
- 
-    $this->widgets = DashboardWidget::where('dashboard_type', 'private-dashboard')->get();
-    $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
-        return $value->status == '1';
-    })->pluck('widget_name')->toArray();
-    
-  
-    $now = now(global_setting()->timezone);
-    $showClockIn = AttendanceSetting::first();
-
-    $this->attendanceSettings = $this->attendanceShift($showClockIn);
-    $currentWeekDates = [];
-    $weekShifts = [];
-    $this->currentWeekDates = $currentWeekDates;
-    $this->weekShifts = $weekShifts;
-    $this->showClockIn = $showClockIn->show_clock_in_button;
-    $this->weekStartDate = $now->copy()->startOfWeek($showClockIn->week_start_from);
-    $this->weekEndDate = $this->weekStartDate->copy()->addDays(7);
-    $this->weekPeriod = CarbonPeriod::create($this->weekStartDate, $this->weekStartDate->copy()->addDays(6));
-    $this->event_filter = explode(',', user()->employeeDetails->calendar_view);
-    $this->weekWiseTimelogs = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
-    $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);
-    $this->dateWiseTimelogs = ProjectTimeLog::dateWiseTimelogs(now()->toDateString(), user()->id);
-    $this->dateWiseTimelogBreak = ProjectTimeLogBreak::dateWiseTimelogBreak(now()->toDateString(), user()->id);
-
-    $this->weekWiseTimelogs = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
-    $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);  
-    
-    if (request()->ajax())
-        {
-          // dd(request('startDate'),request('endDate'),request('user_id'));
-
-        $salesId = $sales->id;
-        // $this->username = DB::table('users')->where('id',$salesId)->value('name');
-        $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
-        $endDate1 = request('endDate');
-        $endDate = Carbon::parse($endDate1)->addDays(1)->format('Y-m-d');
-      
-        $this->startDate1 = Carbon::parse($startDate);
-        $this->endDate1 = Carbon::parse($endDate1);
-        $user_role = DB::table('users')->select('role_id')->where('id', $salesId)->first();
-		$exclude_end_date = Carbon::parse($endDate)->subDays(45)->format('Y-m-d');
-		$this->number_of_leads_received_fixed = DB::table('leads')
-		->where('added_by', $salesId)
-		->where('project_type','fixed')
-		->where('created_at', '>=', $startDate)
-		->where('created_at', '<', $endDate)
-		->count();
-
-	$this->number_of_leads_received_hourly = DB::table('leads')
-	   ->where('added_by', $salesId)
-	   ->where('project_type', 'hourly')
-	   ->where('created_at', '>=', $startDate)
-	   ->where('created_at', '<', $endDate)
-	   ->count();
-
-	$this->number_of_leads_received = DB::table('leads')
-		->where('added_by', $salesId)
-		->where('created_at', '>=', $startDate)
-		->where('created_at', '<', $endDate)
-		->count();
-    $this->number_of_leads_received_get = DB::table('leads')
-		->where('added_by', $salesId)
-		->where('created_at', '>=', $startDate)
-		->where('created_at', '<', $endDate)
-		->get();
-
-	$this->number_of_leads_convert_deals_fixed = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->where('leads.added_by', $salesId)
-		->where('leads.project_type', 'fixed')
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->count();
-
-	$this->number_of_leads_convert_deals_hourly = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->where('leads.added_by', $salesId)
-		->where('leads.project_type', 'hourly')
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->count();
-
-	$this->number_of_leads_convert_deals = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->where('leads.added_by', $salesId)
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->count();
-
-    $this->number_of_leads_convert_deals_get = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->where('leads.added_by', $salesId)
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->get();
-
-	$this->number_of_leads_convert_won_deals_fixed = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-		->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-		->where('leads.added_by', $salesId)
-		->where('leads.project_type', 'fixed')
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->where('deals.created_at', '>=', $startDate)
-		->where('deals.created_at', '<', $endDate)
-		->count();
-
-	$this->number_of_leads_convert_won_deals_hourly = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-		->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-		->where('leads.added_by', $salesId)
-		->where('leads.project_type', 'hourly')
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->where('deals.created_at', '>=', $startDate)
-		->where('deals.created_at', '<', $endDate)
-		->count();
-
-	$this->number_of_leads_convert_won_deals = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-		->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-		->where('leads.added_by', $salesId)
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->where('deals.created_at', '>=', $startDate)
-		->where('deals.created_at', '<', $endDate)
-		->count();
-
-    $this->number_of_leads_convert_won_deals_get = DB::table('deal_stages')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-		->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-		->where('leads.added_by', $salesId)
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->where('deals.created_at', '>=', $startDate)
-		->where('deals.created_at', '<', $endDate)
-		->get();
-
-
-	//--------------     won deals  table     --------------------------//
-
-	$this->number_of_leads_convert_won_deals_data = DB::table('deal_stages')
-		->select('deals.*','leads.created_at as lead_created')
-		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-		->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-		->where('leads.added_by', $salesId)
-		->where('leads.created_at', '>=', $startDate)
-		->where('leads.created_at', '<', $endDate)
-		->where('deal_stages.created_at', '>=', $startDate)
-		->where('deal_stages.created_at', '<', $endDate)
-		->where('deals.created_at', '>=', $startDate)
-		->where('deals.created_at', '<', $endDate)
-		->get();
-
-	// average bidding 
-	$number_of_leads_create_data = DB::table('leads')
-	->select('leads.*')
-	->where('added_by', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->get();
-	$this->number_of_leads_create_data= $number_of_leads_create_data;
-
-	$number_of_leads_create = DB::table('leads')
-	->where('added_by', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->count();
-	
-	$number_of_leads_amount = DB::table('leads')
-	->where('added_by', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->sum('value');
-
-	if($number_of_leads_create>0){
-		$this->average_number_of_leads_amount = $number_of_leads_amount / $number_of_leads_create;
-	}else{
-		$this->average_number_of_leads_amount = 0;
-	}
-	
-
-
-	// average bidding delay time 
-
-	$number_of_leads_create = DB::table('leads')
-	->where('added_by', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->count();
-
-	$delay_minute = DB::table('leads')
-	->where('added_by', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->sum('bidding_minutes');
-
-	$delay_second = DB::table('leads')
-	->where('added_by', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->sum('bidding_seconds');
-
-	if ($number_of_leads_create > 0) {
-	  $this->average_bidding_delay_time= (($delay_minute *60+ $delay_second)/ $number_of_leads_create)/60;
-   }else{
-	  $this->average_bidding_delay_time=0;
-
-  }
-
-   // ---------------bidding frequency--------------------------------------//  
-   $total_minutes=0;
-   $freqency_count=0;
-	$attendence_data_by_user = DB::table('attendances')
-	->select('clock_in_time','clock_out_time')
-	->where('user_id', $salesId)
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->get();
-
-	foreach($attendence_data_by_user as $attendence){
-	   
-	   if($attendence->clock_out_time != Null){
-		 $lead_generate = DB::table('leads')
-			->select('created_at')
-			->where('user_id', $salesId)
-			->where('created_at', '>=', $attendence->clock_in_time)
-			->where('created_at', '<', $attendence->clock_out_time)
-			->orderBy('created_at')
-			->get();
-
-		 $flag=0;
-		 $startTime='';
-		foreach( $lead_generate as $lead){
-			
-			if($flag==0){
-					$flag=1;
-					$startTime = Carbon::parse($lead->created_at);
-				
-			}else{
-					$endTime = Carbon::parse($lead->created_at);
-					$minutesDifference = $endTime->diffInMinutes($startTime);
-					$startTime= $endTime;
-					$total_minutes+= $minutesDifference;
-					$freqency_count++;
-
-			}
-
-		}
-	   }
-	}
-
-	if($freqency_count>0){
-		$this->bidding_frequency = $total_minutes / $freqency_count;
-	}else{
-		$this->bidding_frequency =0;
-
-	}
-
-	//Country wise bidding breakdown
-
-
-	$number_of_leads_received = DB::table('leads')
-		->where('added_by', $salesId)
-		->where('created_at', '>=', $startDate)
-		->where('created_at', '<', $endDate)
-		->count();
-
-	$country_wise_lead_counts = DB::table('leads')
-	->select('country', DB::raw('COUNT(*) as lead_count'))
-	->where('created_at', '>=', $startDate)
-	->where('created_at', '<', $endDate)
-	->where('added_by', $salesId)
-	->groupBy( 'country')
-	->orderBy('lead_count','DESC')
-	->get();
-
-	foreach($country_wise_lead_counts as $leads){
-		 
-		$leads_percentage= ($leads->lead_count/ $number_of_leads_received )*100;
-
-		$leads->leads_percentage= $leads_percentage;
-	}
-	$this->country_wise_lead_counts= $country_wise_lead_counts;
-
-	// --------------Number of won deals (fixed)-------------//
-
-	$number_of_leads_convert_won_deals = DB::table('deals')
-	->select('deals.*')
-	->where('deals.project_type', 'fixed')
-	->where('deals.created_at', '>=', $startDate)
-	->where('deals.created_at', '<', $endDate)
-	->get();
-
-	$won_deals_count=0;
-	$won_deals_value = 0;
-	
-	foreach($number_of_leads_convert_won_deals as $won_deals){
-
-		//closing the deal
-
-		if($won_deals->added_by== $salesId){
-
-			$won_deals_count += .125;
-			$won_deals_value += .125*$won_deals->amount;
-		}
-
-
-		//The bidder
-
-		$leads = DB::table('leads')
-			->where('added_by', $salesId)
-			->where('id', $won_deals->lead_id)
-			->count();
-		
-		if($leads >0){
-
-			$won_deals_count+= .25;
-			$won_deals_value += .25 * $won_deals->amount;
-
-		}
-
-		//Qualifying
-
-		$qualify_contribution = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id',1)
-			->count();
-
-		$qualify = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 1)
-			->count();
-		
-		if($qualify>0){
-		   $won_deals_count+= .0375/ $qualify_contribution;
-		   $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
-
-		}
-
-
-		//Needs Defined
-
-		$needs_defined_contribution = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 2)
-			->count();
-
-		$needs_defined = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 2)
-			->count();
-
-		if ($needs_defined > 0) {
-			$won_deals_count += .1875 / $needs_defined_contribution;
-			$won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
-		}
-
-		//Proposal made
-
-
-		$proposal_made_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-		->where('deal_stage_id', 3)
-			->count();
-
-		$proposal_made = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-		->where('updated_by', $salesId)
-			->where('deal_stage_id', 3)
-			->count();
-
-		if ($proposal_made > 0) {
-			$won_deals_count += .125 / $proposal_made_contribution;
-			$won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
-		}
-
-		//Negotiation started
-
-		$negotiation_contribution = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 4)
-			->count();
-
-		$negotiation = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 4)
-			->count();
-
-		if ($negotiation > 0) {
-			$won_deals_count += .125 / $negotiation_contribution;
-			$won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
-		}
-
-		//Sharing milestone breakdown
-
-		$milestone_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-		->where('deal_stage_id', 5)
-		->count();
-
-		$milestone = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-		->where('updated_by', $salesId)
-		->where('deal_stage_id', 5)
-		->count();
-
-		if ($milestone > 0) {
-			$won_deals_count += .15 / $milestone_contribution;
-			$won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
-		}          
-
-	}
-
-	$this->won_deals_count_fixed =$won_deals_count;
-	$this->won_deals_value_fixed = $won_deals_value;
-
-
-	// --------------Number of won deals (hourly)-------------//
-
-	$number_of_leads_convert_won_deals = DB::table('deals')
-	->select('deals.*')
-	->where('deals.project_type', 'hourly')
-	->where('deals.created_at', '>=', $startDate)
-	->where('deals.created_at', '<', $endDate)
-	->get();
-
-	$won_deals_count = 0;
-	$won_deals_value = 0;
-
-	foreach ($number_of_leads_convert_won_deals as $won_deals) {
-
-		//closing the deal
-
-		if ($won_deals->added_by == $salesId) {
-
-			$won_deals_count += .125;
-			$won_deals_value +=  $won_deals->hourly_rate;
-		}
-
-
-		//The bidder
-
-		$leads = DB::table('leads')
-			->where('added_by', $salesId)
-			->where('id', $won_deals->lead_id)
-			->count();
-
-		if ($leads > 0) {
-
-			$won_deals_count += .25;
-			$won_deals_value += .25 * $won_deals->hourly_rate;
-		}
-
-		//Qualifying
-
-		$qualify_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 1)
-			->count();
-
-		$qualify = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 1)
-			->count();
-
-		if ($qualify > 0) {
-			$won_deals_count += .0375 / $qualify_contribution;
-			$won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
-		}
-
-
-		//Needs Defined
-
-		$needs_defined_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 2)
-			->count();
-
-		$needs_defined = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 2)
-			->count();
-
-		if ($needs_defined > 0) {
-			$won_deals_count += .1875 / $needs_defined_contribution;
-			$won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
-		}
-
-		//Proposal made
-
-
-		$proposal_made_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 3)
-			->count();
-
-		$proposal_made = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 3)
-			->count();
-
-		if ($proposal_made > 0) {
-			$won_deals_count += .125 / $proposal_made_contribution;
-			$won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
-		}
-
-		//Negotiation started
-
-		$negotiation_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 4)
-			->count();
-
-		$negotiation = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 4)
-			->count();
-
-		if ($negotiation > 0) {
-			$won_deals_count += .125 / $negotiation_contribution;
-			$won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
-		}
-
-		//Sharing milestone breakdown
-
-		$milestone_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 5)
-			->count();
-
-		$milestone = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 5)
-			->count();
-
-		if ($milestone > 0) {
-			$won_deals_count += .15 / $milestone_contribution;
-			$won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
-		}
-	}
-
-	$this->won_deals_count_hourly = $won_deals_count;
-	$this->won_deals_value_hourly = $won_deals_value;
-
-
-	// --------------Number of won deals (Country wise)-------------//
-
-  $leads_country_data= DB::table('leads')
-		->select('country')
-		->where('created_at', '>=', $startDate)
-		->where('created_at', '<', $endDate)
-		->distinct('country')
-		->get();
-
- foreach($leads_country_data as $lead_country){
-
-	$number_of_leads_convert_won_deals = DB::table('deals')
-	->select('deals.*')
-	->join('leads', 'deals.lead_id', '=', 'leads.id')
-	->where('leads.country', $lead_country->country )
-	->where('deals.created_at', '>=', $startDate)
-	->where('deals.created_at', '<', $endDate)
-	->get();
-
-	$won_deals_count = 0;
-	$won_deals_value = 0;
-
-	foreach ($number_of_leads_convert_won_deals as $won_deals) {
-
-		//closing the deal
-
-		if ($won_deals->added_by == $salesId) {
-
-			$won_deals_count += .125;
-			if($won_deals->project_type=='fixed'){
-
-					$won_deals_value += .125 * $won_deals->amount;
-			}else{
-
-					$won_deals_value += .125 * $won_deals->hourly_rate;
-
-			}
-		   
-		}
-
-		//The bidder
-
-		$leads = DB::table('leads')
-			->where('added_by', $salesId)
-			->where('id', $won_deals->lead_id)
-			->count();
-
-		if ($leads > 0) {
-
-			   $won_deals_count += .25;
-			
-				if ($won_deals->project_type == 'fixed') {
-
-					$won_deals_value += .25 * $won_deals->amount;
-				} else {
-
-					$won_deals_value += .25 * $won_deals->hourly_rate;
-				}
-		}
-
-		//Qualifying
-
-		$qualify_contribution = DB::table('deal_stage_changes')
-		   ->where('deal_id', $won_deals->lead_id)
-			->where('deal_stage_id', 1)
-			->count();
-
-		$qualify = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->lead_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 1)
-			->count();
-
-		if ($qualify > 0) {
-			   $won_deals_count += .0375 / $qualify_contribution;
-			
-				if ($won_deals->project_type == 'fixed') {
-
-					$won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
-				} else {
-
-					$won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
-				}
-		}
-
-
-		//Needs Defined
-
-		$needs_defined_contribution = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 2)
-			->count();
-
-		$needs_defined = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 2)
-			->count();
-
-		if ($needs_defined > 0) {
-			$won_deals_count += .1875 / $needs_defined_contribution;
-		   
-				if ($won_deals->project_type == 'fixed') {
-
-					$won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
-				} else {
-
-					$won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
-				}
-		}
-
-		//Proposal made
-
-		$proposal_made_contribution = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 3)
-			->count();
-
-		$proposal_made = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 3)
-			->count();
-
-		if ($proposal_made > 0) {
-			$won_deals_count += .125 / $proposal_made_contribution;
-		  
-				if ($won_deals->project_type == 'fixed') {
-
-					$won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
-				} else {
-
-					$won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
-				}
-		}
-
-		//Negotiation started
-
-		$negotiation_contribution = DB::table('deal_stage_changes')
-			 ->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 4)
-			->count();
-
-		$negotiation = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 4)
-			->count();
-
-		if ($negotiation > 0) {
-			$won_deals_count += .125 / $negotiation_contribution;
-		   
-
-				if ($won_deals->project_type == 'fixed') {
-
-					$won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
-				} else {
-
-					$won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
-				}
-		}
-
-		//Sharing milestone breakdown
-
-		$milestone_contribution = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 5)
-			->count();
-
-		$milestone = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 5)
-			->count();
-
-		if ($milestone > 0) {
-			$won_deals_count += .15 / $milestone_contribution;
-		   
-
-				if ($won_deals->project_type == 'fixed') {
-
-					$won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
-				} else {
-
-					$won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
-				}
-		}
-	}
-	
-			$lead_country->won_deals_count= $won_deals_count;
-			$lead_country->won_deals_value= $won_deals_value;
-
-			$won_deals_count = 0;
-			$won_deals_value = 0;
-
-}
-
-   $sort_leads_country_data= $leads_country_data->sortByDesc('won_deals_value');
-
-   $this->leads_country_data = $sort_leads_country_data;
-
-	//---------------Project completion/Won deal ratio-----------------------------------//
-
-
-	$this->project_completion_count = DB::table('contracts')
-		->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-		->where('projects.status','finished')
-		->where('contracts.last_updated_by', $salesId)
-		->where('contracts.updated_at', '<', $endDate)
-		->count();
-
-	$this->project_canceled_count = DB::table('contracts')
-		->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-		->whereIn('projects.status', ['canceled', 'partially finished'])
-		->where('contracts.last_updated_by', $salesId)
-		->where('contracts.updated_at', '<', $endDate)
-		->count();
-
-	$this->project_reject_count = DB::table('contracts')
-		->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-		->where('projects.project_status', 'Not Accepted')
-		->where('contracts.last_updated_by', $salesId)
-		->where('contracts.updated_at', '<', $endDate)
-		->count();
-
-	$this->won_deal_count = DB::table('contracts')
-		->where('last_updated_by', $salesId)
-		->where('updated_at', '<', $exclude_end_date)
-		->count();
-
-    $this->won_deal_count_get = DB::table('contracts')
-		->where('last_updated_by', $salesId)
-		->where('updated_at', '<', $exclude_end_date)
-		->get();
-
-	// exclude one for end cycle date and other for today.  suppose today december 20  and end cycle 31. but logic will be  20-exclude date for current month 
-
-	$this->won_deal_count_reject_project = DB::table('contracts')
-		->where('last_updated_by', $salesId)
-		->where('updated_at', '<', $endDate)
-		->count();
-		
-	// same logic for end date for current month
-	if($this->won_deal_count > 0){
-		$this->project_completion_count_ratio = ($this->project_completion_count / $this->won_deal_count) * 100;
-	}else {
-		$this->project_completion_count_ratio =0;
-	}
-
-	if ($this->won_deal_count > 0) {
-		$this->project_canceled_count_ratio = ($this->project_canceled_count  / $this->won_deal_count) * 100;
-	} else {
-		$this->project_canceled_count_ratio = 0;
-	}
-
-
-	if ($this->won_deal_count_reject_project > 0) {
-		$this->project_reject_count_ratio = ($this->project_reject_count / $this->won_deal_count_reject_project) * 100;
-	} else {
-		$this->project_reject_count_ratio = 0;
-	}
-  
-   
-
-	//--------Reject Projects Count---------------//
-
-	$this->project_reject_count_data = DB::table('contracts')
-	   ->select('projects.*','contracts.last_updated_by')
-	   ->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-	   ->where('projects.project_status', 'Not Accepted')
-	   ->where('contracts.last_updated_by', $salesId)
-	   ->where('contracts.updated_at', '<', $endDate)
-	   ->get();
-
-	// --------------Number of won deals table (fixed)-------------//
-
-	$number_of_leads_convert_won_deals_table = DB::table('deals')
-	->select('deals.*')
-	->where('deals.project_type', 'fixed')
-	->where('deals.created_at', '>=', $startDate)
-	->where('deals.created_at', '<', $endDate)
-	->get();
-
-	$won_deals_count = 0;
-	$won_deals_value = 0;
-	$yes='YES';
-	$no='NO';
-
-	foreach ($number_of_leads_convert_won_deals_table as $won_deals) {
-
-		//closing the deal
-
-		if ($won_deals->added_by == $salesId) {
-
-			$won_deals_count += .125;
-			$won_deals_value += .125 * $won_deals->amount;
-
-			$won_deals->closing_deal= $yes;
-		
-
-		}else{
-
-			$won_deals->closing_deal = $no;
-		}
-
-
-		//The bidder
-
-		$leads = DB::table('leads')
-			->where('added_by', $salesId)
-			->where('id', $won_deals->lead_id)
-			->count();
-
-		if ($leads > 0) {
-
-			$won_deals_count += .25;
-			$won_deals_value += .25 * $won_deals->amount;
-			$won_deals->bidder = $yes;
-		} else {
-
-			$won_deals->bidder = $no;
-		}
-
-		//Qualifying
-
-		$qualify_contribution = DB::table('deal_stage_changes')
-		  ->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 1)
-			->distinct('updated_by')
-			->count();
-
-		$qualify = DB::table('deal_stage_changes')
-			->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 1)
-			->count();
-
-		if ($qualify > 0 && $qualify_contribution >0 ) {
-			$won_deals_count += .0375 / $qualify_contribution;
-			$won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
-			$won_deals->qualifying = $yes;
-		} else {
-
-			$won_deals->qualifying = $no;
-		}
-
-		//Needs Defined
-
-		$needs_defined_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 2)
-			->distinct('updated_by')
-			->count();
-
-		$needs_defined = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 2)
-			->count();
-
-		if ($needs_defined > 0 && $needs_defined_contribution>0) {
-			$won_deals_count += .1875 / $needs_defined_contribution;
-			$won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
-
-			$won_deals->needs_defined = $yes;
-		} else {
-
-			$won_deals->needs_defined = $no;
-		}
-
-		//Proposal made
-
-
-		$proposal_made_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 3)
-			->distinct('updated_by')
-			->count();
-
-		$proposal_made = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 3)
-			->count();
-
-		if ($proposal_made > 0 && $proposal_made_contribution>0) {
-			$won_deals_count += .125 / $proposal_made_contribution;
-			$won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
-			$won_deals->proposal_made = $yes;
-		} else {
-
-			$won_deals->proposal_made = $no;
-		}
-
-		//Negotiation started
-
-		$negotiation_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 4)
-			->distinct('updated_by')
-			->count();
-
-		$negotiation = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 4)
-			->count();
-
-		if ($negotiation > 0 && $negotiation_contribution>0) {
-			$won_deals_count += .125 / $negotiation_contribution;
-			$won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
-			$won_deals->negotiation_started = $yes;
-		} else {
-
-			$won_deals->negotiation_started = $no;
-		}
-
-		//Sharing milestone breakdown
-
-		$milestone_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 5)
-			->distinct('updated_by')
-			->count();
-
-		$milestone = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 5)
-			->count();
-
-		if ($milestone > 0 && $milestone_contribution>0) {
-			$won_deals_count += .15 / $milestone_contribution;
-			$won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
-			$won_deals->sharing_milestone_breakdown = $yes;
-		} else {
-
-			$won_deals->sharing_milestone_breakdown = $no;
-		}
-
-		$won_deals->deals_each_count = $won_deals_count;
-		$won_deals->deals_each_value = $won_deals_value;
-
-		$won_deals_count = 0;
-		$won_deals_value = 0;
-
-	}
-
-	$this->number_of_leads_convert_won_deals_table= $number_of_leads_convert_won_deals_table;
-
-	// --------------Number of won deals table (hourly)-------------//
-
-	$number_of_leads_convert_won_deals_table_hourly = DB::table('deals')
-	->select('deals.*')
-	->where('deals.project_type', 'hourly')
-	->where('deals.created_at', '>=', $startDate)
-	->where('deals.created_at', '<', $endDate)
-	->get();
-
-	$won_deals_count = 0;
-	$won_deals_value = 0;
-	$yes = 'YES';
-	$no = 'NO';
-
-	foreach ($number_of_leads_convert_won_deals_table_hourly as $won_deals) {
-
-		//closing the deal
-
-		if ($won_deals->added_by == $salesId) {
-
-			$won_deals_count += .125;
-			$won_deals_value += .125 * $won_deals->hourly_rate;
-
-			$won_deals->closing_deal = $yes;
-		} else {
-
-			$won_deals->closing_deal = $no;
-		}
-
-
-		//The bidder
-
-		$leads = DB::table('leads')
-			->where('added_by', $salesId)
-			->where('id', $won_deals->lead_id)
-			->count();
-
-		if ($leads > 0) {
-
-			$won_deals_count += .25;
-			$won_deals_value += .25 * $won_deals->hourly_rate;
-			$won_deals->bidder = $yes;
-		} else {
-
-			$won_deals->bidder = $no;
-		}
-
-		//Qualifying
-
-		$qualify_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 1)
-			->distinct('updated_by')
-			->count();
-
-		$qualify = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 1)
-			->count();
-
-		if ($qualify > 0 && $qualify_contribution > 0) {
-			$won_deals_count += .0375 / $qualify_contribution;
-			$won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
-			$won_deals->qualifying = $yes;
-		} else {
-
-			$won_deals->qualifying = $no;
-		}
-
-		//Needs Defined
-
-		$needs_defined_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 2)
-			->distinct('updated_by')
-			->count();
-
-		$needs_defined = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 2)
-			->count();
-
-		if ($needs_defined > 0 && $needs_defined_contribution > 0) {
-			$won_deals_count += .1875 / $needs_defined_contribution;
-			$won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
-
-			$won_deals->needs_defined = $yes;
-		} else {
-
-			$won_deals->needs_defined = $no;
-		}
-
-		//Proposal made
-
-
-		$proposal_made_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 3)
-			->distinct('updated_by')
-			->count();
-
-		$proposal_made = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 3)
-			->count();
-
-		if ($proposal_made > 0 && $proposal_made_contribution > 0) {
-			$won_deals_count += .125 / $proposal_made_contribution;
-			$won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
-			$won_deals->proposal_made = $yes;
-		} else {
-
-			$won_deals->proposal_made = $no;
-		}
-
-		//Negotiation started
-
-		$negotiation_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 4)
-			->distinct('updated_by')
-			->count();
-
-		$negotiation = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 4)
-			->count();
-
-		if ($negotiation > 0 && $negotiation_contribution > 0) {
-			$won_deals_count += .125 / $negotiation_contribution;
-			$won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
-			$won_deals->negotiation_started = $yes;
-		} else {
-
-			$won_deals->negotiation_started = $no;
-		}
-
-		//Sharing milestone breakdown
-
-		$milestone_contribution = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('deal_stage_id', 5)
-			->distinct('updated_by')
-			->count();
-
-		$milestone = DB::table('deal_stage_changes')
-		->where('deal_id', $won_deals->deal_id)
-			->where('updated_by', $salesId)
-			->where('deal_stage_id', 5)
-			->count();
-
-		if ($milestone > 0 && $milestone_contribution > 0) {
-			$won_deals_count += .15 / $milestone_contribution;
-			$won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
-			$won_deals->sharing_milestone_breakdown = $yes;
-		} else {
-
-			$won_deals->sharing_milestone_breakdown = $no;
-		}
-
-		$won_deals->deals_each_count = $won_deals_count;
-		$won_deals->deals_each_value = $won_deals_value;
-
-		$won_deals_count = 0;
-		$won_deals_value = 0;
-	}
-
-	$this->number_of_leads_convert_won_deals_table_hourly = $number_of_leads_convert_won_deals_table_hourly;
-    $this->no_of_won_deals_count= Deal::where('deals.added_by',$salesId)
-    ->where('deals.created_at', '>=', $startDate)
-   ->where('deals.created_at', '<', $endDate)
-  
-   ->get();
-   $this->no_of_won_deals_value= Deal::where('deals.added_by',$salesId)
-    ->where('deals.created_at', '>=', $startDate)
-   ->where('deals.created_at', '<', $endDate)
-  
-   ->sum('deals.amount');
-   $this->finished_project_count = Deal::join('projects','projects.deal_id','deals.id')
-         ->where('deals.added_by',$salesId)
-         ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-       
-        ->where('projects.status','finished')
-        ->get();
-        $this->canceled_project_count = Deal::join('projects','projects.deal_id','deals.id')
-        ->where('deals.added_by',$salesId)
-        ->where('deals.created_at', '>=', $startDate)
-       ->where('deals.created_at', '<', $endDate)
-      
-       ->where('projects.status','partially finished')
-       ->orWhere('projects.status','canceled')
-       ->get();
-       $this->rejected_project_count = Deal::join('projects','projects.deal_id','deals.id')
-       ->where('deals.added_by',$salesId)
-       ->where('deals.created_at', '>=', $startDate)
-      ->where('deals.created_at', '<', $endDate)
-      ->where('deals.status','!=','Denied')
-     
-      ->get();
-         if(count($this->no_of_won_deals_count) > 0)
-         {
-            $this->avg_deal_amount = $this->no_of_won_deals_value/count($this->no_of_won_deals_count);
-            $this->finished_project_ratio= count($this->finished_project_count)/count($this->no_of_won_deals_count);
-            $this->canceled_project_ratio= count($this->canceled_project_count)/count($this->no_of_won_deals_count);
-            $this->rejected_project_ratio= count($this->rejected_project_count)/count($this->no_of_won_deals_count);
-
-         }else 
-         {
-            $this->avg_deal_amount = 0;
-            $this->finished_project_ratio= 0;
-            $this->canceled_project_ratio= 0;
-            $this->rejected_project_ratio= 0;
-
-         }
-        
-        $this->country_wise_won_deals_count = Deal::
-        join('users as client','client.id','deals.client_id')
-        ->where('deals.added_by',$salesId)
-        ->where('deals.created_at', '>=', $startDate)
-       ->where('deals.created_at', '<', $endDate)
-       ->groupBy('client.country_id')
-       ->where('deals.status','!=','Denied')
-       ->get();
-
-
-    
-    
-	//		dd("nksadnkasl");
-            $html = view('dashboard.ajax.salesexecutive.admin_view_month', $this->data)->render();
-
-            
- 
-             return Reply::dataOnly([
-                 'status' => 'success',
-                 'html' => $html,
-             ]);
-
-        }else 
-        {
-            $salesId = $sales->id;
-            // $this->username = DB::table('users')->where('id',$salesId)->value('name');
-            $startDate = Carbon::now()->startOfMonth();
-         
-            $endDate1 = Carbon::now()->endOfMonth();
-           
-            $endDate = Carbon::parse($endDate1)->addDays(1)->format('Y-m-d');
-			$exclude_end_date = Carbon::parse($endDate)->subDays(45)->format('Y-m-d');
-          //  dd($startDate, $endDate);
-          
-            $this->startDate1 = Carbon::parse($startDate);
-            $this->endDate1 = Carbon::parse($endDate1);
-			$this->number_of_leads_received_fixed = DB::table('leads')
-            ->where('added_by', $salesId)
-            ->where('project_type','fixed')
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_received_hourly = DB::table('leads')
-           ->where('added_by', $salesId)
-           ->where('project_type', 'hourly')
-           ->where('created_at', '>=', $startDate)
-           ->where('created_at', '<', $endDate)
-           ->count();
-
-        $this->number_of_leads_received = DB::table('leads')
-            ->where('added_by', $salesId)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_received_get = DB::table('leads')
-            ->where('added_by', $salesId)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate)
-            ->get();
-
-        $this->number_of_leads_convert_deals_fixed = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.project_type', 'fixed')
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_convert_deals_hourly = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.project_type', 'hourly')
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_convert_deals = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_convert_deals_get = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->get();
-
-        $this->number_of_leads_convert_won_deals_fixed = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-            ->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.project_type', 'fixed')
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->where('deals.created_at', '>=', $startDate)
-            ->where('deals.created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_convert_won_deals_hourly = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-            ->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.project_type', 'hourly')
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->where('deals.created_at', '>=', $startDate)
-            ->where('deals.created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_convert_won_deals = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-            ->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->where('deals.created_at', '>=', $startDate)
-            ->where('deals.created_at', '<', $endDate)
-            ->count();
-
-        $this->number_of_leads_convert_won_deals_get = DB::table('deal_stages')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-            ->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->where('deals.created_at', '>=', $startDate)
-            ->where('deals.created_at', '<', $endDate)
-            ->get();
-
-            
-
-        //--------------     won deals  table     --------------------------//
-
-        $this->number_of_leads_convert_won_deals_data = DB::table('deal_stages')
-            ->select('deals.*','leads.created_at as lead_created')
-            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
-            ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
-            ->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
-            ->where('leads.added_by', $salesId)
-            ->where('leads.created_at', '>=', $startDate)
-            ->where('leads.created_at', '<', $endDate)
-            ->where('deal_stages.created_at', '>=', $startDate)
-            ->where('deal_stages.created_at', '<', $endDate)
-            ->where('deals.created_at', '>=', $startDate)
-            ->where('deals.created_at', '<', $endDate)
-            ->get();
-
-        // average bidding 
-        $number_of_leads_create_data = DB::table('leads')
-        ->select('leads.*')
-        ->where('added_by', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->get();
-        $this->number_of_leads_create_data= $number_of_leads_create_data;
-
-        $number_of_leads_create = DB::table('leads')
-        ->where('added_by', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->count();
-        
-        $number_of_leads_amount = DB::table('leads')
-        ->where('added_by', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->sum('value');
-
-        if($number_of_leads_create>0){
-            $this->average_number_of_leads_amount = $number_of_leads_amount / $number_of_leads_create;
-        }else{
-            $this->average_number_of_leads_amount = 0;
-        }
-        
-
-
-        // average bidding delay time 
-
-        $number_of_leads_create = DB::table('leads')
-        ->where('added_by', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->count();
-
-        $delay_minute = DB::table('leads')
-        ->where('added_by', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->sum('bidding_minutes');
-
-        $delay_second = DB::table('leads')
-        ->where('added_by', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->sum('bidding_seconds');
-
-        if ($number_of_leads_create > 0) {
-          $this->average_bidding_delay_time= (($delay_minute *60+ $delay_second)/ $number_of_leads_create)/60;
-       }else{
-          $this->average_bidding_delay_time=0;
-
-      }
-
-       // ---------------bidding frequency--------------------------------------//  
-       $total_minutes=0;
-       $freqency_count=0;
-        $attendence_data_by_user = DB::table('attendances')
-        ->select('clock_in_time','clock_out_time')
-        ->where('user_id', $salesId)
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->get();
-
-        foreach($attendence_data_by_user as $attendence){
-           
-           if($attendence->clock_out_time != Null){
-             $lead_generate = DB::table('leads')
-                ->select('created_at')
+            $number_of_leads_convert_won_deals_fixed = $number_of_leads_convert_deals_fixed->whereHas('leadDeal', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            });
+
+            $number_of_leads_convert_won_deals_hourly = $number_of_leads_convert_deals_hourly->whereHas('leadDeal', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [$startDate, $endDate]);
+            });
+
+            if ($tableType == 'convert_won_deals') {
+                $this->number_of_leads_convert_won_deals_get = $number_of_leads_convert_won_deals->get();
+                $saleExecutive += [
+                    'number_of_leads_convert_won_deals_list' => $this->number_of_leads_convert_won_deals_get,
+                ];
+            } else {
+                $saleExecutive += [
+                    'number_of_leads_convert_won_deals_list' => [],
+                ];
+            }
+
+            $this->number_of_leads_convert_won_deals = $number_of_leads_convert_won_deals->count();
+            $this->number_of_leads_convert_won_deals_fixed = $number_of_leads_convert_won_deals_fixed->count();
+            $this->number_of_leads_convert_won_deals_hourly = $number_of_leads_convert_won_deals_hourly->count();
+
+            $saleExecutive += [
+                'number_of_leads_convert_won_deals'        => $this->number_of_leads_convert_won_deals,
+                'number_of_leads_convert_won_deals_fixed'  => $this->number_of_leads_convert_won_deals_fixed,
+                'number_of_leads_convert_won_deals_hourly' => $this->number_of_leads_convert_won_deals_hourly,
+            ];
+
+            // Number of leads that got converted to won deals End
+
+            $number_of_leads_create = $leadsWithDateAndId->count();
+            $number_of_leads_amount = $leadsWithDateAndId->sum('value');
+
+            $this->average_number_of_leads_amount = $number_of_leads_create ? round($number_of_leads_amount / $number_of_leads_create, 2) : 0;
+
+            $delay_minute = $leadsWithDateAndId->sum('bidding_minutes');
+            $delay_second = $leadsWithDateAndId->sum('bidding_seconds');
+
+            $this->average_bidding_delay_time = $number_of_leads_create ? round((($delay_minute * 60 + $delay_second) / $number_of_leads_create), 2) : 0;
+
+            $saleExecutive += [
+                'average_number_of_leads_amount' => $this->average_number_of_leads_amount,
+                'average_bidding_delay_time'     => gmdate('H:i:s', $this->average_bidding_delay_time),
+            ];
+
+            //---------------bidding frequency--------------------------------------
+
+            $total_minutes = 0;
+            $frequency_count = 0;
+
+            $attendance_data_by_user = Attendance::with('leads')
                 ->where('user_id', $salesId)
-                ->where('created_at', '>=', $attendence->clock_in_time)
-                ->where('created_at', '<', $attendence->clock_out_time)
-                ->orderBy('created_at')
+                ->whereNotNull('clock_out_time')
+                ->whereBetween('created_at', [$startDate, $endDate])
                 ->get();
+            foreach ($attendance_data_by_user as $attendance) {
+                $flag = 0;
+                $startTime = '';
+                foreach ($attendance?->leads as $lead) {
+                    if ($lead->created_at >= $attendance->clock_in_time && $lead->created_at <= $attendance->clock_out_time) {
+                        if ($flag == 0) {
+                            $flag = 1;
+                            $startTime = Carbon::parse($lead->created_at);
+                        } else {
+                            $endTime = Carbon::parse($lead->created_at);
+                            $minutesDifference = $endTime->diffInMinutes($startTime);
+                            $startTime = $endTime;
+                            $total_minutes += $minutesDifference;
+                            $frequency_count++;
+                        }
+                    }
+                }
+            }
 
-             $flag=0;
-             $startTime='';
-            foreach( $lead_generate as $lead){
-                
-                if($flag==0){
-                        $flag=1;
-                        $startTime = Carbon::parse($lead->created_at);
-                    
-                }else{
-                        $endTime = Carbon::parse($lead->created_at);
-                        $minutesDifference = $endTime->diffInMinutes($startTime);
-                        $startTime= $endTime;
-                        $total_minutes+= $minutesDifference;
-                        $freqency_count++;
+            $this->bidding_frequency = $frequency_count ? $total_minutes / $frequency_count : 0;
 
+            $saleExecutive += [
+                'bidding_frequency' => $this->bidding_frequency,
+            ];
+
+            // --------------Number of won deals (fixed)-------------//
+
+            $number_of_leads_convert_won_fix_deals = Deal::with('lead', 'dealStageChanges')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('project_type', 'fixed')->get();
+
+            $won_deals_count = 0;
+            $won_deals_value = 0;
+
+            foreach ($number_of_leads_convert_won_fix_deals as $won_deals) {
+                if ($won_deals->added_by == $salesId) {
+                    $won_deals_count += .125;
+                    $won_deals_value += .125 * $won_deals->amount;
                 }
 
-            }
-           }
-        }
+                if ($won_deals?->lead?->added_by == $salesId) {
+                    $won_deals_count += .25;
+                    $won_deals_value += .25 * $won_deals->amount;
+                }
 
-        if($freqency_count>0){
-            $this->bidding_frequency = $total_minutes / $freqency_count;
-        }else{
-            $this->bidding_frequency =0;
+                $qualify_contribution = 0;
+                $needs_defined_contribution = 0;
+                $proposal_made_contribution = 0;
+                $negotiation_contribution = 0;
+                $milestone_contribution = 0;
 
-        }
-
-        //Country wise bidding breakdown
-
-
-        $number_of_leads_received = DB::table('leads')
-            ->where('added_by', $salesId)
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate)
-            ->count();
-
-        $country_wise_lead_counts = DB::table('leads')
-        ->select('country', DB::raw('COUNT(*) as lead_count'))
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->where('added_by', $salesId)
-        ->groupBy( 'country')
-        ->orderBy('lead_count','DESC')
-        ->get();
-
-        foreach($country_wise_lead_counts as $leads){
-             
-            $leads_percentage= ($leads->lead_count/ $number_of_leads_received )*100;
-
-            $leads->leads_percentage= $leads_percentage;
-        }
-        $this->country_wise_lead_counts= $country_wise_lead_counts;
-
-        // --------------Number of won deals (fixed)-------------//
-
-        $number_of_leads_convert_won_deals = DB::table('deals')
-        ->select('deals.*')
-        ->where('deals.project_type', 'fixed')
-        ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-        ->get();
-
-        $won_deals_count=0;
-        $won_deals_value = 0;
-        
-        foreach($number_of_leads_convert_won_deals as $won_deals){
-
-            //closing the deal
-
-            if($won_deals->added_by== $salesId){
-
-                $won_deals_count += .125;
-                $won_deals_value += .125*$won_deals->amount;
+                foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
+                    if ($dealStageChanges->updated_by == $salesId) {
+                        switch ($dealStageChanges->deal_stage_id) {
+                            case 1:
+                                $qualify_contribution++;
+                                break;
+                            case 2:
+                                $needs_defined_contribution++;
+                                break;
+                            case 3:
+                                $proposal_made_contribution++;
+                                break;
+                            case 4:
+                                $negotiation_contribution++;
+                                break;
+                            case 5:
+                                $milestone_contribution++;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
+                if ($qualify_contribution) {
+                    $won_deals_count += .0375 / $qualify_contribution;
+                    $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
+                }
+                if ($needs_defined_contribution) {
+                    $won_deals_count += .1875 / $needs_defined_contribution;
+                    $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
+                }
+                if ($proposal_made_contribution) {
+                    $won_deals_count += .125 / $proposal_made_contribution;
+                    $won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
+                }
+                if ($negotiation_contribution) {
+                    $won_deals_count += .125 / $negotiation_contribution;
+                    $won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
+                }
+                if ($milestone_contribution) {
+                    $won_deals_count += .15 / $milestone_contribution;
+                    $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
+                }
             }
 
+            $this->won_deals_count_fixed = round($won_deals_count, 2);
+            $this->won_deals_value_fixed = round($won_deals_value, 2);
 
-            //The bidder
+            $saleExecutive += [
+                'won_deals_count_fixed' => $this->won_deals_count_fixed,
+                'won_deals_value_fixed' => $this->won_deals_value_fixed,
+            ];
 
-            $leads = DB::table('leads')
-                ->where('added_by', $salesId)
-                ->where('id', $won_deals->lead_id)
-                ->count();
-            
-            if($leads >0){
 
-                $won_deals_count+= .25;
-                $won_deals_value += .25 * $won_deals->amount;
+            // --------------Number of won deals (hourly)-------------//
 
+            $number_of_leads_convert_won_hourly_deals = Deal::with('lead', 'dealStageChanges')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('project_type', 'hourly')->get();
+
+            $won_deals_count = 0;
+            $won_deals_value = 0;
+
+            foreach ($number_of_leads_convert_won_hourly_deals as $won_deals) {
+                //closing the deal
+
+                if ($won_deals->added_by == $salesId) {
+                    $won_deals_count += .125;
+                    $won_deals_value += $won_deals->hourly_rate;
+                }
+
+                //The bidder
+                if ($won_deals?->lead?->added_by == $salesId) {
+                    $won_deals_count += .25;
+                    $won_deals_value += .25 * $won_deals->hourly_rate;
+                }
+
+                $qualify_contribution = 0;
+                $needs_defined_contribution = 0;
+                $proposal_made_contribution = 0;
+                $negotiation_contribution = 0;
+                $milestone_contribution = 0;
+
+                foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
+                    if ($dealStageChanges->updated_by == $salesId) {
+                        switch ($dealStageChanges->deal_stage_id) {
+                            case 1:
+                                $qualify_contribution++;
+                                break;
+                            case 2:
+                                $needs_defined_contribution++;
+                                break;
+                            case 3:
+                                $proposal_made_contribution++;
+                                break;
+                            case 4:
+                                $negotiation_contribution++;
+                                break;
+                            case 5:
+                                $milestone_contribution++;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
+
+                if ($qualify_contribution) {
+                    $won_deals_count += .0375 / $qualify_contribution;
+                    $won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
+                }
+                if ($needs_defined_contribution) {
+                    $won_deals_count += .1875 / $needs_defined_contribution;
+                    $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
+                }
+                if ($proposal_made_contribution) {
+                    $won_deals_count += .125 / $proposal_made_contribution;
+                    $won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
+                }
+                if ($negotiation_contribution) {
+                    $won_deals_count += .125 / $negotiation_contribution;
+                    $won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
+                }
+                if ($milestone_contribution) {
+                    $won_deals_count += .15 / $milestone_contribution;
+                    $won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
+                }
             }
 
-            //Qualifying
+            $this->won_deals_count_hourly = round($won_deals_count, 2);
+            $this->won_deals_value_hourly = round($won_deals_value, 2);
 
-            $qualify_contribution = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id',1)
-                ->count();
-
-            $qualify = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 1)
-                ->count();
-            
-            if($qualify>0){
-               $won_deals_count+= .0375/ $qualify_contribution;
-               $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
+            $saleExecutive += [
+                'won_deals_count_hourly' => $this->won_deals_count_hourly,
+                'won_deals_value_hourly' => $this->won_deals_value_hourly,
+            ];
 
-            }
+            //---------------Project completion/Won deal ratio-----------------------------------//
 
 
-            //Needs Defined
+            $contractsSaleEndDate = Contract::with('project')
+                ->where('last_updated_by', $salesId)
+                ->where('updated_at', '<', $endDate);
 
-            $needs_defined_contribution = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 2)
-                ->count();
+            $projectCompletionCountClone = clone $contractsSaleEndDate;
+            $projectCanceledCountClone = clone $contractsSaleEndDate;
+            $wonDealCountRejectProjectClone = clone $contractsSaleEndDate;
 
-            $needs_defined = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 2)
-                ->count();
+            //--------Finished Projects---------------//
 
-            if ($needs_defined > 0) {
-                $won_deals_count += .1875 / $needs_defined_contribution;
-                $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
-            }
 
-            //Proposal made
 
+            $this->project_completion_count = $projectCompletionCountClone->whereRelation('project', 'status', 'finished')->count();
 
-            $proposal_made_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-            ->where('deal_stage_id', 3)
-                ->count();
 
-            $proposal_made = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-            ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 3)
-                ->count();
+            $this->project_canceled_count = $projectCanceledCountClone->whereHas('project', function ($query) {
+                $query->whereIn('status', ['canceled', 'partially finished']);
+            })->count();
 
-            if ($proposal_made > 0) {
-                $won_deals_count += .125 / $proposal_made_contribution;
-                $won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
-            }
+            //--------Reject Projects Count---------------//
 
-            //Negotiation started
+            $this->project_reject_count_data = $wonDealCountRejectProjectClone->whereRelation('project', 'project_status', 'Not Accepted')->select('id', 'deal_id', 'last_updated_by')->get();
 
-            $negotiation_contribution = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 4)
-                ->count();
+            $this->project_reject_count = $this->project_reject_count_data->count();
 
-            $negotiation = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 4)
-                ->count();
+            $contractsExcludeEndDate = Contract::where('last_updated_by', $salesId)
+                ->where('updated_at', '<', $exclude_end_date);
 
-            if ($negotiation > 0) {
-                $won_deals_count += .125 / $negotiation_contribution;
-                $won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
-            }
+            $contractsExcludeEndDateClone = clone $contractsExcludeEndDate;
 
-            //Sharing milestone breakdown
+            $this->won_deal_count_get = $contractsExcludeEndDateClone->get();
 
-            $milestone_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-            ->where('deal_stage_id', 5)
-            ->count();
+            $this->won_deal_count = $contractsExcludeEndDateClone->count();
 
-            $milestone = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-            ->where('updated_by', $salesId)
-            ->where('deal_stage_id', 5)
-            ->count();
 
-            if ($milestone > 0) {
-                $won_deals_count += .15 / $milestone_contribution;
-                $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
-            }          
 
-        }
+            //exclude one for end cycle date and other for today.  suppose today december 20  and end cycle 31.
 
-        $this->won_deals_count_fixed =$won_deals_count;
-        $this->won_deals_value_fixed = $won_deals_value;
+            $this->won_deal_count_reject_project = $wonDealCountRejectProjectClone->count();
 
+            // same logic for end date for current month
 
-        // --------------Number of won deals (hourly)-------------//
+            $this->project_completion_count_ratio = $this->won_deal_count ? ($this->project_completion_count / $this->won_deal_count) * 100 : 0;
 
-        $number_of_leads_convert_won_deals = DB::table('deals')
-        ->select('deals.*')
-        ->where('deals.project_type', 'hourly')
-        ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-        ->get();
+            $this->project_canceled_count_ratio = $this->won_deal_count ? ($this->project_canceled_count / $this->won_deal_count) * 100 : 0;
 
-        $won_deals_count = 0;
-        $won_deals_value = 0;
+            $this->project_reject_count_ratio = $this->won_deal_count_reject_project ? ($this->project_reject_count / $this->won_deal_count_reject_project) * 100 : 0;
 
-        foreach ($number_of_leads_convert_won_deals as $won_deals) {
 
-            //closing the deal
+            // --------------Number of won deals table (fixed)-------------//
 
-            if ($won_deals->added_by == $salesId) {
+            if (false) {
+                $number_of_leads_convert_won_deals_table = $number_of_leads_convert_won_fix_deals;
+                $won_deals_count = 0;
+                $won_deals_value = 0;
+                $yes = 'YES';
+                $no = 'NO';
+                $numberOfLeadsConvertWonDeals = [];
 
-                $won_deals_count += .125;
-                $won_deals_value +=  $won_deals->hourly_rate;
-            }
-
-
-            //The bidder
-
-            $leads = DB::table('leads')
-                ->where('added_by', $salesId)
-                ->where('id', $won_deals->lead_id)
-                ->count();
-
-            if ($leads > 0) {
-
-                $won_deals_count += .25;
-                $won_deals_value += .25 * $won_deals->hourly_rate;
-            }
-
-            //Qualifying
-
-            $qualify_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 1)
-                ->count();
-
-            $qualify = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 1)
-                ->count();
-
-            if ($qualify > 0) {
-                $won_deals_count += .0375 / $qualify_contribution;
-                $won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
-            }
-
-
-            //Needs Defined
-
-            $needs_defined_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 2)
-                ->count();
-
-            $needs_defined = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 2)
-                ->count();
-
-            if ($needs_defined > 0) {
-                $won_deals_count += .1875 / $needs_defined_contribution;
-                $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
-            }
-
-            //Proposal made
-
-
-            $proposal_made_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 3)
-                ->count();
-
-            $proposal_made = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 3)
-                ->count();
-
-            if ($proposal_made > 0) {
-                $won_deals_count += .125 / $proposal_made_contribution;
-                $won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
-            }
-
-            //Negotiation started
-
-            $negotiation_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 4)
-                ->count();
-
-            $negotiation = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 4)
-                ->count();
-
-            if ($negotiation > 0) {
-                $won_deals_count += .125 / $negotiation_contribution;
-                $won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
-            }
-
-            //Sharing milestone breakdown
-
-            $milestone_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 5)
-                ->count();
-
-            $milestone = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 5)
-                ->count();
-
-            if ($milestone > 0) {
-                $won_deals_count += .15 / $milestone_contribution;
-                $won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
-            }
-        }
-
-        $this->won_deals_count_hourly = $won_deals_count;
-        $this->won_deals_value_hourly = $won_deals_value;
-
-
-        // --------------Number of won deals (Country wise)-------------//
-
-      $leads_country_data= DB::table('leads')
-            ->select('country')
-            ->where('created_at', '>=', $startDate)
-            ->where('created_at', '<', $endDate)
-            ->distinct('country')
-            ->get();
-
-     foreach($leads_country_data as $lead_country){
-
-        $number_of_leads_convert_won_deals = DB::table('deals')
-        ->select('deals.*')
-        ->join('leads', 'deals.lead_id', '=', 'leads.id')
-        ->where('leads.country', $lead_country->country )
-        ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-        ->get();
-
-        $won_deals_count = 0;
-        $won_deals_value = 0;
-
-        foreach ($number_of_leads_convert_won_deals as $won_deals) {
-
-            //closing the deal
-
-            if ($won_deals->added_by == $salesId) {
-
-                $won_deals_count += .125;
-                if($won_deals->project_type=='fixed'){
-
+                foreach ($number_of_leads_convert_won_deals_table as $won_deals) {
+                    $deal = $won_deals->toArray();
+                    // closing the deal
+                    if ($won_deals->added_by == $salesId) {
+                        $won_deals_count += .125;
                         $won_deals_value += .125 * $won_deals->amount;
-                }else{
+                        $deal += ['closing_deal' => $yes];
+                    } else {
+                        $deal += ['closing_deal' => $no];
+                    }
 
-                        $won_deals_value += .125 * $won_deals->hourly_rate;
-
-                }
-               
-            }
-
-            //The bidder
-
-            $leads = DB::table('leads')
-                ->where('added_by', $salesId)
-                ->where('id', $won_deals->lead_id)
-                ->count();
-
-            if ($leads > 0) {
-
-                   $won_deals_count += .25;
-                
-                    if ($won_deals->project_type == 'fixed') {
-
+                    // The bidder
+                    if ($won_deals?->lead?->added_by == $salesId) {
+                        $won_deals_count += .25;
                         $won_deals_value += .25 * $won_deals->amount;
+                        $deal += ['bidder' => $yes];
                     } else {
-
-                        $won_deals_value += .25 * $won_deals->hourly_rate;
+                        $deal += ['bidder' => $no];
                     }
-            }
 
-            //Qualifying
 
-            $qualify_contribution = DB::table('deal_stage_changes')
-               ->where('deal_id', $won_deals->lead_id)
-                ->where('deal_stage_id', 1)
-                ->count();
+                    $qualify_contribution = 0;
+                    $needs_defined_contribution = 0;
+                    $proposal_made_contribution = 0;
+                    $negotiation_contribution = 0;
+                    // $milestone_contribution = 0;
 
-            $qualify = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->lead_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 1)
-                ->count();
-
-            if ($qualify > 0) {
-                   $won_deals_count += .0375 / $qualify_contribution;
-                
-                    if ($won_deals->project_type == 'fixed') {
-
+                    foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
+                        if ($dealStageChanges->updated_by == $salesId) {
+                            switch ($dealStageChanges->deal_stage_id) {
+                                case 1:
+                                    $qualify_contribution++;
+                                    break;
+                                case 2:
+                                    $needs_defined_contribution++;
+                                    break;
+                                case 3:
+                                    $proposal_made_contribution++;
+                                    break;
+                                case 4:
+                                    $negotiation_contribution++;
+                                    break;
+                                // case 5:
+                                //     $milestone_contribution++;
+                                //     break;
+                                // default:
+                                //     # code...
+                                //     break;
+                            }
+                        }
+                    }
+                    if ($qualify_contribution) {
+                        $won_deals_count += .0375 / $qualify_contribution;
                         $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
+                        $deal += ['qualifying' => $yes];
                     } else {
-
-                        $won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
+                        $deal += ['qualifying' => $no];
                     }
-            }
-
-
-            //Needs Defined
-
-            $needs_defined_contribution = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 2)
-                ->count();
-
-            $needs_defined = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 2)
-                ->count();
-
-            if ($needs_defined > 0) {
-                $won_deals_count += .1875 / $needs_defined_contribution;
-               
-                    if ($won_deals->project_type == 'fixed') {
-
+                    if ($needs_defined_contribution) {
+                        $won_deals_count += .1875 / $needs_defined_contribution;
                         $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
+                        $deal += ['needs_defined' => $yes];
                     } else {
-
-                        $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
+                        $deal += ['needs_defined' => $no];
                     }
-            }
-
-            //Proposal made
-
-            $proposal_made_contribution = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 3)
-                ->count();
-
-            $proposal_made = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 3)
-                ->count();
-
-            if ($proposal_made > 0) {
-                $won_deals_count += .125 / $proposal_made_contribution;
-              
-                    if ($won_deals->project_type == 'fixed') {
-
+                    if ($proposal_made_contribution) {
+                        $won_deals_count += .125 / $proposal_made_contribution;
                         $won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
+                        $deal += ['proposal_made' => $yes];
                     } else {
-
-                        $won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
+                        $deal += ['proposal_made' => $no];
                     }
-            }
-
-            //Negotiation started
-
-            $negotiation_contribution = DB::table('deal_stage_changes')
-                 ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 4)
-                ->count();
-
-            $negotiation = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 4)
-                ->count();
-
-            if ($negotiation > 0) {
-                $won_deals_count += .125 / $negotiation_contribution;
-               
-
-                    if ($won_deals->project_type == 'fixed') {
-
+                    if ($negotiation_contribution) {
+                        $won_deals_count += .125 / $negotiation_contribution;
                         $won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
+                        $deal += ['negotiation_started' => $yes];
                     } else {
-
-                        $won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
+                        $deal += ['negotiation_started' => $no];
                     }
+                    // use for 5
+                    // if ($milestone_contribution) {
+                    //     $won_deals_count += .15 / $milestone_contribution;
+                    //     $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
+                    //     $deal += ['sharing_milestone_breakdown' => $yes];
+                    // } else {
+                    //     $deal += ['sharing_milestone_breakdown' => $no];
+                    // }
+
+                    $milestone_contribution = DB::table('deal_stage_changes')
+                        ->where('deal_id', $won_deals->deal_id)
+                        ->where('deal_stage_id', 5)
+                        ->distinct('updated_by')
+                        ->get();
+
+                    $milestone = DB::table('deal_stage_changes')
+                        ->where('deal_id', $won_deals->deal_id)
+                        ->where('updated_by', $salesId)
+                        ->where('deal_stage_id', 5)
+                        ->count();
+                    if ($milestone > 0 && $milestone_contribution->count() > 0) {
+                        $won_deals_count += .15 / $milestone_contribution->count();
+                        $won_deals_value += .15 / $milestone_contribution->count() * $won_deals->amount;
+                        $deal += ['sharing_milestone_breakdown' => $yes];
+                    } else {
+                        $deal += ['sharing_milestone_breakdown' => $no];
+                    }
+
+                    $deal += ['deals_each_count' => $won_deals_count];
+                    $deal += ['deals_each_value' => $won_deals_value];
+
+                    $numberOfLeadsConvertWonDeals[] = $deal;
+
+                    $won_deals_count = 0;
+                    $won_deals_value = 0;
+                    $deal = [];
+                }
+
+                $this->number_of_leads_convert_won_deals_table = $numberOfLeadsConvertWonDeals;
+
+                $saleExecutive += [
+                    'number_of_leads_convert_won_deals_table' => $numberOfLeadsConvertWonDeals,
+                ];
             }
 
-            //Sharing milestone breakdown
+            // --------------Number of won deals table (hourly)-------------//
+            if (false) {
+                $number_of_leads_convert_won_deals_table_hourly = $number_of_leads_convert_won_hourly_deals;
 
-            $milestone_contribution = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 5)
-                ->count();
+                $won_deals_count = 0;
+                $won_deals_value = 0;
+                $yes = 'YES';
+                $no = 'NO';
+                $numberOfLeadsConvertWonDealsTableHourly = [];
 
-            $milestone = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 5)
-                ->count();
+                foreach ($number_of_leads_convert_won_deals_table_hourly as $won_deals) {
+                    $deal = $won_deals->toArray();
 
-            if ($milestone > 0) {
-                $won_deals_count += .15 / $milestone_contribution;
-               
-
-                    if ($won_deals->project_type == 'fixed') {
-
-                        $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
+                    //closing the deal
+                    if ($won_deals->added_by == $salesId) {
+                        $won_deals_count += .125;
+                        $won_deals_value += .125 * $won_deals->hourly_rate;
+                        $deal += ['closing_deal' => $yes];
                     } else {
+                        $deal += ['closing_deal' => $no];
+                    }
+                    //The bidder
+                    if ($won_deals?->lead?->added_by == $salesId) {
+                        $won_deals_count += .25;
+                        $won_deals_value += .25 * $won_deals->hourly_rate;
+                        $deal += ['bidder' => $yes];
+                    } else {
+                        $deal += ['bidder' => $no];
+                    }
 
+                    $qualify_contribution = 0;
+                    $needs_defined_contribution = 0;
+                    $proposal_made_contribution = 0;
+                    $negotiation_contribution = 0;
+                    // $milestone_contribution = 0;
+
+                    foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
+                        if ($dealStageChanges->updated_by == $salesId) {
+                            switch ($dealStageChanges->deal_stage_id) {
+                                case 1:
+                                    $qualify_contribution++;
+                                    break;
+                                case 2:
+                                    $needs_defined_contribution++;
+                                    break;
+                                case 3:
+                                    $proposal_made_contribution++;
+                                    break;
+                                case 4:
+                                    $negotiation_contribution++;
+                                    break;
+                                // case 5:
+                                //     $milestone_contribution++;
+                                //     break;
+                                // default:
+                                //     # code...
+                                //     break;
+                            }
+                        }
+                    }
+
+                    if ($qualify_contribution) {
+                        $won_deals_count += .0375 / $qualify_contribution;
+                        $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
+                        $deal += ['qualifying' => $yes];
+                    } else {
+                        $deal += ['qualifying' => $no];
+                    }
+                    if ($needs_defined_contribution) {
+                        $won_deals_count += .1875 / $needs_defined_contribution;
+                        $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
+                        $deal += ['needs_defined' => $yes];
+                    } else {
+                        $deal += ['needs_defined' => $no];
+                    }
+                    if ($proposal_made_contribution) {
+                        $won_deals_count += .125 / $proposal_made_contribution;
+                        $won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
+                        $deal += ['proposal_made' => $yes];
+                    } else {
+                        $deal += ['proposal_made' => $no];
+                    }
+                    if ($negotiation_contribution) {
+                        $won_deals_count += .125 / $negotiation_contribution;
+                        $won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
+                        $deal += ['negotiation_started' => $yes];
+                    } else {
+                        $deal += ['negotiation_started' => $no];
+                    }
+                    // use for 5
+                    // if ($milestone_contribution) {
+                    //     $won_deals_count += .15 / $milestone_contribution;
+                    //     $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
+                    //     $deal += ['sharing_milestone_breakdown' => $yes];
+                    // } else {
+                    //     $deal += ['sharing_milestone_breakdown' => $no];
+                    // }
+
+                    //Sharing milestone breakdown
+
+                    $milestone_contribution = DB::table('deal_stage_changes')
+                        ->where('deal_id', $won_deals->deal_id)
+                        ->where('deal_stage_id', 5)
+                        ->distinct('updated_by')
+                        ->count();
+
+                    $milestone = DB::table('deal_stage_changes')
+                        ->where('deal_id', $won_deals->deal_id)
+                        ->where('updated_by', $salesId)
+                        ->where('deal_stage_id', 5)
+                        ->count();
+
+                    if ($milestone > 0 && $milestone_contribution > 0) {
+                        $won_deals_count += .15 / $milestone_contribution;
                         $won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
+                        $deal += ['sharing_milestone_breakdown' => $yes];
+                    } else {
+                        $deal += ['sharing_milestone_breakdown' => $no];
                     }
+
+                    $deal += ['deals_each_count' => $won_deals_count];
+                    $deal += ['deals_each_value' => $won_deals_value];
+
+                    $numberOfLeadsConvertWonDealsTableHourly[] = $deal;
+
+                    $won_deals_count = 0;
+                    $won_deals_value = 0;
+                    $deal = [];
+                }
+
+                $this->number_of_leads_convert_won_deals_table_hourly = $numberOfLeadsConvertWonDealsTableHourly;
+
+                $saleExecutive += [
+                    'number_of_leads_convert_won_deals_table_hourly' => $numberOfLeadsConvertWonDealsTableHourly,
+                ];
             }
+
+            $dealWithSaleIdDate = Deal::with('currency', 'user')
+                ->where('added_by', $salesId)
+                ->whereBetween('created_at', [$startDate, $endDate]);
+
+            $dealWithSaleIdDateClone = clone $dealWithSaleIdDate;
+            $dealWithSaleIdDatePartiallyFinishedClone = clone $dealWithSaleIdDate;
+            $dealWithSaleIdDateDeniedClone = clone $dealWithSaleIdDate;
+
+            $no_of_won_deals = $dealWithSaleIdDateClone->get();
+
+            $finished_project = Deal::with('currency', 'user')
+                ->where([
+                    ['added_by', '=', $salesId],
+                    ['created_at', '<', $endDate],
+                    ['created_at', '>=', $startDate],
+                ])->whereRelation('project', 'status', 'finished');
+
+            $finished_project_count = $finished_project->count();
+
+            if ($tableType == 'finished_project') {
+                $saleExecutive += [
+                    'finished_project_list' => $finished_project->get(),
+                ];
+            } else {
+                $saleExecutive += [
+                    'finished_project_list' => []
+                ];
+            }
+
+
+            $this->no_of_won_deals_value = round($dealWithSaleIdDateClone->sum('amount'), 2);
+
+            $canceled_project = $dealWithSaleIdDatePartiallyFinishedClone->with('project', 'user', 'currency')
+                ->whereRelation('project', 'status', 'partially finished')
+                ->orWhereRelation('project', 'status', 'canceled');
+            $canceled_project_count = $canceled_project->count();
+            if ($tableType == 'canceled_project') {
+                $saleExecutive += [
+                    'canceled_project_list' => $canceled_project->get(),
+                ];
+            } else {
+                $saleExecutive += [
+                    'canceled_project_list' => []
+                ];
+            }
+
+            $rejected_project = $dealWithSaleIdDateDeniedClone->with('project', 'user', 'currency')->where('deals.status', '!=', 'Denied');
+
+            $rejected_project_count = $rejected_project->count();
+
+            if ($tableType == 'rejected_project') {
+                $saleExecutive += [
+                    'rejected_project_list' => $rejected_project->get(),
+                ];
+            } else {
+                $saleExecutive += [
+                    'rejected_project_list' => []
+                ];
+            }
+
+            if (count($no_of_won_deals)) {
+                $avg_deal_amount = round($this->no_of_won_deals_value / count($no_of_won_deals), 2);
+                $finished_project_ratio = round($finished_project_count / count($no_of_won_deals), 2);
+                $canceled_project_ratio = round($canceled_project_count / count($no_of_won_deals), 2);
+                $rejected_project_ratio = round($rejected_project_count / count($no_of_won_deals), 2);
+            } else {
+                $avg_deal_amount = 0;
+                $finished_project_ratio = 0;
+                $canceled_project_ratio = 0;
+                $rejected_project_ratio = 0;
+            }
+
+            // $country_wise_won_deals_count = Deal::join('users as client', 'client.id', 'deals.client_id')
+            //     ->where('deals.added_by', $salesId)
+            //     ->whereBetween('deals.created_at', [$startDate, $endDate])
+            //     ->groupBy('client.country_id')
+            //     ->where('deals.status', '!=', 'Denied')
+            //     ->get();
+
+            $saleExecutive += [
+                'no_of_won_deals_list'   => ($tableType == 'num_of_won_deal') ? $no_of_won_deals : [],
+                'no_of_won_deals_count'  => $no_of_won_deals->count(),
+                'no_of_won_deals_value'  => $this->no_of_won_deals_value,
+                'avg_deal_amount'        => $avg_deal_amount,
+                'finished_project_ratio' => $finished_project_ratio,
+                'finished_project_count' => $finished_project_count,
+                'canceled_project_ratio' => $canceled_project_ratio,
+                'canceled_project_count' => $canceled_project_count,
+                'rejected_project_ratio' => $rejected_project_ratio,
+                'rejected_project_count' => $rejected_project_count,
+            ];
+
+            return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
         }
-        
-                $lead_country->won_deals_count= $won_deals_count;
-                $lead_country->won_deals_value= $won_deals_value;
+    }
+
+    public function salesDashboardCountryWiseBiddingBreakdownAdminApi($sales)
+    {
+        $validator = Validator::make(request()->all(), [
+            'start_date' => 'date',
+            'end_date'   => 'date|after:start_date',
+            'sale_id'    => 'nullable',
+        ]);
+        if ($validator->fails()) {
+            return Reply::error(__('validation_failed'), $validator->errors());
+        } else {
+            $salesId = request('sale_id') ?? $sales->id;
+            if (request('start_date') && request('end_date')) {
+                $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
+            } else {
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate = Carbon::now()->endOfDay();
+                // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+                // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+            }
+
+            //Country wise bidding breakdown
+
+            $number_of_leads_received = Lead::where('added_by', $salesId)
+                ->whereBetween('created_at', [$startDate, $endDate]);
+
+            $number_of_leads_receivedClone = clone $number_of_leads_received;
+            if ($number_of_leads_received->count()) {
+                $country_wise_lead = $number_of_leads_receivedClone->select('country', DB::raw('COUNT(*) as lead_count, SUM(value) as lead_value'))
+                    ->groupBy('country')->orderBy('lead_count', 'DESC')->get()->toArray();
+            } else {
+                $country_wise_lead = [];
+            }
+
+
+            if (count($country_wise_lead)) {
+                $totalValue = array_sum(array_column($country_wise_lead, 'lead_value'));
+                $country_wise_lead = Arr::map($country_wise_lead, function (array $value, string $key) use ($totalValue) {
+                    return $value += [
+                        'avg_lead_value'        => round($value['lead_value'] / $value['lead_count'], 2),
+                        'percentage_lead_value' => round(($value['lead_value'] / $totalValue) * 100, 2),
+                    ];
+                });
+            }
+
+            $saleExecutive = [
+                'country_wise_leads'       => $country_wise_lead ?? [],
+                'country_wise_leads_count' => count($country_wise_lead) ?? 0,
+                'number_of_leads_received' => $number_of_leads_received->count() ?? 0,
+            ];
+            return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
+        }
+    }
+    public function salesDashboardCountryWiseWonDealsAdminApi($sales)
+    {
+        $validator = Validator::make(request()->all(), [
+            'start_date' => 'date',
+            'end_date'   => 'date|after:start_date',
+            'sale_id'    => 'nullable',
+        ]);
+        if ($validator->fails()) {
+            return Reply::error(__('validation_failed'), $validator->errors());
+        } else {
+            $salesId = request('sale_id') ?? $sales->id;
+
+            if (request('start_date') && request('end_date')) {
+                $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
+            } else {
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate = Carbon::now()->endOfDay();
+                // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+                // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+            }
+
+            // $country_wise_won_deals_count = Deal::join('users as client', 'client.id', 'deals.client_id')
+            //     ->where('deals.added_by', $salesId)
+            //     ->whereBetween('deals.created_at', [$startDate, $endDate])
+            //     ->groupBy('client.country_id')
+            //     ->where('deals.status', '!=', 'Denied')
+            //     ->get();
+
+            // --------------Number of won deals (Country wise)-------------//
+
+            $leads_country_data = Lead::with('leadDeal.dealStageChanges')
+                ->whereHas('leadDeal', function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->get()
+                ->groupBy('country')
+                ->toArray();
+
+            $leads_country = [];
+            foreach ($leads_country_data as $key => $leads) {
+
+                $lead_count = count($leads);
 
                 $won_deals_count = 0;
                 $won_deals_value = 0;
 
+                $thisLeadDeal = false;
+                foreach ($leads as $lead) {
+                    if (isset($lead['lead_deal'])) {
+                        $thisLeadDeal = true;
+                        if ($lead['lead_deal']['added_by'] == $salesId) {
+                            //closing the deal
+                            $won_deals_count += .125;
+                            $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 * $lead['lead_deal']['amount'] : .125 * $lead['lead_deal']['hourly_rate'];
+                        }
+                        if ($lead['added_by'] == $salesId) {
+                            //The bidder
+                            $won_deals_count += .25;
+                            $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
+                        }
+                    }
+
+                    $qualify_contribution = 0;
+                    $needs_defined_contribution = 0;
+                    $proposal_made_contribution = 0;
+                    $negotiation_contribution = 0;
+                    $milestone_contribution = 0;
+
+                    foreach ($lead['lead_deal']['deal_stage_changes'] ?? [] as $dealStageChanges) {
+                        if ($dealStageChanges['updated_by'] == $salesId) {
+                            switch ($dealStageChanges['deal_stage_id']) {
+                                case 1:
+                                    $qualify_contribution++;
+                                    break;
+                                case 2:
+                                    $needs_defined_contribution++;
+                                    break;
+                                case 3:
+                                    $proposal_made_contribution++;
+                                    break;
+                                case 4:
+                                    $negotiation_contribution++;
+                                    break;
+                                case 5:
+                                    $milestone_contribution++;
+                                    break;
+                                default:
+                                    # code...
+                                    break;
+                            }
+                        }
+                    }
+
+                    if ($qualify_contribution) {
+                        $won_deals_count += .0375 / $qualify_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .0375 / $qualify_contribution * $lead['lead_deal']['amount'] : .0375 / $qualify_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($needs_defined_contribution) {
+                        $won_deals_count += .1875 / $needs_defined_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .1875 / $needs_defined_contribution * $lead['lead_deal']['amount'] : .1875 / $needs_defined_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($proposal_made_contribution) {
+                        $won_deals_count += .125 / $proposal_made_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $proposal_made_contribution * $lead['lead_deal']['amount'] : .125 / $proposal_made_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($negotiation_contribution) {
+                        $won_deals_count += .125 / $negotiation_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $negotiation_contribution * $lead['lead_deal']['amount'] : .125 / $negotiation_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($milestone_contribution) {
+                        $won_deals_count += .15 / $milestone_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .15 / $milestone_contribution * $lead['lead_deal']['amount'] : .15 / $milestone_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                }
+                if ($thisLeadDeal) {
+                    $country_data = ['country' => $key];
+                    $country_data += [
+                        'won_deals_count'     => round($won_deals_count, 2),
+                        'won_deals_value'     => round($won_deals_value, 2),
+                        'avg_won_deals_value' => round($won_deals_value, 2) ? round($won_deals_value / $lead_count, 2) : 0,
+                    ];
+                    $leads_country[] = $country_data;
+                }
+            }
+
+            $totalCount = array_sum(array_column($leads_country, 'won_deals_count'));
+            $totalValue = array_sum(array_column($leads_country, 'won_deals_value'));
+
+            $leads_country = Arr::map($leads_country, function (array $value, string $key) use ($totalValue) {
+                return $value += [
+                    'percentage_won_deals_value' => round(($value['won_deals_value'] / $totalValue) * 100, 2),
+                ];
+            });
+
+
+            $saleExecutive = [
+                'country_wise_won_deals'       => $leads_country,
+                'country_wise_won_deals_count' => count($leads_country),
+            ];
+            return response(['data' => $saleExecutive])->header('Content-Type', 'application/json');
+        }
     }
 
-       $sort_leads_country_data= $leads_country_data->sortByDesc('won_deals_value');
-
-       $this->leads_country_data = $sort_leads_country_data;
-
-        //---------------Project completion/Won deal ratio-----------------------------------//
-
-
-        $this->project_completion_count = DB::table('contracts')
-            ->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-            ->where('projects.status','finished')
-            ->where('contracts.last_updated_by', $salesId)
-            ->where('contracts.updated_at', '<', $endDate)
-            ->count();
-
-        $this->project_canceled_count = DB::table('contracts')
-            ->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-            ->whereIn('projects.status', ['canceled', 'partially finished'])
-            ->where('contracts.last_updated_by', $salesId)
-            ->where('contracts.updated_at', '<', $endDate)
-            ->count();
-
-        $this->project_reject_count = DB::table('contracts')
-            ->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-            ->where('projects.project_status', 'Not Accepted')
-            ->where('contracts.last_updated_by', $salesId)
-            ->where('contracts.updated_at', '<', $endDate)
-            ->count();
-
-        $this->won_deal_count = DB::table('contracts')
-            ->where('last_updated_by', $salesId)
-            ->where('updated_at', '<', $exclude_end_date)
-            ->count();
-
-        $this->won_deal_count_get = DB::table('contracts')
-            ->where('last_updated_by', $salesId)
-            ->where('updated_at', '<', $exclude_end_date)
-            ->get();
-
-
-        // exclude one for end cycle date and other for today.  suppose today december 20  and end cycle 31. but logic will be  20-exclude date for current month 
-
-        $this->won_deal_count_reject_project = DB::table('contracts')
-            ->where('last_updated_by', $salesId)
-            ->where('updated_at', '<', $endDate)
-            ->count();
-            
-        // same logic for end date for current month
-        if($this->won_deal_count > 0){
-            $this->project_completion_count_ratio = ($this->project_completion_count / $this->won_deal_count) * 100;
-        }else {
-            $this->project_completion_count_ratio =0;
-        }
-
-        if ($this->won_deal_count > 0) {
-            $this->project_canceled_count_ratio = ($this->project_canceled_count  / $this->won_deal_count) * 100;
-        } else {
-            $this->project_canceled_count_ratio = 0;
-        }
-
-
-        if ($this->won_deal_count_reject_project > 0) {
-            $this->project_reject_count_ratio = ($this->project_reject_count / $this->won_deal_count_reject_project) * 100;
-        } else {
-            $this->project_reject_count_ratio = 0;
-        }
-      
-       
-
-        //--------Reject Projects Count---------------//
-
-        $this->project_reject_count_data = DB::table('contracts')
-           ->select('projects.*','contracts.last_updated_by')
-           ->join('projects', 'contracts.deal_id', '=', 'projects.deal_id')
-           ->where('projects.project_status', 'Not Accepted')
-           ->where('contracts.last_updated_by', $salesId)
-           ->where('contracts.updated_at', '<', $endDate)
-           ->get();
-
-        // --------------Number of won deals table (fixed)-------------//
-
-        $number_of_leads_convert_won_deals_table = DB::table('deals')
-        ->select('deals.*')
-        ->where('deals.project_type', 'fixed')
-        ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-        ->get();
-
-        $won_deals_count = 0;
-        $won_deals_value = 0;
-        $yes='YES';
-        $no='NO';
-
-        foreach ($number_of_leads_convert_won_deals_table as $won_deals) {
-
-            //closing the deal
-
-            if ($won_deals->added_by == $salesId) {
-
-                $won_deals_count += .125;
-                $won_deals_value += .125 * $won_deals->amount;
-
-                $won_deals->closing_deal= $yes;
-            
-
-            }else{
-
-                $won_deals->closing_deal = $no;
-            }
-
-
-            //The bidder
-
-            $leads = DB::table('leads')
-                ->where('added_by', $salesId)
-                ->where('id', $won_deals->lead_id)
-                ->count();
-
-            if ($leads > 0) {
-
-                $won_deals_count += .25;
-                $won_deals_value += .25 * $won_deals->amount;
-                $won_deals->bidder = $yes;
-            } else {
-
-                $won_deals->bidder = $no;
-            }
-
-            //Qualifying
-
-            $qualify_contribution = DB::table('deal_stage_changes')
-              ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 1)
-                ->distinct('updated_by')
-                ->count();
-
-            $qualify = DB::table('deal_stage_changes')
-                ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 1)
-                ->count();
-
-            if ($qualify > 0 && $qualify_contribution >0 ) {
-                $won_deals_count += .0375 / $qualify_contribution;
-                $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
-                $won_deals->qualifying = $yes;
-            } else {
-
-                $won_deals->qualifying = $no;
-            }
-
-            //Needs Defined
-
-            $needs_defined_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 2)
-                ->distinct('updated_by')
-                ->count();
-
-            $needs_defined = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 2)
-                ->count();
-
-            if ($needs_defined > 0 && $needs_defined_contribution>0) {
-                $won_deals_count += .1875 / $needs_defined_contribution;
-                $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
-
-                $won_deals->needs_defined = $yes;
-            } else {
-
-                $won_deals->needs_defined = $no;
-            }
-
-            //Proposal made
-
-
-            $proposal_made_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 3)
-                ->distinct('updated_by')
-                ->count();
-
-            $proposal_made = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 3)
-                ->count();
-
-            if ($proposal_made > 0 && $proposal_made_contribution>0) {
-                $won_deals_count += .125 / $proposal_made_contribution;
-                $won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
-                $won_deals->proposal_made = $yes;
-            } else {
-
-                $won_deals->proposal_made = $no;
-            }
-
-            //Negotiation started
-
-            $negotiation_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 4)
-                ->distinct('updated_by')
-                ->count();
-
-            $negotiation = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 4)
-                ->count();
-
-            if ($negotiation > 0 && $negotiation_contribution>0) {
-                $won_deals_count += .125 / $negotiation_contribution;
-                $won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
-                $won_deals->negotiation_started = $yes;
-            } else {
-
-                $won_deals->negotiation_started = $no;
-            }
-
-            //Sharing milestone breakdown
-
-            $milestone_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 5)
-                ->distinct('updated_by')
-                ->count();
-
-            $milestone = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 5)
-                ->count();
-
-            if ($milestone > 0 && $milestone_contribution>0) {
-                $won_deals_count += .15 / $milestone_contribution;
-                $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
-                $won_deals->sharing_milestone_breakdown = $yes;
-            } else {
-
-                $won_deals->sharing_milestone_breakdown = $no;
-            }
-
-            $won_deals->deals_each_count = $won_deals_count;
-            $won_deals->deals_each_value = $won_deals_value;
-
-            $won_deals_count = 0;
-            $won_deals_value = 0;
-
-        }
-
-        $this->number_of_leads_convert_won_deals_table= $number_of_leads_convert_won_deals_table;
-
-        // --------------Number of won deals table (hourly)-------------//
-
-        $number_of_leads_convert_won_deals_table_hourly = DB::table('deals')
-        ->select('deals.*')
-        ->where('deals.project_type', 'hourly')
-        ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-        ->get();
-
-        $won_deals_count = 0;
-        $won_deals_value = 0;
-        $yes = 'YES';
-        $no = 'NO';
-
-        foreach ($number_of_leads_convert_won_deals_table_hourly as $won_deals) {
-
-            //closing the deal
-
-            if ($won_deals->added_by == $salesId) {
-
-                $won_deals_count += .125;
-                $won_deals_value += .125 * $won_deals->hourly_rate;
-
-                $won_deals->closing_deal = $yes;
-            } else {
-
-                $won_deals->closing_deal = $no;
-            }
-
-
-            //The bidder
-
-            $leads = DB::table('leads')
-                ->where('added_by', $salesId)
-                ->where('id', $won_deals->lead_id)
-                ->count();
-
-            if ($leads > 0) {
-
-                $won_deals_count += .25;
-                $won_deals_value += .25 * $won_deals->hourly_rate;
-                $won_deals->bidder = $yes;
-            } else {
-
-                $won_deals->bidder = $no;
-            }
-
-            //Qualifying
-
-            $qualify_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 1)
-                ->distinct('updated_by')
-                ->count();
-
-            $qualify = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 1)
-                ->count();
-
-            if ($qualify > 0 && $qualify_contribution > 0) {
-                $won_deals_count += .0375 / $qualify_contribution;
-                $won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
-                $won_deals->qualifying = $yes;
-            } else {
-
-                $won_deals->qualifying = $no;
-            }
-
-            //Needs Defined
-
-            $needs_defined_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 2)
-                ->distinct('updated_by')
-                ->count();
-
-            $needs_defined = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 2)
-                ->count();
-
-            if ($needs_defined > 0 && $needs_defined_contribution > 0) {
-                $won_deals_count += .1875 / $needs_defined_contribution;
-                $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
-
-                $won_deals->needs_defined = $yes;
-            } else {
-
-                $won_deals->needs_defined = $no;
-            }
-
-            //Proposal made
-
-
-            $proposal_made_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 3)
-                ->distinct('updated_by')
-                ->count();
-
-            $proposal_made = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 3)
-                ->count();
-
-            if ($proposal_made > 0 && $proposal_made_contribution > 0) {
-                $won_deals_count += .125 / $proposal_made_contribution;
-                $won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
-                $won_deals->proposal_made = $yes;
-            } else {
-
-                $won_deals->proposal_made = $no;
-            }
-
-            //Negotiation started
-
-            $negotiation_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 4)
-                ->distinct('updated_by')
-                ->count();
-
-            $negotiation = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 4)
-                ->count();
-
-            if ($negotiation > 0 && $negotiation_contribution > 0) {
-                $won_deals_count += .125 / $negotiation_contribution;
-                $won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
-                $won_deals->negotiation_started = $yes;
-            } else {
-
-                $won_deals->negotiation_started = $no;
-            }
-
-            //Sharing milestone breakdown
-
-            $milestone_contribution = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('deal_stage_id', 5)
-                ->distinct('updated_by')
-                ->count();
-
-            $milestone = DB::table('deal_stage_changes')
-            ->where('deal_id', $won_deals->deal_id)
-                ->where('updated_by', $salesId)
-                ->where('deal_stage_id', 5)
-                ->count();
-
-            if ($milestone > 0 && $milestone_contribution > 0) {
-                $won_deals_count += .15 / $milestone_contribution;
-                $won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
-                $won_deals->sharing_milestone_breakdown = $yes;
-            } else {
-
-                $won_deals->sharing_milestone_breakdown = $no;
-            }
-
-            $won_deals->deals_each_count = $won_deals_count;
-            $won_deals->deals_each_value = $won_deals_value;
-
-            $won_deals_count = 0;
-            $won_deals_value = 0;
-        }
-
-        $this->number_of_leads_convert_won_deals_table_hourly = $number_of_leads_convert_won_deals_table_hourly;
-        $this->no_of_won_deals_count= Deal::where('deals.added_by',$salesId)
-    ->where('deals.created_at', '>=', $startDate)
-   ->where('deals.created_at', '<', $endDate)
-  
-   ->get();
-   $this->no_of_won_deals_value= Deal::where('deals.added_by',$salesId)
-    ->where('deals.created_at', '>=', $startDate)
-   ->where('deals.created_at', '<', $endDate)
-  
-   ->sum('deals.amount');
-   $this->finished_project_count = Deal::join('projects','projects.deal_id','deals.id')
-         ->where('deals.added_by',$salesId)
-         ->where('deals.created_at', '>=', $startDate)
-        ->where('deals.created_at', '<', $endDate)
-       
-        ->where('projects.status','finished')
-        ->get();
-        $this->canceled_project_count = Deal::join('projects','projects.deal_id','deals.id')
-        ->where('deals.added_by',$salesId)
-        ->where('deals.created_at', '>=', $startDate)
-       ->where('deals.created_at', '<', $endDate)
-      
-       ->where('projects.status','partially finished')
-       ->orWhere('projects.status','canceled')
-       ->get();
-       $this->rejected_project_count = Deal::join('projects','projects.deal_id','deals.id')
-       ->where('deals.added_by',$salesId)
-       ->where('deals.created_at', '>=', $startDate)
-      ->where('deals.created_at', '<', $endDate)
-      ->where('deals.status','!=','Denied')
-     
-      ->get();
-         if(count($this->no_of_won_deals_count) > 0)
-         {
-            $this->avg_deal_amount = $this->no_of_won_deals_value/count($this->no_of_won_deals_count);
-            $this->finished_project_ratio= count($this->finished_project_count)/count($this->no_of_won_deals_count);
-            $this->canceled_project_ratio= count($this->canceled_project_count)/count($this->no_of_won_deals_count);
-            $this->rejected_project_ratio= count($this->rejected_project_count)/count($this->no_of_won_deals_count);
-
-         }else 
-         {
-            $this->avg_deal_amount = 0;
-            $this->finished_project_ratio= 0;
-            $this->canceled_project_ratio= 0;
-            $this->rejected_project_ratio= 0;
-
-         }
-        
-        $this->country_wise_won_deals_count = Deal::
-        join('users as client','client.id','deals.client_id')
-        ->where('deals.added_by',$salesId)
-        ->where('deals.created_at', '>=', $startDate)
-       ->where('deals.created_at', '<', $endDate)
-       ->groupBy('client.country_id')
-       ->where('deals.status','!=','Denied')
-       ->get();
-        
-
-
-        
-            return view('dashboard.employee.admin_view_sales_executive', $this->data);
-        }
-       
-       
+    public function salesDashboardAdminView($sales)
+    {
+        return view('dashboard.employee.admin_view_sales_executive', $this->data);
     }
 }

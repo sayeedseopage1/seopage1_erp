@@ -23,10 +23,18 @@ import Toaster from "../global/Toaster";
 // Error boundary component
 import ErrorBoundary from "./helper/ErrorBoundary.jsx";
 
-// Context
-import { LeadDeveloperProvider } from "./context/LeadDeveloperContext.jsx";
+// Context for user
 import { DeveloperDashboardProvider } from "./context/DeveloperDashboardContext.jsx";
+import { LeadDeveloperDashboardProvider } from "./context/LeadDeveloperDashboardContext.jsx";
 import { SaleExecutiveDashboardProvider } from "./context/SalesExecutiveDashboardContext.jsx";
+
+// Context for admin
+import { SaleExecutiveAdminDashboardProvider } from "./context/SalesExecutiveAdminDashboardContext.jsx";
+import { LeadDeveloperAdminDashboardProvider } from "./context/LeadDeveloperAdminDashboardContext.jsx";
+import { DeveloperAdminDashboardProvider } from "./context/DeveloperAdminDashboardContext.jsx";
+
+
+// Context for admin
 
 // Content component
 const Content = () => (
@@ -80,15 +88,14 @@ const dashboardComponents = {
     7: SalesExecutiveDashboard,
 };
 
-// Mapping roles to their respective context providers
+// Mapping roles to their respective context providers for user
 const dashboardContextProviders = {
     5: DeveloperDashboardProvider,
-    6: LeadDeveloperProvider,
-    7: SaleExecutiveDashboardProvider
+    6: LeadDeveloperDashboardProvider,
+    7: SaleExecutiveDashboardProvider,
 };
 
-
-// Function to get the appropriate dashboard component based on user role
+//Function to get the appropriate dashboard component based on user role
 const renderEmployeeDashboardById = () => {
     const DashboardComponent =
         dashboardComponents[user?.role_id] || PMDashboard;
@@ -100,36 +107,36 @@ const routes = [
     {
         id: 1,
         containerId: "employeeDashboard",
-        baseUrl: "/account/dashboard/temp",
+        baseUrl: "/account/dashboard",
         contextProvider: dashboardContextProviders[user?.role_id] || null,
         pageComponent: renderEmployeeDashboardById(),
     },
     {
         id: 2,
-        containerId: "employeeDashboard",
+        containerId: "pmAdminDashboard",
         baseUrl: "/account/dashboard-pm-performance",
-        contextProvider: null,
+        contextProvider: DeveloperAdminDashboardProvider,
         pageComponent: <PMDashboard />,
     },
     {
         id: 3,
         containerId: "leadAdminDashboard",
-        baseUrl: "/account/dashboard-lead-dev-performance",
-        contextProvider: LeadDeveloperProvider,
+        baseUrl: "account/dashboard-lead-dev-performance/",
+        contextProvider: LeadDeveloperAdminDashboardProvider,
         pageComponent: <LeadDeveloperDashboard />,
     },
     {
         id: 4,
         containerId: "devAdminDashboard",
         baseUrl: "/account/dashboard-developer-performance",
-        contextProvider: DeveloperDashboardProvider,
+        contextProvider: DeveloperAdminDashboardProvider,
         pageComponent: <DeveloperDashboard />,
     },
     {
         id: 5,
         containerId: "salesAdminDashboard",
         baseUrl: "/account/dashboard-sales-performance",
-        contextProvider: SaleExecutiveDashboardProvider,
+        contextProvider: SaleExecutiveAdminDashboardProvider,
         pageComponent: <SalesExecutiveDashboard />,
     },
 ];
@@ -150,7 +157,6 @@ const renderRoutes = () => {
         if (!container) return;
 
         const ContextProvider = route.contextProvider || React.Fragment;
-
         ReactDOM.createRoot(container).render(
             <React.StrictMode key={route.id}>
                 <ErrorBoundary>
@@ -162,9 +168,7 @@ const renderRoutes = () => {
                                         <Route path="/" element={<Content />}>
                                             <Route
                                                 path={
-                                                    route.id === 1
-                                                        ? ""
-                                                        : ":id/temp"
+                                                    route.id === 1 ? "" : ":id"
                                                 }
                                                 element={route.pageComponent}
                                             />

@@ -7,16 +7,11 @@ import AntdModal from "../../UI/AntdModal/AntdModal";
 // Components - UI - Custom
 import CustomModalHeader from "../../UI/CustomModalHeader/CustomModalHeader";
 
-// Services - API
-import { useGetTestDataQuery } from "../../../../services/api/dashboardApiSlice";
-
 // Components - UI - Styled
 import { SectionWrapper } from "../../UI/StyledComponents";
 
 // Components - Table
 import DashboardDataTable from "../../table/DashboardDataTable";
-
-
 
 // Components - UI - Shared
 import RefreshButton from "../../shared/RefreshButton";
@@ -28,19 +23,22 @@ import Switch from "../../../../global/Switch";
 import { Placeholder } from "../../../../global/Placeholder";
 import SaleExecutiveDashboardTableLoader from "../../loader/SaleExecutiveDashboardTableLoader";
 
+// Hooks
+import { useGetSaleExDashboardModalData } from "../../../hooks/useGetSaleExDashboardModalData";
+
 const SalesExecutiveDashboardDataModal = ({
     isModalOpen,
     closeModal,
     modalData,
+    filter,
+    userData,
 }) => {
-    const { query } = modalData;
-
-    const { isLoading, isFetching, refetch } =
-        useGetTestDataQuery(query, {
-            refetchOnMountOrArgChange: true,
-        });
-
-    const isModalDataRetchingOrLoading = isFetching || isLoading;
+    const {
+        isModalDataRetchingOrLoading,
+        modalExtraInfo,
+        saleExecutiveModalData,
+        refetch
+    } = useGetSaleExDashboardModalData(modalData, filter, userData);
 
     return (
         <AntdModal
@@ -67,16 +65,14 @@ const SalesExecutiveDashboardDataModal = ({
                             isLoading={isModalDataRetchingOrLoading}
                         />
                     </SectionWrapper>
-                    <Switch.Case
-                        condition={modalData?.isShowModalExtraInfo?.length}
-                    >
+                    <Switch.Case condition={modalExtraInfo?.length}>
                         <SectionWrapper
                             className="d-flex flex-wrap"
                             gap="10px"
                             backgroundColor="transparent"
                             padding="15px 0px"
                         >
-                            {modalData?.isShowModalExtraInfo?.map((item) => (
+                            {modalExtraInfo?.map((item) => (
                                 <SectionWrapper
                                     key={item.id}
                                     className="sp1_dashboard_modal_extra_info_section"
@@ -99,7 +95,8 @@ const SalesExecutiveDashboardDataModal = ({
                                         }
                                     >
                                         <span>
-                                            {item?.value} {item?.valueType}
+                                            {item.valueTypeBefore}
+                                            {item?.value} {item?.valueTypeAfter}
                                         </span>
                                     </Switch.Case>
                                 </SectionWrapper>
@@ -108,13 +105,18 @@ const SalesExecutiveDashboardDataModal = ({
                     </Switch.Case>
                     <DashboardDataTable
                         tableColumns={modalData?.tableColumn}
-                        tableData={[]}
-                        isLoading={isLoading || isFetching}
+                        tableData={saleExecutiveModalData}
+                        isLoading={isModalDataRetchingOrLoading}
                         tableName={modalData?.title}
                         options={{
                             isPagination: true,
                         }}
                         getLoadingComponent={SaleExecutiveDashboardTableLoader}
+                        tableStyles={{
+                            height: {
+                                maxHeight: "44vh",
+                            },
+                        }}
                     />
                 </SectionWrapper>
             </Switch>
@@ -128,4 +130,6 @@ SalesExecutiveDashboardDataModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.object,
+    filter: PropTypes.object,
+    userData: PropTypes.object,
 };

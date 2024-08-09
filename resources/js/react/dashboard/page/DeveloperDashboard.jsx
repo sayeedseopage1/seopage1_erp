@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Components - UI - Shared
 import ProfileAvatar from "../components/shared/ProfileAvatar";
@@ -10,8 +11,6 @@ import { SectionWrapper } from "../components/UI/StyledComponents";
 import CustomDropDown from "../components/UI/CustomDropDown/CustomDropDown";
 import DashboardMonthFilter from "../components/UI/DashboardMonthFilter/DashboardMonthFilter";
 
-// Constants
-import { DeveloperDummyData } from "../constant";
 
 // Components - UI - Modal
 import DeveloperDashboardDataModal from "../components/modal/DeveloperDashboardDataModal/DeveloperDashboardDataModal";
@@ -24,20 +23,34 @@ import Switch from "../../global/Switch";
 
 // Context
 import { DeveloperDashboardContext } from "../context/DeveloperDashboardContext";
+import { DeveloperAdminDashboardContext } from "../context/DeveloperAdminDashboardContext";
+
+// Hooks
+import { useAuth } from "../../hooks/useAuth";
 
 const DeveloperDashboard = () => {
-    const { user } = useContext(DeveloperDashboardContext);
-    const [filter, setFilter] = useState();
+    const { id: devParamsId } = useParams();
+    const auth = useAuth();
+    const navigate = useNavigate();
+
+    // Get the context based on the user role ID to access the user data
+    const DashboardContext =
+        auth.getRoleId() === 1
+            ? DeveloperAdminDashboardContext
+            : DeveloperDashboardContext;
+    // Get the user data from the context
+    const {
+        userData,
+        isDeveloperDashboardIsLoading,
+        setDev_id,
+        userList,
+        filter,
+        setFilter,
+    } = useContext(DashboardContext);
+
     const [isLoading, setIsLoading] = useState(false);
     const [isDeveloperModalOpen, setIsDeveloperModalOpen] = useState(false);
     const [developerModalData, setDeveloperModalData] = useState({});
-
-    const handleLoadingCheck = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 5000);
-    };
 
     /**
      * Toggles the state of a modal and optionally executes an additional action.
@@ -59,6 +72,16 @@ const DeveloperDashboard = () => {
         });
     };
 
+    // Set the sales ID to the state when the salesParamsId changes (when the URL changes)
+    // This is only necessary for the Sales Executive Admin Dashboard
+    useEffect(() => {
+        if (devParamsId) {
+            setDev_id(devParamsId);
+        } else if (userData?.isAdmin && filter?.person) {
+            setDev_id(filter?.person?.id);
+        }
+    }, [devParamsId, userData, filter?.person]);
+
     return (
         <SectionWrapper
             className="d-flex flex-column"
@@ -66,7 +89,7 @@ const DeveloperDashboard = () => {
             padding="0px"
             backgroundColor="transparent"
         >
-            {/* Lead Developer Dashboard Header Section */}
+            {/* Dashboard Header Section */}
             <SectionWrapper
                 className="sp1_dashboard_header_section"
                 border="1px solid var(--primaryLightBorder)"
@@ -79,19 +102,14 @@ const DeveloperDashboard = () => {
                         border="1px solid var(--primaryLightBorder)"
                     >
                         <ProfileAvatar
-                            personInfo={{
-                                name: "John Doe",
-                                avatar: "avatar1.jpg",
-                                position: "Sr. Executive",
-                                employeeId: "Seopage1/0131",
-                            }}
-                            isLoading={isLoading}
+                            personInfo={userData}
+                            isLoading={isDeveloperDashboardIsLoading}
                         />
                     </SectionWrapper>
 
                     <SectionWrapper
                         className={`sp1_dashboard_header_filter_section ${
-                            user?.roleId === 1
+                            userData?.isAdmin
                                 ? "justify-content-between"
                                 : "justify-content-center"
                         }`}
@@ -99,23 +117,26 @@ const DeveloperDashboard = () => {
                         border="1px solid var(--primaryLightBorder)"
                         gap="10px"
                     >
-                        <Switch.Case condition={user?.roleId === 1}>
+                        <Switch.Case condition={userData?.isAdmin}>
                             <CustomDropDown
-                                data={DeveloperDummyData}
+                                data={userList}
                                 selected={filter?.person}
-                                setSelected={(e) =>
+                                setSelected={(e) => {
                                     setFilter({
                                         ...filter,
                                         person: e?.target?.value,
-                                    })
-                                }
+                                    });
+                                    navigate(`/${e?.target?.value?.id}`, {
+                                        replace: true,
+                                    });
+                                }}
                                 filedName="person"
                                 isSearchBoxUse
                             />
                         </Switch.Case>
                         <DashboardMonthFilter
                             setFilter={setFilter}
-                            isLoading={isLoading}
+                            isLoading={isDeveloperDashboardIsLoading}
                         />
                     </SectionWrapper>
                 </Switch>
@@ -123,8 +144,7 @@ const DeveloperDashboard = () => {
 
             {/* Lead Developer Dashboard Content */}
             <DeveloperDashboardContent
-                isLoading={isLoading}
-                handleLoadingCheck={handleLoadingCheck} // temp function to check loading
+                isLoading={isDeveloperDashboardIsLoading}
                 handleModalOpen={handleModalOpen}
             />
 
@@ -139,6 +159,8 @@ const DeveloperDashboard = () => {
                         })
                     }
                     modalData={developerModalData}
+                    filter={filter}
+                    userData={userData}
                 />
             )}
         </SectionWrapper>

@@ -8,10 +8,10 @@ import "../table/style/dashboardDataTable.css";
 import { Placeholder } from "../../../global/Placeholder";
 
 const SaleExecutiveDashboardTableLoader = ({
-    prevItemLength = 10,
+    prevItemLength = 9,
     tableCol = 8,
 }) => {
-    const updateItemLength = prevItemLength === 0 ? 10 : prevItemLength;
+    const updateItemLength = prevItemLength;
     return _.times(updateItemLength, (item) => (
         <tr key={item} className="sp1_dashboard_data_table_tr">
             {_.times(tableCol, (i) => (

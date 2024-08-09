@@ -21,12 +21,12 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
 
     // format date range
     const formatDateRange = (date) => {
-        let startDate = date.date(targetedDay);
-        let endDate = date.add(1, "month").date(targetedDay - 1);
+        let start_data = date.date(targetedDay);
+        let end_date = date.add(1, "month").date(targetedDay - 1);
         return (
             <>
-                <span>{startDate.format("MMM YYYY")}</span> <span>-</span>{" "}
-                <span>{endDate.format("MMM YYYY")}</span>
+                <span>{start_data.format("MMM YYYY")}</span> <span>-</span>{" "}
+                <span>{end_date.format("MMM YYYY")}</span>
             </>
         );
     };
@@ -51,16 +51,16 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
 
     // update filter on month change
     useEffect(() => {
-        const startDate = monthDate.date(targetedDay).format("YYYY-MM-DD");
-        const endDate = monthDate
+        const start_date = monthDate.date(targetedDay).format("YYYY-MM-DD");
+        const end_date = monthDate
             .add(1, "month")
             .date(targetedDay - 1)
             .format("YYYY-MM-DD");
         setFilter((prevFilter) => {
             return {
                 ...prevFilter,
-                startDate,
-                endDate,
+                start_date,
+                end_date,
             };
         });
     }, [monthDate]);

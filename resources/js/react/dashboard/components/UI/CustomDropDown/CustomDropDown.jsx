@@ -188,15 +188,14 @@ export default CustomDropDown;
 
 CustomDropDown.propTypes = {
     data: PropTypes.array || null,
-    selected: PropTypes.shape(
-        {
+    selected: PropTypes.oneOfType([
+        PropTypes.shape({
             id: PropTypes.number,
             name: PropTypes.string,
             user_name: PropTypes.string,
-        } ||
-            [] ||
-            null
-    ),
+        }),
+        PropTypes.oneOf([null]),
+    ]),
     setSelected: PropTypes.func,
     filedName: PropTypes.string,
     isMultiple: PropTypes.bool,

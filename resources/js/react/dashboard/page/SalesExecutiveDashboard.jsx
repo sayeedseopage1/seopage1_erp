@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 // Components - UI - Shared
 import ProfileAvatar from "../components/shared/ProfileAvatar";
 
@@ -9,9 +9,6 @@ import { SectionWrapper } from "../components/UI/StyledComponents";
 // Components - UI - Custom
 import CustomDropDown from "../components/UI/CustomDropDown/CustomDropDown";
 import DashboardMonthFilter from "../components/UI/DashboardMonthFilter/DashboardMonthFilter";
-
-// Constants
-import { DeveloperDummyData } from "../constant";
 
 // Components - UI - Modal
 import SalesExecutiveDashboardDataModal from "../components/modal/SalesExecutiveDashboardDataModal/SalesExecutiveDashboardDataModal";
@@ -24,21 +21,33 @@ import Switch from "../../global/Switch";
 
 // Context
 import { SaleExecutiveDashboardContext } from "../context/SalesExecutiveDashboardContext";
+import { SalesExecutiveAdminDashboardContext } from "../context/SalesExecutiveAdminDashboardContext";
+
+// Hooks
+import { useAuth } from "../../hooks/useAuth";
 
 const SalesExecutiveDashboard = () => {
-    const { user } = useContext(SaleExecutiveDashboardContext);
-    const [filter, setFilter] = useState();
-    const [isLoading, setIsLoading] = useState(false);
+    const { id: salesParamsId } = useParams();
+    const auth = useAuth();
+    const navigate = useNavigate();
+    // Get the context based on the user role ID to access the user data
+    const DashboardContext =
+        auth.getRoleId() === 1
+            ? SalesExecutiveAdminDashboardContext
+            : SaleExecutiveDashboardContext;
+    // Get the user data from the context
+    const {
+        userData,
+        isSaleExecutiveDashboardIsLoading,
+        setSale_id,
+        userList,
+        filter,
+        setFilter,
+    } = useContext(DashboardContext);
+
     const [isSaleExecutiveModalOpen, setIsSaleExecutiveModalOpen] =
         useState(false);
     const [saleExecutiveModalData, setSaleExecutiveModalData] = useState({});
-
-    const handleLoadingCheck = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 5000);
-    };
 
     /**
      * Toggles the state of a modal and optionally executes an additional action.
@@ -60,6 +69,16 @@ const SalesExecutiveDashboard = () => {
         });
     };
 
+    // Set the sales ID to the state when the salesParamsId changes (when the URL changes)
+    // This is only necessary for the Sales Executive Admin Dashboard
+    useEffect(() => {
+        if (salesParamsId) {
+            setSale_id(salesParamsId);
+        } else if (userData?.isAdmin && filter?.person) {
+            setSale_id(filter?.person?.id);
+        }
+    }, [salesParamsId, userData, filter?.person]);
+
     return (
         <SectionWrapper
             className="d-flex flex-column"
@@ -80,19 +99,14 @@ const SalesExecutiveDashboard = () => {
                         border="1px solid var(--primaryLightBorder)"
                     >
                         <ProfileAvatar
-                            personInfo={{
-                                name: "John Doe",
-                                avatar: "avatar1.jpg",
-                                position: "Sr. Executive",
-                                employeeId: "Seopage1/0131",
-                            }}
-                            isLoading={isLoading}
+                            personInfo={userData}
+                            isLoading={isSaleExecutiveDashboardIsLoading}
                         />
                     </SectionWrapper>
 
                     <SectionWrapper
                         className={`sp1_dashboard_header_filter_section ${
-                            user?.roleId === 1
+                            userData?.isAdmin
                                 ? "justify-content-between"
                                 : "justify-content-center"
                         }`}
@@ -100,23 +114,27 @@ const SalesExecutiveDashboard = () => {
                         border="1px solid var(--primaryLightBorder)"
                         gap="10px"
                     >
-                        <Switch.Case condition={user?.roleId === 1}>
+                        {/* This Section only for Admin */}
+                        <Switch.Case condition={userData?.isAdmin}>
                             <CustomDropDown
-                                data={DeveloperDummyData}
+                                data={userList}
                                 selected={filter?.person}
-                                setSelected={(e) =>
+                                setSelected={(e) => {
                                     setFilter({
                                         ...filter,
                                         person: e?.target?.value,
-                                    })
-                                }
+                                    });
+                                    navigate(`/${e?.target?.value?.id}`, {
+                                        replace: true,
+                                    });
+                                }}
                                 filedName="person"
                                 isSearchBoxUse
                             />
                         </Switch.Case>
                         <DashboardMonthFilter
                             setFilter={setFilter}
-                            isLoading={isLoading}
+                            isLoading={isSaleExecutiveDashboardIsLoading}
                         />
                     </SectionWrapper>
                 </Switch>
@@ -124,8 +142,7 @@ const SalesExecutiveDashboard = () => {
 
             {/* Lead Developer Dashboard Content */}
             <SalesExecutiveDashboardContent
-                isLoading={isLoading}
-                handleLoadingCheck={handleLoadingCheck} // temp function to check loading
+                isLoading={isSaleExecutiveDashboardIsLoading}
                 handleModalOpen={handleModalOpen}
             />
 
@@ -140,6 +157,8 @@ const SalesExecutiveDashboard = () => {
                         })
                     }
                     modalData={saleExecutiveModalData}
+                    filter={filter}
+                    userData={userData}
                 />
             )}
         </SectionWrapper>

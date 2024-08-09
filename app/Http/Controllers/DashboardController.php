@@ -69,7 +69,6 @@ class DashboardController extends AccountBaseController
             $this->viewFinanceDashboard = user()->permission('view_finance_dashboard');
             return $next($request);
         });
-
     }
 
     /**
@@ -91,7 +90,7 @@ class DashboardController extends AccountBaseController
             return $this->UxUiDashboard();
         }
         if ($this->user->role_id == 7) {
-            return $this->SalesDashboard();
+            return $this->salesDashboard();
         }
         if ($this->user->role_id == 10) {
             return $this->GraphicsDashboard();
@@ -119,7 +118,7 @@ class DashboardController extends AccountBaseController
             return $this->UxUiDashboard();
         }
         if ($this->user->role_id == 7) {
-            return $this->SalesDashboard();
+            return $this->salesDashboardApi();
         }
         if ($this->user->role_id == 10) {
             return $this->GraphicsDashboard();
@@ -831,19 +830,10 @@ class DashboardController extends AccountBaseController
 
             ->orderBy('task_history.created_at', 'desc')
             ->get();
-        //  dd($status_history);
-
-
-
-
-
-
-
     }
     public function task_revision($id)
     {
         $task_revision = TaskRevision::select(
-            'task_revisions.created_at',
             'task_revisions.final_responsible_person',
             'raised_by_percent',
             'raised_against_percent'
@@ -871,6 +861,21 @@ class DashboardController extends AccountBaseController
         $this->pageTitle = 'Sales Performance';
         return $this->SalesDashboardAdminView($this->sales);
     }
+    public function adminSalesPerformanceApi($id = null)
+    {
+        $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
+        return $this->salesDashboardAdminApi($this->sales);
+    }
+    public function adminSalesPerformanceCountryWiseBiddingBreakdownApi($id = null)
+    {
+        $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
+        return $this->salesDashboardCountryWiseBiddingBreakdownAdminApi($this->sales);
+    }
+    public function adminSalesPerformanceCountryWiseWiseWonDealsApi($id = null)
+    {
+        $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
+        return $this->salesDashboardCountryWiseWonDealsAdminApi($this->sales);
+    }
 
     // temp lead
     public function tempLeadDevDashboard($id)
@@ -889,5 +894,18 @@ class DashboardController extends AccountBaseController
     {
         $this->sales = User::where('id', $id)->first();
         return view('dashboard.temp_sales_admin_dashboard', $this->data);
+    }
+
+    public function getUserRoleWiseWithLead($role = null)
+    {
+        if ($role) {
+            $users = User::whereHas('role', function ($query) use ($role) {
+                $query->whereIn('role_id', [$role, 8]);
+            })->withoutEagerLoads()->select('id', 'name')->get();
+        } else {
+            $users = [];
+        }
+
+        return response()->json(['data' => $users]);
     }
 }

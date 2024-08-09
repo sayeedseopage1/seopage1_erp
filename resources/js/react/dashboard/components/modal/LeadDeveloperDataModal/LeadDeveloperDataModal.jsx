@@ -18,17 +18,35 @@ import DashboardDataTable from "../../table/DashboardDataTable";
 
 // Components - Loader
 import LeadDashboardModalTableLoader from "../../loader/LeadDashboardModalTableLoader";
+import { Placeholder } from "../../../../global/Placeholder";
 
 // Components - UI - Shared
 import RefreshButton from "../../shared/RefreshButton";
 
-const LeadDeveloperDataModal = ({ isModalOpen, closeModal, modalData }) => {
+// Components - Logic - Global
+import Switch from "../../../../global/Switch";
+
+// Hooks
+import { useGetLeadDevDashboardModalData } from "../../../hooks/useGetLeadDevDashboardModalData";
+
+
+const LeadDeveloperDataModal = ({
+    isModalOpen,
+    closeModal,
+    modalData,
+    filter,
+    userData,
+}) => {
+    const { leadDevDashboardModalData, modalExtraInfo } =
+        useGetLeadDevDashboardModalData(modalData, filter, userData);
+
     const { query } = modalData;
 
-    const {  isLoading, isFetching, refetch } =
-        useGetTestDataQuery(query, {
-            refetchOnMountOrArgChange: true,
-        });
+    const { isLoading, isFetching, refetch } = useGetTestDataQuery(query, {
+        refetchOnMountOrArgChange: true,
+    });
+
+    const isModalDataRetchingOrLoading = isLoading || isFetching;
 
     return (
         <AntdModal
@@ -37,34 +55,79 @@ const LeadDeveloperDataModal = ({ isModalOpen, closeModal, modalData }) => {
             isCentered
             width="1200px"
         >
-            <CustomModalHeader
-                title={modalData?.title}
-                closeModal={closeModal}
-            />
-            <SectionWrapper
-                backgroundColor="var(--priMaryWhiteBg)"
-                padding="15px 30px"
-            >
+            <Switch>
+                <CustomModalHeader
+                    title={modalData?.title}
+                    closeModal={closeModal}
+                />
                 <SectionWrapper
                     backgroundColor="var(--priMaryWhiteBg)"
-                    className="d-flex pb-0 pr-0 justify-content-end py-1"
+                    padding="15px 30px"
                 >
-                    <RefreshButton
-                        onClick={() => refetch()}
-                        isLoading={isFetching || isLoading}
+                    <SectionWrapper
+                        backgroundColor="var(--priMaryWhiteBg)"
+                        className="d-flex pb-0 pr-0 justify-content-end py-1"
+                    >
+                        <RefreshButton
+                            onClick={() => refetch()}
+                            isLoading={isModalDataRetchingOrLoading}
+                        />
+                    </SectionWrapper>
+                    <Switch.Case condition={modalExtraInfo?.length}>
+                        <SectionWrapper
+                            className="d-flex flex-wrap"
+                            gap="10px"
+                            backgroundColor="transparent"
+                            padding="15px 0px"
+                        >
+                            {modalExtraInfo?.map((item) => (
+                                <SectionWrapper
+                                    key={item.id}
+                                    className="sp1_dashboard_modal_extra_info_section"
+                                    padding="15px 0"
+                                    border="1px solid var(--primaryDarkBorderBlue)"
+                                    borderRadius="var(--borderRadius)"
+                                    backgroundColor="var(--primaryDarkBlue)"
+                                    flex="1"
+                                    gap="10px"
+                                >
+                                    <span>{item?.title}</span>
+                                    <Switch.Case
+                                        condition={isModalDataRetchingOrLoading}
+                                    >
+                                        <Placeholder width="60px" />
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={
+                                            !isModalDataRetchingOrLoading
+                                        }
+                                    >
+                                        <span>
+                                            {item.valueTypeBefore}
+                                            {item?.value} {item?.valueTypeAfter}
+                                        </span>
+                                    </Switch.Case>
+                                </SectionWrapper>
+                            ))}
+                        </SectionWrapper>
+                    </Switch.Case>
+                    <DashboardDataTable
+                        tableColumns={modalData?.tableColumn}
+                        tableData={[]}
+                        isLoading={isModalDataRetchingOrLoading}
+                        tableName={modalData?.title}
+                        options={{
+                            isPagination: true,
+                        }}
+                        getLoadingComponent={LeadDashboardModalTableLoader}
+                        tableStyles={{
+                            height: {
+                                maxHeight: "44vh",
+                            },
+                        }}
                     />
                 </SectionWrapper>
-                <DashboardDataTable
-                    tableColumns={modalData?.tableColumn}
-                    tableData={[]}
-                    isLoading={isLoading || isFetching}
-                    tableName={modalData?.title}
-                    options={{
-                        isPagination: true,
-                    }}
-                    getLoadingComponent={LeadDashboardModalTableLoader}
-                />
-            </SectionWrapper>
+            </Switch>
         </AntdModal>
     );
 };
@@ -75,4 +138,6 @@ LeadDeveloperDataModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.object,
+    filter: PropTypes.object,
+    userData: PropTypes.object,
 };

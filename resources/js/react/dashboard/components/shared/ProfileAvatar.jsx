@@ -22,8 +22,8 @@ const ProfileAvatar = ({ personInfo, isLoading }) => {
         e.target.alt = personInfo?.name?.slice(0, 1).toUpperCase() || "A";
     };
 
-    const avatarSrc = personInfo?.avatar
-        ? `/user-uploads/avatar/${personInfo?.avatar}`
+    const avatarSrc = personInfo?.image
+        ? `/user-uploads/avatar/${personInfo?.image}`
         : "/img/avatar.png";
     const avatarAlt = personInfo?.name?.slice(0, 1).toUpperCase() || "A";
 
@@ -31,7 +31,7 @@ const ProfileAvatar = ({ personInfo, isLoading }) => {
         <div className={`${style.sp1_profile_avatar_wrapper}`}>
             <Switch>
                 <div className={`${style.sp1_profile_avatar}`}>
-                    <Switch.Case condition={personInfo?.avatar && !isLoading}>
+                    <Switch.Case condition={personInfo?.image && !isLoading}>
                         <img
                             src={avatarSrc}
                             alt={avatarAlt}
@@ -39,7 +39,7 @@ const ProfileAvatar = ({ personInfo, isLoading }) => {
                             onError={handleError}
                         />
                     </Switch.Case>
-                    <Switch.Case condition={!personInfo?.avatar && !isLoading}>
+                    <Switch.Case condition={!personInfo?.image && !isLoading}>
                         <div
                             className={`${style.sp1_profile_error_avatar_text}`}
                         >
@@ -60,15 +60,15 @@ const ProfileAvatar = ({ personInfo, isLoading }) => {
                 <Switch.Case condition={!isLoading}>
                     <div className={`${style.sp1_profile_content}`}>
                         <h3 className={`${style.sp1_profile_content_name}`}>
-                            John Doe
+                            {personInfo?.name}
                         </h3>
                         <p
                             className={`${style.sp1_profile_content_designation}`}
                         >
-                            Sr. Executive
+                            {personInfo?.designation}
                         </p>
                         <p className={`${style.sp1_profile_content_em_id}`}>
-                            E.Id : Seopage1/0131
+                            E.Id : {personInfo?.employee_id}
                         </p>
                     </div>
                 </Switch.Case>
@@ -81,8 +81,15 @@ export default ProfileAvatar;
 
 ProfileAvatar.propTypes = {
     personInfo: PropTypes.shape({
+        roleId: PropTypes.number,
         name: PropTypes.string,
-        avatar: PropTypes.string,
+        id: PropTypes.number,
+        email: PropTypes.string,
+        imageUrl: PropTypes.string,
+        countryId: PropTypes.number,
+        designation: PropTypes.string,
+        employee_id: PropTypes.string,
+        image: PropTypes.string,
     }),
     isLoading: PropTypes.bool,
 };

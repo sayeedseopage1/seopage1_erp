@@ -16,7 +16,7 @@ const reorderColumn = (draggedColumnId, targetColumnId, columnOrder) => {
 };
 
 // draggable columns
- const DraggableColumnHeader = ({
+const DraggableColumnHeader = ({
     header,
     table,
     sortingColumn = [],
@@ -82,6 +82,7 @@ const reorderColumn = (draggedColumnId, targetColumnId, columnOrder) => {
     const justifyContent =
         columnJustifyContent[column.id] || columnJustifyContent.default;
 
+
     return (
         <th
             ref={dropRef}
@@ -99,7 +100,7 @@ const reorderColumn = (draggedColumnId, targetColumnId, columnOrder) => {
         >
             <div
                 style={{
-                    justifyContent,
+                    justifyContent: justifyContent,
                 }}
                 className={`d-flex align-items-start ${
                     column.id && "text-center"
